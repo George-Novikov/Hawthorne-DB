@@ -1,0 +1,25 @@
+plugins {
+    id 'java-library'
+}
+
+group 'com.george-n'
+version '0.0.1'
+
+java {
+    sourceCompatibility = '8'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.slf4j:slf4j-api:2.0.11'
+    runtimeOnly 'org.slf4j:slf4j-simple:2.0.11'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+}
+
+test {
+    useJUnitPlatform()
+}
