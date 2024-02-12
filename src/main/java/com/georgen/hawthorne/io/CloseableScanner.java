@@ -1,4 +1,4 @@
-package storage;
+package com.georgen.hawthorne.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;

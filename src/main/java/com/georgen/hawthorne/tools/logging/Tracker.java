@@ -1,4 +1,4 @@
-package tools.logging;
+package com.georgen.hawthorne.tools.logging;
 
 /* This class returns a method and class name for tracking library actions */
 public class Tracker {

@@ -1,4 +1,4 @@
-package tools.logging;
+package com.georgen.hawthorne.tools.logging;
 
 /* DTO to pass the name of the class and method, that created this DTO, or higher in the call chain */
 public class TraceInfo extends Throwable {

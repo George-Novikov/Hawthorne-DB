@@ -1,7 +1,6 @@
-package tools;
+package com.georgen.hawthorne.tools;
 
 import java.util.Collection;
-import java.util.List;
 
 public class Validator {
     /* String validation */

@@ -1,4 +1,4 @@
-package tools.logging;
+package com.georgen.hawthorne.tools.logging;
 
 import org.slf4j.Logger;
 
