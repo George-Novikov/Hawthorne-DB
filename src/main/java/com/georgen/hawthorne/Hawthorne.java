@@ -1,11 +1,12 @@
 package com.georgen.hawthorne;
 
+import com.georgen.hawthorne.config.SettingsContainer;
 import com.georgen.hawthorne.config.SystemConfig;
-import com.georgen.hawthorne.model.constants.ConfigPropertyName;
+import com.georgen.hawthorne.io.FileFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
+import java.io.File;
 
 public class Hawthorne {
     private static final Logger LOGGER = LoggerFactory.getLogger(Hawthorne.class);
@@ -13,13 +14,12 @@ public class Hawthorne {
 
     static {
         try {
-            LOGGER.info("Main file name: {}", CONFIG.getProperty(ConfigPropertyName.MANAGING_FILE_NAME));
-        } catch (IOException e) {
+            File controlFile = FileFactory.getControlFile();
+            LOGGER.info("Control file: {}", controlFile.toPath());
+        } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }
     }
 
-    public static void main(String[] args){
-
-    }
+    public static void main(String[] args){}
 }

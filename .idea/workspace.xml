@@ -5,31 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a21c502-bf7b-46bf-9d89-07dc9a468797" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/config/Settings.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/config/SettingsContainer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/io/CloseableWriter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/io/FileFactory.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/constants/ConfigPropertyName.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/constants/SystemProperty.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/exceptions/FileException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/exceptions/InitializationException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/messages/Descriptive.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/messages/SystemMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/annotations/entities/EntityCollection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/annotations/entities/MonoEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Hawthorne.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/Hawthorne.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/config/Configuration.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/config/SystemConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/model/constants/ConfigProperty.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/storage/CloseableScanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/io/CloseableScanner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/storage/FileManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/io/FileManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tools/FileSystemHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/tools/FileSystemHelper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tools/OSHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/tools/OSInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tools/SafeReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/tools/SafeReader.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tools/Validator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/tools/Validator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tools/logging/SelfTracking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/tools/logging/SelfTracking.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tools/logging/TraceInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/tools/logging/TraceInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/tools/logging/Tracker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/tools/logging/Tracker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/Hawthorne.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/Hawthorne.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/config/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/config/Settings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/config/SettingsContainer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/config/SettingsContainer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/config/SystemConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/config/SystemConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/io/FileFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/io/FileFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/constants/ConfigPropertyName.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/constants/ConfigPropertyName.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/hawthorne.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/hawthorne.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -206,7 +191,11 @@
       <workItem from="1707219559625" duration="1257000" />
       <workItem from="1707283612063" duration="4175000" />
       <workItem from="1707709386203" duration="4784000" />
-      <workItem from="1707756252253" duration="1118000" />
+      <workItem from="1707756252253" duration="1402000" />
+      <workItem from="1707794401927" duration="680000" />
+      <workItem from="1707843521662" duration="371000" />
+      <workItem from="1707892584679" duration="599000" />
+      <workItem from="1707924934868" duration="4130000" />
     </task>
     <servers />
   </component>
