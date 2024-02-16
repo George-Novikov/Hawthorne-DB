@@ -3,7 +3,7 @@ package com.georgen.hawthorne.tools.logging;
 /* This class returns a method and class name for tracking library actions */
 public class Tracker {
     private static final int DEFAULT_TRACE_INDEX = 1;
-    private static final String PROCESS_START_PREFIX = "****";
+    private static final String PROCESS_START_PREFIX = "START";
 
     /* The name of the process one level higher than this class */
     public static String getCallerInfo(){

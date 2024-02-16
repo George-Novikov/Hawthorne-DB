@@ -3,6 +3,7 @@ package com.georgen.hawthorne.io;
 import com.georgen.hawthorne.config.SettingsContainer;
 import com.georgen.hawthorne.config.SystemConfig;
 import com.georgen.hawthorne.model.exceptions.InitializationException;
+import com.georgen.hawthorne.model.messages.SystemMessage;
 import com.georgen.hawthorne.tools.OSInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +11,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.attribute.PosixFilePermission;
 import java.util.Arrays;
 import java.util.Set;
@@ -43,7 +42,7 @@ public class FileFactory {
         return file;
     }
 
-    public static void setFilePermissions(File file) throws IOException {
+    private static void setFilePermissions(File file) throws IOException {
         if (!OSInfo.isUnixSystem()) return;
 
         Set<PosixFilePermission> permissions = Arrays
@@ -60,7 +59,7 @@ public class FileFactory {
             controlFile = createFile(config.getControlFilePath());
             setFilePermissions(controlFile);
         } catch (IOException e) {
-            throw new InitializationException(e);
+            throw new InitializationException(SystemMessage.CONTROL_FILE_LOAD_FAIL, e);
         }
     }
 }

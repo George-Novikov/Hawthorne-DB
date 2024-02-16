@@ -3,7 +3,7 @@ package com.georgen.hawthorne.config;
 public class SettingsContainer {
     private static Settings instance;
 
-    public static synchronized Settings getInstance(){
+    public static Settings getInstance(){
         if (instance == null){
             synchronized (SettingsContainer.class){
                 if (instance == null){

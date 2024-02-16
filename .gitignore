@@ -3,7 +3,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-**/hawthorne/**
+hawthorne/**
 
 ### IntelliJ IDEA ###
 .idea/modules.xml

@@ -1,6 +1,7 @@
 package com.georgen.hawthorne.model.exceptions;
 
 import com.georgen.hawthorne.model.messages.Descriptive;
+import com.georgen.hawthorne.model.messages.ExceptionCaption;
 
 public class InitializationException extends RuntimeException {
 
@@ -19,7 +20,7 @@ public class InitializationException extends RuntimeException {
     public InitializationException(Descriptive descriptive, Throwable cause){
         super(
                 String.format(
-                        "Hawthorne initialization error: %s",
+                        ExceptionCaption.INITIALIZATION_EXCEPTION.getDescription(),
                         descriptive.getDescription()
                 ),
                 cause
