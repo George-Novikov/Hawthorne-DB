@@ -1,35 +1,39 @@
 package com.georgen.hawthorne.api.repositories;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.georgen.hawthorne.api.annotations.entities.MonoEntity;
-import com.georgen.hawthorne.config.SettingsContainer;
+import com.georgen.hawthorne.config.Settings;
 import com.georgen.hawthorne.io.FileFactory;
 import com.georgen.hawthorne.io.FileManager;
+import com.georgen.hawthorne.model.storage.StorageSchema;
+import com.georgen.hawthorne.model.storage.StorageUnit;
+import com.georgen.hawthorne.serialization.Serializer;
 import com.georgen.hawthorne.tools.logging.SelfTracking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class MonoEntityRepository implements GenericRepository, SelfTracking {
+public class MonoEntityRepository<T> implements GenericRepository, SelfTracking {
     private static final Logger LOGGER = LoggerFactory.getLogger(MonoEntityRepository.class);
-    private static final ObjectMapper SERIALIZER = new ObjectMapper();
     private String entityFolderName;
 
     public MonoEntityRepository(){
-        this.entityFolderName = SettingsContainer.getInstance().getEntitiesFolderName();
+        this.entityFolderName = Settings.getInstance().getEntitiesPath();
     }
+    @Override
     public File save(Object object){
         try {
             LOGGER.info(start());
 
-            String className = object.getClass().getSimpleName();
-            String filePath = String.format("%s%s%s.json", this.entityFolderName, File.separator, className);
-            LOGGER.info("File path: {}", filePath);
+            StorageUnit unit = new StorageUnit(object);
+            StorageSchema storageSchema = Settings.getInstance().getStorageSchema();
+            storageSchema.register(unit);
+            storageSchema.save();
 
-            String serializedObject = SERIALIZER.writeValueAsString(object);
+            LOGGER.info("File path: {}", unit.getPath());
 
-            File file = FileFactory.getFile(filePath);
+            String serializedObject = Serializer.toJson(object);
+
+            File file = FileFactory.getFile(unit.getPath());
             FileManager.write(file, serializedObject);
 
             return file;
@@ -38,4 +42,14 @@ public class MonoEntityRepository implements GenericRepository, SelfTracking {
             return null;
         }
     }
+
+//    public T get(Class javaClass){
+//        try {
+//            String className = javaClass.getSimpleName();
+//            EntityType entityType = EntityType.of(javaClass);
+//        } catch (FileException e) {
+//            LOGGER.error(e.getMessage(), e);
+//            return null;
+//        }
+//    }
 }

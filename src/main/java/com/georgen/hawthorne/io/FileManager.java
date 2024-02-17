@@ -1,7 +1,6 @@
 package com.georgen.hawthorne.io;
 
-import com.georgen.hawthorne.tools.FileSystemHelper;
-import com.georgen.hawthorne.tools.OSInfo;
+import com.georgen.hawthorne.tools.SystemHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,8 +30,8 @@ public class FileManager {
     public static void createOrBypass(File file) throws IOException {
         boolean isCreated = file.createNewFile();
 
-        if (isCreated && OSInfo.isUnixSystem()){
-            FileSystemHelper.setFilePermissions(file);
+        if (isCreated && SystemHelper.isUnixSystem()){
+            SystemHelper.setFilePermissions(file);
         }
     }
 }

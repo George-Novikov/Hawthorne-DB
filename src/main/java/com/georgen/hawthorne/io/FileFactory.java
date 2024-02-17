@@ -1,12 +1,7 @@
 package com.georgen.hawthorne.io;
 
-import com.georgen.hawthorne.config.SettingsContainer;
-import com.georgen.hawthorne.config.SystemConfig;
-import com.georgen.hawthorne.model.exceptions.InitializationException;
-import com.georgen.hawthorne.model.messages.SystemMessage;
-import com.georgen.hawthorne.tools.OSInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.georgen.hawthorne.config.Settings;
+import com.georgen.hawthorne.tools.SystemHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,14 +12,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class FileFactory {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileFactory.class);
     private static File controlFile;
 
     public static File getControlFile(){
         if (controlFile == null){
             synchronized (FileFactory.class){
                 if (controlFile == null){
-                    initControlFile();
+                    controlFile = Settings.getInstance().getControlFile();
                 }
             }
         }
@@ -32,18 +26,20 @@ public class FileFactory {
     }
 
     public static File getFile(String name) throws IOException {
-        return createFile(name);
+        File file = new File(name);
+        if (!file.exists()) file = createFile(file);
+        return file;
     }
 
-    private static File createFile(String path) throws IOException {
-        File file = new File(path);
+    private static File createFile(File file) throws IOException {
         file.getParentFile().mkdirs();
+        file.createNewFile();
         setFilePermissions(file);
         return file;
     }
 
     private static void setFilePermissions(File file) throws IOException {
-        if (!OSInfo.isUnixSystem()) return;
+        if (!SystemHelper.isUnixSystem()) return;
 
         Set<PosixFilePermission> permissions = Arrays
                 .stream(PosixFilePermission.values())
@@ -51,15 +47,5 @@ public class FileFactory {
                 .collect(Collectors.toSet());
 
         Files.setPosixFilePermissions(file.toPath(), permissions);
-    }
-
-    private static void initControlFile() {
-        try {
-            SystemConfig config = SettingsContainer.getInstance().getConfig();
-            controlFile = createFile(config.getControlFilePath());
-            setFilePermissions(controlFile);
-        } catch (IOException e) {
-            throw new InitializationException(SystemMessage.CONTROL_FILE_LOAD_FAIL, e);
-        }
     }
 }

@@ -1,5 +1,6 @@
 package com.georgen.hawthorne;
 
+import com.georgen.hawthorne.api.annotations.AnnotationProcessor;
 import com.georgen.hawthorne.api.repositories.MonoEntityRepository;
 import com.georgen.hawthorne.api.repositories.Repository;
 import com.georgen.hawthorne.io.FileFactory;
@@ -17,10 +18,11 @@ public class Hawthorne {
             File controlFile = FileFactory.getControlFile();
             LOGGER.info("Control file: {}", controlFile.toPath());
 
-            Sample sample = new Sample("abc");
+            Sample sample = new Sample("This is a long message to test bytes serialization");
             File file = Repository.save(sample);
 
             LOGGER.info("File is not null: {}", file != null);
+
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }

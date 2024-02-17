@@ -1,72 +1,97 @@
 package com.georgen.hawthorne.config;
 
-import java.io.File;
+import com.georgen.hawthorne.io.FileFactory;
+import com.georgen.hawthorne.io.FileManager;
+import com.georgen.hawthorne.model.exceptions.InitializationException;
+import com.georgen.hawthorne.model.messages.SystemMessage;
+import com.georgen.hawthorne.model.storage.StorageSchema;
+import com.georgen.hawthorne.serialization.Serializer;
+import com.georgen.hawthorne.serialization.StorageSchemaSerializer;
 
-import static com.georgen.hawthorne.model.constants.ConfigProperty.ENTITIES_DIRECTORY_NAME;
-import static com.georgen.hawthorne.model.constants.ConfigProperty.ROOT_DIRECTORY_NAME;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Serializable;
+
+import static com.georgen.hawthorne.model.constants.ConfigProperty.*;
 
 public class Settings {
-    private SystemConfig config;
-    private String rootFolderName;
-    private String entitiesFolderName;
-    private String filesFolderName;
-    private String collectionsFolderName;
+    private static Settings instance;
+    private ConfigReader configReader;
+    private StorageSchema storageSchema;
 
-    public Settings(){
-        this.config = new SystemConfig();
-    }
+    private Settings(){
+        this.configReader = new ConfigReader();
+        File controlFile = getControlFile();
 
-    public SystemConfig getConfig() {
-        return config;
-    }
-
-    public void setConfig(SystemConfig config) {
-        this.config = config;
-    }
-
-    public String getRootFolderName() {
         try {
-            return this.rootFolderName != null ? this.rootFolderName : this.config.getProperty(ROOT_DIRECTORY_NAME);
+            String storageSchemaJson = FileManager.read(controlFile);
+            this.storageSchema = StorageSchemaSerializer.deserialize(storageSchemaJson);
         } catch (Exception e){
-            return ROOT_DIRECTORY_NAME.getDefaultValue();
+            this.storageSchema = new StorageSchema();
         }
     }
 
-    public void setRootFolderName(String rootFolderName) {
-        this.rootFolderName = rootFolderName;
+    public static Settings getInstance(){
+        if (instance == null){
+            synchronized (Settings.class){
+                if (instance == null){
+                    instance = new Settings();
+                }
+            }
+        }
+        return instance;
     }
 
-    public String getEntitiesFolderName() {
+    public String getRootPath() {
         try {
-            String entitiesFolderName = this.entitiesFolderName != null ? this.entitiesFolderName : this.config.getProperty(ENTITIES_DIRECTORY_NAME);
-            return String.format(
-                    "%s%s%s",
-                    this.getRootFolderName(),
-                    File.separator,
-                    entitiesFolderName
-            );
+            String rootFolderName = this.configReader.getProperty(ROOT_PATH);
+            return rootFolderName != null ? rootFolderName : ROOT_PATH.getDefaultValue();
         } catch (Exception e){
-            return ENTITIES_DIRECTORY_NAME.getDefaultValue();
+            return ROOT_PATH.getDefaultValue();
         }
     }
 
-    public void setEntitiesFolderName(String entitiesFolderName) {
-        this.entitiesFolderName = entitiesFolderName;
+    public String getEntitiesPath() {
+        try {
+            String entitiesPath = this.configReader.getProperty(ENTITIES_PATH);
+            return getPathRelativeToRoot(entitiesPath != null ? entitiesPath : ENTITIES_PATH.getDefaultValue());
+        } catch (Exception e){
+            return ENTITIES_PATH.getDefaultValue();
+        }
     }
 
-    public String getFilesFolderName() {
-        return filesFolderName;
+    public String getFilesPath() {
+        try {
+            String filesPath = this.configReader.getProperty(FILES_PATH);
+            return getPathRelativeToRoot(filesPath != null ? filesPath : FILES_PATH.getDefaultValue());
+        } catch (Exception e){
+            return FILES_PATH.getDefaultValue();
+        }
     }
 
-    public void setFilesFolderName(String filesFolderName) {
-        this.filesFolderName = filesFolderName;
+    public String getCollectionsPath() {
+        try {
+            String collectionsPath = this.configReader.getProperty(COLLECTIONS_PATH);
+            return getPathRelativeToRoot(collectionsPath != null ? collectionsPath : COLLECTIONS_PATH.getDefaultValue());
+        } catch (Exception e){
+            return COLLECTIONS_PATH.getDefaultValue();
+        }
     }
 
-    public String getCollectionsFolderName() {
-        return collectionsFolderName;
+    public File getControlFile() {
+        try {
+            return FileFactory.getFile(configReader.getControlFilePath());
+        } catch (Exception e){
+            throw new InitializationException(SystemMessage.CONTROL_FILE_LOAD_FAIL, e);
+        }
     }
 
-    public void setCollectionsFolderName(String collectionsFolderName) {
-        this.collectionsFolderName = collectionsFolderName;
+    public StorageSchema getStorageSchema(){
+        return this.storageSchema;
+    }
+
+    private String getPathRelativeToRoot(String path){
+        return String.format("%s%s%s", getRootPath(), File.separator, path);
     }
 }

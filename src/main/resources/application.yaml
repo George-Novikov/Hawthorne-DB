@@ -1,0 +1,8 @@
+hawthorne:
+  naming:
+    root-directory: hawthorne
+    control-file: storage.json
+    storage-directory: storage
+    entities-directory: entities
+    collections-directory: collections
+    files-directory: files

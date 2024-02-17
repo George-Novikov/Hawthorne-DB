@@ -4,7 +4,6 @@ import com.georgen.hawthorne.api.annotations.entities.EntityCollection;
 import com.georgen.hawthorne.api.annotations.entities.FileEntity;
 import com.georgen.hawthorne.api.annotations.entities.MonoEntity;
 import com.georgen.hawthorne.model.exceptions.FileException;
-import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.messages.FileMessage;
 
 public enum EntityType {

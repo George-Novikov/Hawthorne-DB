@@ -1,7 +1,7 @@
 package com.georgen.hawthorne.model.constants;
 
 public enum SystemProperty {
-    CONFIG_FILE_NAME("hawthorne.properties");
+    CONFIG_FILE_NAME("application.properties");
 
     private String value;
 
