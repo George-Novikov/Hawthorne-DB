@@ -1,26 +1,22 @@
-package com.georgen.hawthorne.config;
+package com.georgen.hawthorne.settings;
 
 import com.georgen.hawthorne.io.FileFactory;
 import com.georgen.hawthorne.io.FileManager;
 import com.georgen.hawthorne.model.exceptions.InitializationException;
 import com.georgen.hawthorne.model.messages.SystemMessage;
 import com.georgen.hawthorne.model.storage.StorageSchema;
-import com.georgen.hawthorne.serialization.Serializer;
 import com.georgen.hawthorne.serialization.StorageSchemaSerializer;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Serializable;
 
 import static com.georgen.hawthorne.model.constants.ConfigProperty.*;
 
-public class Settings {
-    private static Settings instance;
+public class StorageSettings {
+    private static StorageSettings instance;
     private ConfigReader configReader;
     private StorageSchema storageSchema;
 
-    private Settings(){
+    private StorageSettings(){
         this.configReader = new ConfigReader();
         File controlFile = getControlFile();
 
@@ -28,15 +24,15 @@ public class Settings {
             String storageSchemaJson = FileManager.read(controlFile);
             this.storageSchema = StorageSchemaSerializer.deserialize(storageSchemaJson);
         } catch (Exception e){
-            this.storageSchema = new StorageSchema();
+            this.storageSchema = new StorageSchema(controlFile);
         }
     }
 
-    public static Settings getInstance(){
+    public static StorageSettings getInstance(){
         if (instance == null){
-            synchronized (Settings.class){
+            synchronized (StorageSettings.class){
                 if (instance == null){
-                    instance = new Settings();
+                    instance = new StorageSettings();
                 }
             }
         }

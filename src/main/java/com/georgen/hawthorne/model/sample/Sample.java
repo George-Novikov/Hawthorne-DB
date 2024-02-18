@@ -10,6 +10,8 @@ public class Sample {
     private byte[] bytes;
     private SubSample subSample;
 
+    public Sample() {}
+
     public Sample(String field) {
         this.field = field;
         this.bytes = field.getBytes();

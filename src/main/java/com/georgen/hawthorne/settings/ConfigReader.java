@@ -1,4 +1,4 @@
-package com.georgen.hawthorne.config;
+package com.georgen.hawthorne.settings;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;

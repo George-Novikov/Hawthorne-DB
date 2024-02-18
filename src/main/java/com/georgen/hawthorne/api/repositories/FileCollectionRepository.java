@@ -5,9 +5,9 @@ import com.georgen.hawthorne.model.storage.StorageUnit;
 
 import java.io.File;
 
-public class SingletonFileRepository implements GenericRepository {
+public class FileCollectionRepository implements GenericRepository {
     @Override
-    public File save(StorageUnit storageUnit){
+    public File save(StorageUnit storageUnit) {
         return null;
     }
 

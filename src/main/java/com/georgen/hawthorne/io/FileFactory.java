@@ -1,6 +1,6 @@
 package com.georgen.hawthorne.io;
 
-import com.georgen.hawthorne.config.Settings;
+import com.georgen.hawthorne.settings.StorageSettings;
 import com.georgen.hawthorne.tools.SystemHelper;
 
 import java.io.File;
@@ -18,15 +18,15 @@ public class FileFactory {
         if (controlFile == null){
             synchronized (FileFactory.class){
                 if (controlFile == null){
-                    controlFile = Settings.getInstance().getControlFile();
+                    controlFile = StorageSettings.getInstance().getControlFile();
                 }
             }
         }
         return controlFile;
     }
 
-    public static File getFile(String name) throws IOException {
-        File file = new File(name);
+    public static File getFile(String path) throws IOException {
+        File file = new File(path);
         if (!file.exists()) file = createFile(file);
         return file;
     }

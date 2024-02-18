@@ -18,8 +18,11 @@ public class Hawthorne {
 
             Sample sample = new Sample("This is a long message to test bytes serialization");
             File file = Repository.save(sample);
-
             LOGGER.info("File is not null: {}", file != null);
+
+            Sample retrievedSample = Repository.get(Sample.class);
+            LOGGER.info("Retrieved sample is not null: {}", retrievedSample != null);
+            LOGGER.info("Sample field: {}", sample.getField());
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);

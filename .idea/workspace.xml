@@ -5,25 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a21c502-bf7b-46bf-9d89-07dc9a468797" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/storage/EntityUnit.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/storage/FileUnit.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/storage/StorageArchetype.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/tools/ByteContentExtractor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/repositories/FileCollectionRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/Hawthorne.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/Hawthorne.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/annotations/AnnotationProcessor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/annotations/entities/FileEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/annotations/entities/SingletonFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/annotations/entities/MonoEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/annotations/entities/FileCollection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/annotations/entities/SingletonEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/annotations/entities/SingletonEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/repositories/FileRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/repositories/SingletonFileRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/repositories/MonoEntityRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/repositories/SingletonEntityRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/repositories/EntityCollectionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/repositories/EntityCollectionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/repositories/GenericRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/repositories/GenericRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/repositories/Repository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/repositories/Repository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/repositories/RepositoryFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/repositories/RepositoryFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/constants/EntityType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/constants/EntityType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/repositories/SingletonEntityRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/repositories/SingletonEntityRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/repositories/SingletonFileRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/repositories/SingletonFileRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/config/ConfigReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/settings/ConfigReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/config/Settings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/settings/StorageSettings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/io/FileFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/io/FileFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/messages/FileMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/messages/FileMessage.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/sample/Sample.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/sample/Sample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/storage/StorageArchetype.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/storage/StorageArchetype.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/storage/StorageSchema.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/storage/StorageSchema.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/storage/StorageUnit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/storage/StorageUnit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/serialization/Serializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/serialization/Serializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/tools/PathBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/tools/PathBuilder.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -213,6 +211,7 @@
       <workItem from="1708149432029" duration="3073000" />
       <workItem from="1708157568303" duration="6847000" />
       <workItem from="1708173122430" duration="11616000" />
+      <workItem from="1708271259328" duration="2581000" />
     </task>
     <servers />
   </component>
