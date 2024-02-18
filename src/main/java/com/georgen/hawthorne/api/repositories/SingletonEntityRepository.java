@@ -4,7 +4,7 @@ import com.georgen.hawthorne.config.Settings;
 import com.georgen.hawthorne.io.FileFactory;
 import com.georgen.hawthorne.io.FileManager;
 import com.georgen.hawthorne.model.storage.StorageSchema;
-import com.georgen.hawthorne.model.storage.StorageUnit;
+import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.serialization.Serializer;
 import com.georgen.hawthorne.tools.logging.SelfTracking;
 import org.slf4j.Logger;
@@ -12,11 +12,11 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
-public class MonoEntityRepository<T> implements GenericRepository, SelfTracking {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MonoEntityRepository.class);
+public class SingletonEntityRepository<T> implements GenericRepository, SelfTracking {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SingletonEntityRepository.class);
     private String entityFolderName;
 
-    public MonoEntityRepository(){
+    public SingletonEntityRepository(){
         this.entityFolderName = Settings.getInstance().getEntitiesPath();
     }
     @Override
@@ -24,7 +24,7 @@ public class MonoEntityRepository<T> implements GenericRepository, SelfTracking 
         try {
             LOGGER.info(start());
 
-            StorageUnit unit = new StorageUnit(object);
+            StorageArchetype unit = new StorageArchetype(object);
             StorageSchema storageSchema = Settings.getInstance().getStorageSchema();
             storageSchema.register(unit);
             storageSchema.save();

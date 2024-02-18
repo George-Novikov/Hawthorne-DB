@@ -1,36 +1,39 @@
 package com.georgen.hawthorne.api.repositories;
 
 import com.georgen.hawthorne.model.constants.EntityType;
-
-import java.io.File;
+import com.georgen.hawthorne.model.storage.StorageArchetype;
 
 public class RepositoryFactory {
-    private MonoEntityRepository monoEntityRepository;
+    private SingletonEntityRepository singletonEntityRepository;
     private EntityCollectionRepository entityCollectionRepository;
-    private FileRepository fileRepository;
+    private SingletonFileRepository singletonFileRepository;
+
+    public GenericRepository getRepository(StorageArchetype archetype){
+        return getRepository(archetype.getEntityType());
+    }
 
     public GenericRepository getRepository(EntityType entityType){
         switch (entityType){
-            case MONO_ENTITY:
-                return this.getMonoEntityRepository();
+            case SINGLETON_ENTITY:
+                return this.getSingletonEntityRepository();
             case ENTITY_COLLECTION:
                 return this.getEntityCollectionRepository();
-            case FILE:
-                return this.getFileRepository();
+            case SINGLETON_FILE:
+                return this.getSingletonFileRepository();
             default:
-                return this.getMonoEntityRepository();
+                return this.getSingletonEntityRepository();
         }
     }
 
-    private MonoEntityRepository getMonoEntityRepository(){
-        if (this.monoEntityRepository == null){
+    private SingletonEntityRepository getSingletonEntityRepository(){
+        if (this.singletonEntityRepository == null){
             synchronized (RepositoryFactory.class){
-                if (this.monoEntityRepository == null){
-                    this.monoEntityRepository = new MonoEntityRepository();
+                if (this.singletonEntityRepository == null){
+                    this.singletonEntityRepository = new SingletonEntityRepository();
                 }
             }
         }
-        return this.monoEntityRepository;
+        return this.singletonEntityRepository;
     }
 
     private EntityCollectionRepository getEntityCollectionRepository(){
@@ -44,14 +47,14 @@ public class RepositoryFactory {
         return this.entityCollectionRepository;
     }
 
-    private FileRepository getFileRepository(){
-        if (this.fileRepository == null){
+    private SingletonFileRepository getSingletonFileRepository(){
+        if (this.singletonFileRepository == null){
             synchronized (RepositoryFactory.class){
-                if (this.fileRepository == null){
-                    this.fileRepository = new FileRepository();
+                if (this.singletonFileRepository == null){
+                    this.singletonFileRepository = new SingletonFileRepository();
                 }
             }
         }
-        return this.fileRepository;
+        return this.singletonFileRepository;
     }
 }

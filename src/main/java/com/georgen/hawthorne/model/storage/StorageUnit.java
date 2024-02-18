@@ -1,53 +1,48 @@
 package com.georgen.hawthorne.model.storage;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.georgen.hawthorne.model.constants.EntityType;
 import com.georgen.hawthorne.model.exceptions.FileException;
-import com.georgen.hawthorne.tools.PathBuilder;
 
-public class StorageUnit {
-    private String simpleName;
-    private String fullName;
-    private EntityType entityType;
-    private String path;
+import java.lang.reflect.InvocationTargetException;
 
-    public StorageUnit(Object object) throws FileException {
-        Class javaClass = object.getClass();
+public abstract class StorageUnit<T> {
+    private StorageArchetype archetype;
+    private String metadata;
+    private T content;
 
-        this.simpleName = javaClass.getSimpleName();
-        this.fullName = javaClass.getName();
-        this.entityType = EntityType.of(javaClass);
-        this.path = PathBuilder.getPath(this.simpleName, entityType);
+    public StorageArchetype getArchetype() {
+        return archetype;
     }
 
-    public String getSimpleName() {
-        return simpleName;
+    public void setArchetype(StorageArchetype archetype) {
+        this.archetype = archetype;
     }
 
-    public void setSimpleName(String simpleName) {
-        this.simpleName = simpleName;
+    public String getMetadata() {
+        return metadata;
     }
 
-    public String getFullName() {
-        return fullName;
+    public void setMetadata(String metadata) {
+        this.metadata = metadata;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public T getContent() {
+        return content;
     }
 
-    public EntityType getEntityType() {
-        return entityType;
+    public void setContent(T content) {
+        this.content = content;
     }
 
-    public void setEntityType(EntityType entityType) {
-        this.entityType = entityType;
-    }
+    public static StorageUnit of(Object object) throws FileException, JsonProcessingException, InvocationTargetException, IllegalAccessException {
+        StorageArchetype archetype = new StorageArchetype(object);
+        EntityType entityType = archetype.getEntityType();
 
-    public String getPath() {
-        return path;
-    }
+        if (entityType.isFile()){
+            return new FileUnit(archetype, object);
+        }
 
-    public void setPath(String path) {
-        this.path = path;
+        return new EntityUnit(archetype, object);
     }
 }

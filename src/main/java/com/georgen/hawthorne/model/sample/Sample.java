@@ -1,9 +1,9 @@
 package com.georgen.hawthorne.model.sample;
 
 import com.georgen.hawthorne.api.annotations.BinaryData;
-import com.georgen.hawthorne.api.annotations.entities.MonoEntity;
+import com.georgen.hawthorne.api.annotations.entities.SingletonEntity;
 
-@MonoEntity(name = "Sample")
+@SingletonEntity(name = "Sample")
 public class Sample {
     private String field;
     @BinaryData
