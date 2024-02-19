@@ -8,7 +8,9 @@ public enum FileMessage implements Descriptive {
     BINARY_DATA_EXTRACTION_ERROR("Binary data extraction error."),
     NO_ENTITY_ANNOTATION("The object data cannot be processed because the @SingletonEntity or @EntityCollection annotations are missing."),
     ENTITY_RETRIEVAL_ERROR("Entity retrieval error."),
-    NO_ID_ANNOTATION("The object cannot be processed because no fields or methods are marked with the @Id annotation.");
+    NO_ID_ANNOTATION("The object cannot be processed because no fields or methods are marked with the @Id annotation."),
+    FILE_IS_CORRUPTED("The file cannot be read because its structure is corrupted."),
+    DELETE_FAIL("This file cannot be deleted because it does not exist.");
 
     private String description;
 

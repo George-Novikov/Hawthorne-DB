@@ -34,7 +34,6 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
 
             StorageSchema storageSchema = StorageSettings.getInstance().getStorageSchema();
             storageSchema.update(archetype);
-            storageSchema.save();
 
             LOGGER.info("File path: {}", archetype.getPath());
 
@@ -52,7 +51,10 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
     public <T, I> T get(StorageArchetype archetype, I... id){
         try {
             File file = FileFactory.getFile(archetype.getPath());
+            if (file == null) return null;
+
             String json = FileManager.read(file);
+            if (json == null || json.isEmpty()) throw new HawthorneException(FileMessage.FILE_IS_CORRUPTED);
 
             Class javaClass = Class.forName(archetype.getFullName());
             T object = Serializer.deserialize(json, javaClass);
@@ -62,6 +64,18 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
         } catch (Exception e){
             LOGGER.error(e.getMessage(), e);
             return null;
+        }
+    }
+
+    @Override
+    public <I> boolean delete(StorageArchetype archetype, I... id) {
+        try {
+            File file = FileFactory.getFile(archetype.getPath());
+            if (file == null) throw new HawthorneException(FileMessage.DELETE_FAIL);
+            return FileManager.delete(file);
+        } catch (Exception e){
+            LOGGER.error(e.getMessage(), e);
+            return false;
         }
     }
 

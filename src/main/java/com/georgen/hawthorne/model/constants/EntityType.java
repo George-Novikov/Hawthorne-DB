@@ -33,6 +33,13 @@ public enum EntityType {
         throw new HawthorneException(FileMessage.NOT_COMPATIBLE);
     }
 
+    public static boolean isTyped(Class javaClass){
+        return javaClass.isAnnotationPresent(SingletonEntity.class)
+                || javaClass.isAnnotationPresent(EntityCollection.class)
+                || javaClass.isAnnotationPresent(SingletonFile.class)
+                || javaClass.isAnnotationPresent(FileCollection.class);
+    }
+
     public boolean isEntity(){
         return SINGLETON_ENTITY.equals(this) || ENTITY_COLLECTION.equals(this);
     }

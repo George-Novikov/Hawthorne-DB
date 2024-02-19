@@ -29,6 +29,9 @@ public class Hawthorne {
             IdType idType = IdTypeExtractor.extract(retrievedSample);
             LOGGER.info("Retrieved sample IdType: {}", idType);
 
+            boolean isDeleted = Repository.delete(Sample.class);
+            LOGGER.info("Is sample deleted: {}", isDeleted);
+
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
         }

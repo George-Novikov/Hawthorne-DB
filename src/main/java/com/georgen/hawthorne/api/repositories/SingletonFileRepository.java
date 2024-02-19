@@ -15,4 +15,9 @@ public class SingletonFileRepository implements GenericRepository {
     public <T, I> T get(StorageArchetype archetype, I... id){
         return null;
     }
+
+    @Override
+    public <I> boolean delete(StorageArchetype archetype, I... id) {
+        return false;
+    }
 }

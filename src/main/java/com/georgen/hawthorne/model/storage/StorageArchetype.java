@@ -1,17 +1,18 @@
 package com.georgen.hawthorne.model.storage;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.georgen.hawthorne.model.constants.EntityType;
 import com.georgen.hawthorne.model.constants.IdType;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.tools.PathBuilder;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class StorageArchetype {
     private String simpleName;
     private String fullName;
     private EntityType entityType;
     private IdType idType;
     private String path;
-    private int count;
 
     public StorageArchetype(Object object) throws HawthorneException {
         Class javaClass = object.getClass();
@@ -60,14 +61,6 @@ public class StorageArchetype {
 
     public void setPath(String path) {
         this.path = path;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
     }
 
     @Override

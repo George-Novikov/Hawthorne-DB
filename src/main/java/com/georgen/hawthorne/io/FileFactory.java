@@ -32,10 +32,12 @@ public class FileFactory {
     }
 
     private static File createFile(File file) throws IOException {
-        file.getParentFile().mkdirs();
-        file.createNewFile();
-        setFilePermissions(file);
-        return file;
+        synchronized (file){
+            file.getParentFile().mkdirs();
+            file.createNewFile();
+            setFilePermissions(file);
+            return file;
+        }
     }
 
     private static void setFilePermissions(File file) throws IOException {
