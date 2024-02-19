@@ -12,7 +12,7 @@ public class EntityCollectionRepository implements GenericRepository {
     }
 
     @Override
-    public <T> T get(StorageArchetype archetype){
+    public <T, I> T get(StorageArchetype archetype, I... id){
         return null;
     }
 }

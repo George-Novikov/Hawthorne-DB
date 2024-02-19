@@ -4,7 +4,7 @@ import com.georgen.hawthorne.api.annotations.entities.EntityCollection;
 import com.georgen.hawthorne.api.annotations.entities.FileCollection;
 import com.georgen.hawthorne.api.annotations.entities.SingletonFile;
 import com.georgen.hawthorne.api.annotations.entities.SingletonEntity;
-import com.georgen.hawthorne.model.exceptions.FileException;
+import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.messages.FileMessage;
 
 public enum EntityType {
@@ -13,7 +13,7 @@ public enum EntityType {
     SINGLETON_FILE,
     FILE_COLLECTION;
 
-    public static EntityType of(Class javaClass) throws FileException {
+    public static EntityType of(Class javaClass) throws HawthorneException {
         if (javaClass.isAnnotationPresent(SingletonEntity.class)){
             return EntityType.SINGLETON_ENTITY;
         }
@@ -30,7 +30,7 @@ public enum EntityType {
             return EntityType.FILE_COLLECTION;
         }
 
-        throw new FileException(FileMessage.NOT_COMPATIBLE);
+        throw new HawthorneException(FileMessage.NOT_COMPATIBLE);
     }
 
     public boolean isEntity(){

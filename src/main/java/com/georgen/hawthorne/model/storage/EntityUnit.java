@@ -1,12 +1,12 @@
 package com.georgen.hawthorne.model.storage;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.georgen.hawthorne.model.exceptions.FileException;
+import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.serialization.Serializer;
 
 public class EntityUnit extends StorageUnit<String> {
 
-    public EntityUnit(Object object) throws FileException, JsonProcessingException {
+    public EntityUnit(Object object) throws HawthorneException, JsonProcessingException {
         this(
                 new StorageArchetype(object),
                 object

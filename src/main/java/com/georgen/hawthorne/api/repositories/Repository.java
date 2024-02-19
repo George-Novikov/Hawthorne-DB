@@ -1,7 +1,5 @@
 package com.georgen.hawthorne.api.repositories;
 
-import com.georgen.hawthorne.model.constants.EntityType;
-import com.georgen.hawthorne.model.exceptions.FileException;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.model.storage.StorageSchema;

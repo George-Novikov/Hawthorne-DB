@@ -2,7 +2,7 @@ package com.georgen.hawthorne.model.storage;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.georgen.hawthorne.model.constants.EntityType;
-import com.georgen.hawthorne.model.exceptions.FileException;
+import com.georgen.hawthorne.model.exceptions.HawthorneException;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -35,7 +35,7 @@ public abstract class StorageUnit<T> {
         this.content = content;
     }
 
-    public static StorageUnit of(Object object) throws FileException, JsonProcessingException, InvocationTargetException, IllegalAccessException {
+    public static StorageUnit of(Object object) throws HawthorneException, JsonProcessingException, InvocationTargetException, IllegalAccessException {
         StorageArchetype archetype = new StorageArchetype(object);
         EntityType entityType = archetype.getEntityType();
 

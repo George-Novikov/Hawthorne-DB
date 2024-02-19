@@ -2,18 +2,16 @@ package com.georgen.hawthorne.model.exceptions;
 
 import com.georgen.hawthorne.model.messages.Descriptive;
 
-import java.io.File;
-
-public class FileException extends Exception {
-    public FileException(Descriptive descriptive){
+public class TypeException extends Exception {
+    public TypeException(Descriptive descriptive){
         super(descriptive.getDescription());
     }
 
-    public FileException(Throwable cause){
+    public TypeException(Throwable cause){
         super(cause);
     }
 
-    public FileException(String message, Throwable cause){
+    public TypeException(String message, Throwable cause){
         super(message, cause);
     }
 }

@@ -3,7 +3,7 @@ package com.georgen.hawthorne.model.messages;
 
 public enum ExceptionCaption implements Descriptive {
     INITIALIZATION_EXCEPTION("Hawthorne initialization error: %s"),
-    HAWTHORNE_EXCEPTION("Hawthorne initialization error: %s")
+    HAWTHORNE_EXCEPTION("Hawthorne error: %s")
     ;
 
     private String description;

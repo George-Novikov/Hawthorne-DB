@@ -2,7 +2,9 @@ package com.georgen.hawthorne;
 
 import com.georgen.hawthorne.api.repositories.Repository;
 import com.georgen.hawthorne.io.FileFactory;
+import com.georgen.hawthorne.model.constants.IdType;
 import com.georgen.hawthorne.model.sample.Sample;
+import com.georgen.hawthorne.tools.extractors.IdTypeExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +25,9 @@ public class Hawthorne {
             Sample retrievedSample = Repository.get(Sample.class);
             LOGGER.info("Retrieved sample is not null: {}", retrievedSample != null);
             LOGGER.info("Sample field: {}", sample.getField());
+
+            IdType idType = IdTypeExtractor.extract(retrievedSample);
+            LOGGER.info("Retrieved sample IdType: {}", idType);
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);

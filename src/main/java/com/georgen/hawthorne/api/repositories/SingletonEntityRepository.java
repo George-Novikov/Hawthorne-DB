@@ -4,7 +4,7 @@ import com.georgen.hawthorne.serialization.Serializer;
 import com.georgen.hawthorne.settings.StorageSettings;
 import com.georgen.hawthorne.io.FileFactory;
 import com.georgen.hawthorne.io.FileManager;
-import com.georgen.hawthorne.model.exceptions.FileException;
+import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.messages.FileMessage;
 import com.georgen.hawthorne.model.storage.EntityUnit;
 import com.georgen.hawthorne.model.storage.StorageSchema;
@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.Serializable;
 
 public class SingletonEntityRepository<T> implements GenericRepository, SelfTracking {
     private static final Logger LOGGER = LoggerFactory.getLogger(SingletonEntityRepository.class);
@@ -50,14 +49,14 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
     }
 
     @Override
-    public <T> T get(StorageArchetype archetype){
+    public <T, I> T get(StorageArchetype archetype, I... id){
         try {
             File file = FileFactory.getFile(archetype.getPath());
             String json = FileManager.read(file);
 
             Class javaClass = Class.forName(archetype.getFullName());
             T object = Serializer.deserialize(json, javaClass);
-            if (object == null) throw new FileException(FileMessage.ENTITY_RETRIEVAL_ERROR);
+            if (object == null) throw new HawthorneException(FileMessage.ENTITY_RETRIEVAL_ERROR);
 
             return object;
         } catch (Exception e){
@@ -66,8 +65,8 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
         }
     }
 
-    private void validateType(StorageUnit storageUnit) throws FileException {
+    private void validateType(StorageUnit storageUnit) throws HawthorneException {
         boolean isEntityType = storageUnit instanceof EntityUnit;
-        if (!isEntityType) throw new FileException(FileMessage.NO_ENTITY_ANNOTATION);
+        if (!isEntityType) throw new HawthorneException(FileMessage.NO_ENTITY_ANNOTATION);
     }
 }

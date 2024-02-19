@@ -1,10 +1,13 @@
 package com.georgen.hawthorne.model.sample;
 
 import com.georgen.hawthorne.api.annotations.BinaryData;
+import com.georgen.hawthorne.api.annotations.Id;
 import com.georgen.hawthorne.api.annotations.entities.SingletonEntity;
 
 @SingletonEntity(name = "Sample")
 public class Sample {
+    @Id
+    private int id;
     private String field;
     @BinaryData
     private byte[] bytes;
@@ -16,6 +19,14 @@ public class Sample {
         this.field = field;
         this.bytes = field.getBytes();
         this.subSample = new SubSample();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getField() {

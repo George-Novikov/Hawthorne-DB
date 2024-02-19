@@ -1,17 +1,19 @@
 package com.georgen.hawthorne.model.storage;
 
 import com.georgen.hawthorne.model.constants.EntityType;
-import com.georgen.hawthorne.model.exceptions.FileException;
+import com.georgen.hawthorne.model.constants.IdType;
+import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.tools.PathBuilder;
 
 public class StorageArchetype {
     private String simpleName;
     private String fullName;
     private EntityType entityType;
+    private IdType idType;
     private String path;
     private int count;
 
-    public StorageArchetype(Object object) throws FileException {
+    public StorageArchetype(Object object) throws HawthorneException {
         Class javaClass = object.getClass();
 
         this.simpleName = javaClass.getSimpleName();
@@ -42,6 +44,14 @@ public class StorageArchetype {
 
     public void setEntityType(EntityType entityType) {
         this.entityType = entityType;
+    }
+
+    public IdType getIdType() {
+        return idType;
+    }
+
+    public void setIdType(IdType idType) {
+        this.idType = idType;
     }
 
     public String getPath() {

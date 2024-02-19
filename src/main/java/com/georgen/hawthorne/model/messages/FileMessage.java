@@ -7,7 +7,8 @@ public enum FileMessage implements Descriptive {
     BINARY_DATA_IS_NULL("The field of method annotated with @BinaryData is null."),
     BINARY_DATA_EXTRACTION_ERROR("Binary data extraction error."),
     NO_ENTITY_ANNOTATION("The object data cannot be processed because the @SingletonEntity or @EntityCollection annotations are missing."),
-    ENTITY_RETRIEVAL_ERROR("Entity retrieval error.");
+    ENTITY_RETRIEVAL_ERROR("Entity retrieval error."),
+    NO_ID_ANNOTATION("The object cannot be processed because no fields or methods are marked with the @Id annotation.");
 
     private String description;
 
