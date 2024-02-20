@@ -6,6 +6,7 @@ import com.georgen.hawthorne.model.exceptions.InitializationException;
 import com.georgen.hawthorne.model.messages.SystemMessage;
 import com.georgen.hawthorne.model.storage.StorageSchema;
 import com.georgen.hawthorne.serialization.StorageSchemaSerializer;
+import com.georgen.hawthorne.tools.PathBuilder;
 
 import java.io.File;
 
@@ -88,6 +89,6 @@ public class StorageSettings {
     }
 
     private String getPathRelativeToRoot(String path){
-        return String.format("%s%s%s", getRootPath(), File.separator, path);
+        return PathBuilder.concat(getRootPath(), path);
     }
 }

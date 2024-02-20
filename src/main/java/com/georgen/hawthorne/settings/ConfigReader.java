@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.georgen.hawthorne.model.constants.ConfigProperty;
 import com.georgen.hawthorne.model.constants.SystemProperty;
+import com.georgen.hawthorne.tools.PathBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +20,7 @@ public class ConfigReader {
     public String getControlFilePath() throws IOException {
         String rootFolderName = getProperty(ConfigProperty.ROOT_PATH);
         String controlFileName = getProperty(ConfigProperty.CONTROL_FILE_NAME);
-        return String.format("%s%s%s", rootFolderName, File.separator, controlFileName);
+        return PathBuilder.concat(rootFolderName, controlFileName);
     }
 
     public String getProperty(ConfigProperty property) throws IOException {

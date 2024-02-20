@@ -8,12 +8,8 @@ import java.io.File;
 
 public class PathBuilder {
 
-
-    public static String getPath(StorageArchetype archetype){
-        switch (archetype.getEntityType()){
-            default:
-                return getSingletonEntityPath(archetype.getSimpleName());
-        }
+    public static String concat(String parentPath, String childPath){
+        return String.format("%s%s%s", parentPath, File.separator, childPath);
     }
 
     public static String getPath(String filePath, EntityType entityType){
@@ -25,6 +21,6 @@ public class PathBuilder {
 
     private static String getSingletonEntityPath(String filePath){
         String entitiesFolderName = StorageSettings.getInstance().getEntitiesPath();
-        return String.format("%s%s%s.json", entitiesFolderName, File.separator, filePath);
+        return concat(entitiesFolderName, filePath);
     }
 }
