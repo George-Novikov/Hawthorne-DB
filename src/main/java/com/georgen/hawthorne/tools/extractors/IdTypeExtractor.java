@@ -4,7 +4,7 @@ import com.georgen.hawthorne.api.annotations.Id;
 import com.georgen.hawthorne.model.constants.IdType;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.exceptions.TypeException;
-import com.georgen.hawthorne.model.messages.FileMessage;
+import com.georgen.hawthorne.model.messages.Message;
 import com.georgen.hawthorne.model.messages.TypeMessage;
 
 import java.lang.reflect.Field;
@@ -23,7 +23,7 @@ public class IdTypeExtractor {
         idType = getFromMethods(javaClass);
         if (idType != null) return idType;
 
-        throw new HawthorneException(FileMessage.NO_ID_ANNOTATION);
+        throw new HawthorneException(Message.NO_ID_ANNOTATION);
     }
 
     private static IdType getFromFields(Class javaClass) throws TypeException {

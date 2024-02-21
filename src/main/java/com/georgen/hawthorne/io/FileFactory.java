@@ -31,6 +31,11 @@ public class FileFactory {
         return file;
     }
 
+    public static boolean isExistingFile(String path){
+        File file = new File(path);
+        return file.exists();
+    }
+
     private static File createFile(File file) throws IOException {
         synchronized (file){
             file.getParentFile().mkdirs();

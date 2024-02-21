@@ -13,7 +13,6 @@ import java.io.File;
 import static com.georgen.hawthorne.model.constants.ConfigProperty.*;
 
 public class StorageSettings {
-    private static StorageSettings instance;
     private ConfigReader configReader;
     private StorageSchema storageSchema;
 
@@ -29,15 +28,12 @@ public class StorageSettings {
         }
     }
 
+    private static class StorageSettingsInitializer {
+        private static final StorageSettings INSTANCE = new StorageSettings();
+    }
+
     public static StorageSettings getInstance(){
-        if (instance == null){
-            synchronized (StorageSettings.class){
-                if (instance == null){
-                    instance = new StorageSettings();
-                }
-            }
-        }
-        return instance;
+        return StorageSettingsInitializer.INSTANCE;
     }
 
     public String getRootPath() {

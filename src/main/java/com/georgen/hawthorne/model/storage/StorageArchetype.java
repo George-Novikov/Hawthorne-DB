@@ -70,6 +70,7 @@ public class StorageArchetype {
         if (this.simpleName != null) hashCode = 31 * hashCode + this.simpleName.hashCode();
         if (this.fullName != null) hashCode = 31 * hashCode + this.fullName.hashCode();
         if (this.entityType != null) hashCode = 31 * hashCode + this.entityType.hashCode();
+        if (this.idType != null) hashCode = 31 * hashCode + this.idType.hashCode();
         if (this.path != null) hashCode = 31 * hashCode + this.path.hashCode();
 
         return hashCode;
@@ -92,9 +93,12 @@ public class StorageArchetype {
         boolean isEntityTypeEqual = (this.entityType == null && other.getEntityType() == null)
                 || (this.entityType != null && this.entityType.equals(other.getEntityType()));
 
+        boolean isIdTypeEqual = (this.idType == null && other.getIdType() == null)
+                || (this.idType != null && this.idType.equals(other.getIdType()));
+
         boolean isPathEqual = (this.path == null && other.getPath() == null)
                 || (this.path != null && this.path.equals(other.getPath()));
 
-        return isSimpleNameEqual && isFullNameEqual && isEntityTypeEqual && isPathEqual;
+        return isSimpleNameEqual && isFullNameEqual && isEntityTypeEqual && isIdTypeEqual && isPathEqual;
     }
 }

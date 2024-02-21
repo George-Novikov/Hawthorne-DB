@@ -3,7 +3,7 @@ package com.georgen.hawthorne.tools.extractors;
 import com.georgen.hawthorne.api.annotations.BinaryData;
 import com.georgen.hawthorne.model.constants.EntityType;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
-import com.georgen.hawthorne.model.messages.FileMessage;
+import com.georgen.hawthorne.model.messages.Message;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -20,7 +20,7 @@ public class ByteContentExtractor {
         data = getFromMethods(javaClass, object);
         if (data != null) return data;
 
-        throw new HawthorneException(FileMessage.BINARY_DATA_EXTRACTION_ERROR);
+        throw new HawthorneException(Message.BINARY_DATA_EXTRACTION_ERROR);
     }
 
     private static byte[] getFromFields(Class javaClass, Object object) throws IllegalAccessException, HawthorneException {
@@ -49,12 +49,12 @@ public class ByteContentExtractor {
 
     private static void validateType(Class javaClass) throws HawthorneException {
         EntityType entityType = EntityType.of(javaClass);
-        if (!entityType.isFile()) throw new HawthorneException(FileMessage.NO_FILE_ANNOTATION);
+        if (!entityType.isFile()) throw new HawthorneException(Message.NO_FILE_ANNOTATION);
     }
 
     private static void validateData(Object data) throws HawthorneException {
-        if (data == null) throw new HawthorneException(FileMessage.BINARY_DATA_IS_NULL);
+        if (data == null) throw new HawthorneException(Message.BINARY_DATA_IS_NULL);
         boolean isByteArray = data instanceof byte[];
-        if (isByteArray) throw new HawthorneException(FileMessage.NOT_A_BYTE_ARRAY);
+        if (isByteArray) throw new HawthorneException(Message.NOT_A_BYTE_ARRAY);
     }
 }

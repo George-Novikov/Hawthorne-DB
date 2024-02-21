@@ -1,11 +1,12 @@
 package com.georgen.hawthorne.api.repositories;
 
+import com.georgen.hawthorne.model.sample.Sample;
 import com.georgen.hawthorne.serialization.Serializer;
 import com.georgen.hawthorne.settings.StorageSettings;
 import com.georgen.hawthorne.io.FileFactory;
 import com.georgen.hawthorne.io.FileManager;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
-import com.georgen.hawthorne.model.messages.FileMessage;
+import com.georgen.hawthorne.model.messages.Message;
 import com.georgen.hawthorne.model.storage.EntityUnit;
 import com.georgen.hawthorne.model.storage.StorageSchema;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
@@ -15,14 +16,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SingletonEntityRepository<T> implements GenericRepository, SelfTracking {
     private static final Logger LOGGER = LoggerFactory.getLogger(SingletonEntityRepository.class);
-    private String entityFolderName;
 
-    public SingletonEntityRepository(){
-        this.entityFolderName = StorageSettings.getInstance().getEntitiesPath();
-    }
     @Override
     public File save(StorageUnit storageUnit){
         try {
@@ -34,8 +33,6 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
 
             StorageSchema storageSchema = StorageSettings.getInstance().getStorageSchema();
             storageSchema.update(archetype);
-
-            LOGGER.info("File path: {}", archetype.getPath());
 
             File file = FileFactory.getFile(archetype.getPath());
             FileManager.write(file, entityUnit.getContent());
@@ -50,15 +47,17 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
     @Override
     public <T, I> T get(StorageArchetype archetype, I... id){
         try {
+            LOGGER.info(start());
+
             File file = FileFactory.getFile(archetype.getPath());
             if (file == null) return null;
 
             String json = FileManager.read(file);
-            if (json == null || json.isEmpty()) throw new HawthorneException(FileMessage.FILE_IS_CORRUPTED);
+            if (json == null || json.isEmpty()) throw new HawthorneException(Message.FILE_IS_CORRUPTED);
 
             Class javaClass = Class.forName(archetype.getFullName());
             T object = Serializer.deserialize(json, javaClass);
-            if (object == null) throw new HawthorneException(FileMessage.ENTITY_RETRIEVAL_ERROR);
+            if (object == null) throw new HawthorneException(Message.ENTITY_RETRIEVAL_ERROR);
 
             return object;
         } catch (Exception e){
@@ -70,8 +69,9 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
     @Override
     public <I> boolean delete(StorageArchetype archetype, I... id) {
         try {
+            LOGGER.info(start());
             File file = FileFactory.getFile(archetype.getPath());
-            if (file == null) throw new HawthorneException(FileMessage.DELETE_FAIL);
+            if (file == null) throw new HawthorneException(Message.DELETE_FAIL);
             return FileManager.delete(file);
         } catch (Exception e){
             LOGGER.error(e.getMessage(), e);
@@ -79,8 +79,21 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
         }
     }
 
+    @Override
+    public <T> List<T> list(StorageArchetype archetype) {
+        LOGGER.info(start());
+        T object = get(archetype);
+        return new ArrayList<T>() {{ add(object); }};
+    }
+
+    //TODO: maybe it would be better to return the number of versions
+    public <T> long count(StorageArchetype archetype){
+        LOGGER.info(start());
+        return FileFactory.isExistingFile(archetype.getPath()) ? 1 : 0;
+    }
+
     private void validateType(StorageUnit storageUnit) throws HawthorneException {
         boolean isEntityType = storageUnit instanceof EntityUnit;
-        if (!isEntityType) throw new HawthorneException(FileMessage.NO_ENTITY_ANNOTATION);
+        if (!isEntityType) throw new HawthorneException(Message.NO_ENTITY_ANNOTATION);
     }
 }

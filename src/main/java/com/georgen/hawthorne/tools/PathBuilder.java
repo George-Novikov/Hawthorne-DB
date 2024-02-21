@@ -21,6 +21,11 @@ public class PathBuilder {
 
     private static String getSingletonEntityPath(String filePath){
         String entitiesFolderName = StorageSettings.getInstance().getEntitiesPath();
+        return concat(entitiesFolderName, String.format("%s.json", filePath));
+    }
+
+    private static String getEntityCollectionPath(String filePath){
+        String entitiesFolderName = StorageSettings.getInstance().getEntitiesPath();
         return concat(entitiesFolderName, filePath);
     }
 }

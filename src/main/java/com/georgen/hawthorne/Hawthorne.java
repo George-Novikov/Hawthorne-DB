@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.List;
 
 public class Hawthorne {
     private static final Logger LOGGER = LoggerFactory.getLogger(Hawthorne.class);
@@ -19,8 +20,8 @@ public class Hawthorne {
             LOGGER.info("Control file: {}", controlFile.toPath());
 
             Sample sample = new Sample("This is a long message to test bytes serialization");
-            File file = Repository.save(sample);
-            LOGGER.info("File is not null: {}", file != null);
+            Sample savedSample = Repository.save(sample);
+            LOGGER.info("Saved sample is not null: {}", savedSample != null);
 
             Sample retrievedSample = Repository.get(Sample.class);
             LOGGER.info("Retrieved sample is not null: {}", retrievedSample != null);
@@ -29,8 +30,14 @@ public class Hawthorne {
             IdType idType = IdTypeExtractor.extract(retrievedSample);
             LOGGER.info("Retrieved sample IdType: {}", idType);
 
+            List<Sample> sampleList = Repository.list(Sample.class);
+            LOGGER.info("Sample list: {}", sampleList);
+
             boolean isDeleted = Repository.delete(Sample.class);
             LOGGER.info("Is sample deleted: {}", isDeleted);
+
+            long sampleCount = Repository.count(Sample.class);
+            LOGGER.info("Sample count: {}", sampleCount);
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
