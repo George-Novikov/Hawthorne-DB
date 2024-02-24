@@ -11,41 +11,53 @@ import java.io.File;
 /**
  * @SingletonEntity path: root + entities + customPath + classSimpleName + partitionNumber + classSimpleName.json
  * @EntityCollention path: root + entities + customPath + classSimpleName + partitionNumber + id.json
- * @BinaryData path: root + entities + customPath + classSimpleName + partitionNumber + binary-data + id/classSimpleName.json
+ * @BinaryData path: root + entities + customPath + classSimpleName + partitionNumber + binary-data + id.bin or classSimpleName.bin
  *
  */
 public class PathBuilder {
-    //
-    // JSON file path: root + entities + fileSimpleName + partition +
+    private static final String ENTITY_FILE_EXTENSION = "json";
+    private static final String BINARY_DATA_EXTENSION = "bin";
 
     public static String concat(String parentPath, String childPath){
         return String.format("%s%s%s", parentPath, File.separator, childPath);
     }
 
-    public static String getPath(StorageArchetype archetype){
-        return null;
+    public static String buildBasePath(Object object, StorageArchetype archetype){
+        EntityType entityType = archetype.getEntityType();
+
+        return entityType.isCollection() ? getCollectionPath(object, archetype) : getSingletonPath(object, archetype);
     }
 
-    public static String getPath(String filePath, EntityType entityType){
-        switch (entityType){
-            default:
-                return getSingletonPath(filePath);
-        }
+    private static String getSingletonPath(Object object, StorageArchetype archetype){
+        String entitiesBasePath = StorageSettings.getInstance().getEntitiesPath();
+        String customSourcePath = extractPathFromAnnotation(object);
+        return concat(entitiesBasePath, customSourcePath);
     }
 
-    private static String getSingletonPath(String filePath){
-        String entitiesFolderName = StorageSettings.getInstance().getEntitiesPath();
-        return concat(entitiesFolderName, String.format("%s.json", filePath));
+    private static String getCollectionPath(Object object, StorageArchetype archetype){
+        String entitiesBasePath = StorageSettings.getInstance().getEntitiesPath();
+        String customSourcePath = extractPathFromAnnotation(object);
+        String archetypeSimpleName = archetype.getSimpleName();
+        String partitionPath = String.valueOf(archetype.getPartitionsCounter());
+        return concat(
+                concat(entitiesBasePath, customSourcePath),
+                concat(archetypeSimpleName, partitionPath)
+        );
     }
 
-    private static String getCollectionPath(String filePath){
-        String entitiesFolderName = StorageSettings.getInstance().getEntitiesPath();
-        return concat(entitiesFolderName,filePath);
+    public static String toEntityPath(StorageArchetype archetype){
+        EntityType entityType = archetype.getEntityType();
+        String basePath = archetype.getPath();
+        String documentPath = entityType.isCollection() ? concat(basePath, archetype.getLastId()) : concat(basePath, archetype.getSimpleName());
+        return String.format("%s.%s", documentPath, ENTITY_FILE_EXTENSION);
     }
 
-    private static String getEntityCollectionPath(String filePath){
-        String entitiesFolderName = StorageSettings.getInstance().getEntitiesPath();
-        return concat(entitiesFolderName, filePath);
+    public static String toBinaryDataPath(StorageArchetype archetype){
+        EntityType entityType = archetype.getEntityType();
+        String binaryDataPath = StorageSettings.getInstance().getBinaryDataPath();
+        String basePath = concat(archetype.getPath(), binaryDataPath);
+        String filePath = entityType.isCollection() ? concat(basePath, archetype.getLastId()) : concat(basePath, archetype.getSimpleName());
+        return String.format("%s.%s", filePath, BINARY_DATA_EXTENSION);
     }
 
     public static String extractPathFromAnnotation(Object object) {
@@ -53,14 +65,23 @@ public class PathBuilder {
 
         if (javaClass.isAnnotationPresent(SingletonEntity.class)){
             SingletonEntity singletonEntityAnnotation = (SingletonEntity) javaClass.getAnnotation(SingletonEntity.class);
-            return singletonEntityAnnotation.path();
+            return formatSeparators(singletonEntityAnnotation.path());
         }
 
         if (javaClass.isAnnotationPresent(EntityCollection.class)){
             EntityCollection entityCollectionAnnotation = (EntityCollection) javaClass.getAnnotation(EntityCollection.class);
-            return entityCollectionAnnotation.path();
+            return formatSeparators(entityCollectionAnnotation.path());
         }
 
         return null;
+    }
+
+    public static String formatSeparators(String string){
+        try {
+            if (string.startsWith("/") || string.startsWith("\\")) string = string.substring(1);
+            return string.replace("/", File.separator).replace("\\", File.separator);
+        } catch (Exception e){
+            return string;
+        }
     }
 }

@@ -5,7 +5,7 @@ import com.georgen.hawthorne.api.annotations.EntityCollection;
 import com.georgen.hawthorne.api.annotations.Id;
 import com.georgen.hawthorne.api.annotations.SingletonEntity;
 
-@SingletonEntity
+@SingletonEntity(path = "samples/example")
 public class Sample {
     @Id
     private int id;

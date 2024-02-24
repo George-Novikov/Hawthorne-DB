@@ -11,6 +11,7 @@ import com.georgen.hawthorne.model.storage.EntityUnit;
 import com.georgen.hawthorne.model.storage.StorageSchema;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.model.storage.StorageUnit;
+import com.georgen.hawthorne.tools.PathBuilder;
 import com.georgen.hawthorne.tools.logging.SelfTracking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,20 +24,20 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
     private static final Logger LOGGER = LoggerFactory.getLogger(SingletonEntityRepository.class);
 
     @Override
-    public File save(StorageUnit storageUnit){
+    public <C, S> S save(StorageUnit<C, S> storageUnit){
         try {
             validateType(storageUnit);
-
             EntityUnit entityUnit = (EntityUnit) storageUnit;
-            StorageArchetype archetype = entityUnit.getArchetype();
 
+            StorageArchetype archetype = entityUnit.getArchetype();
             StorageSchema storageSchema = StorageSettings.getInstance().getStorageSchema();
+            if (archetype.getEntityType().isCollection()) archetype.consumeCounters(storageSchema);
             storageSchema.update(archetype);
 
-            File file = FileFactory.getFile(archetype.getPath());
+            File file = FileFactory.getFile(PathBuilder.toEntityPath(archetype));
             FileManager.write(file, entityUnit.getContent());
 
-            return file;
+            return storageUnit.getSource();
         } catch (Exception e){
             LOGGER.error(e.getMessage(), e);
             return null;
@@ -46,7 +47,7 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
     @Override
     public <T, I> T get(StorageArchetype archetype, I... id){
         try {
-            File file = FileFactory.getFile(archetype.getPath());
+            File file = FileFactory.getFile(PathBuilder.toEntityPath(archetype));
             if (file == null) return null;
 
             String json = FileManager.read(file);
@@ -66,7 +67,7 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
     @Override
     public <I> boolean delete(StorageArchetype archetype, I... id) {
         try {
-            File file = FileFactory.getFile(archetype.getPath());
+            File file = FileFactory.getFile(PathBuilder.toEntityPath(archetype));
             if (file == null) throw new HawthorneException(Message.DELETE_FAIL);
             return FileManager.delete(file);
         } catch (Exception e){
@@ -82,12 +83,12 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
     }
 
     //TODO: maybe it would be better to return the number of versions
-    public <T> long count(StorageArchetype archetype){
-        return FileFactory.isExistingFile(archetype.getPath()) ? 1 : 0;
+    public long count(StorageArchetype archetype){
+        return FileFactory.isExistingFile(PathBuilder.toEntityPath(archetype)) ? 1 : 0;
     }
 
     private void validateType(StorageUnit storageUnit) throws HawthorneException {
         boolean isEntityType = storageUnit instanceof EntityUnit;
-        if (!isEntityType) throw new HawthorneException(Message.NO_ENTITY_ANNOTATION);
+        if (!isEntityType) throw new HawthorneException(Message.NOT_AN_ENTITY);
     }
 }

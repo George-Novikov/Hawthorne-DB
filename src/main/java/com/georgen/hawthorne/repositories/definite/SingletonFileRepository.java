@@ -29,7 +29,7 @@ public class SingletonFileRepository implements GenericRepository {
     }
 
     @Override
-    public <T> long count(StorageArchetype archetype) {
+    public long count(StorageArchetype archetype) {
         return 0;
     }
 }

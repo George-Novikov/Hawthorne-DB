@@ -20,7 +20,7 @@ public class IdTypeExtractor {
         idType = getFromMethods(javaClass);
         if (idType != null) return idType;
 
-        throw new HawthorneException(Message.NO_ID_ANNOTATION);
+        return IdType.NONE;
     }
 
     private static IdType getFromFields(Class javaClass) throws TypeException {

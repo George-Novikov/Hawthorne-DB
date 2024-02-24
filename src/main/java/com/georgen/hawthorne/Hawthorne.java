@@ -10,7 +10,11 @@ import com.georgen.hawthorne.tools.extractors.IdTypeExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
+import java.net.URLConnection;
 import java.util.List;
 
 public class Hawthorne {
@@ -18,14 +22,12 @@ public class Hawthorne {
 
     static {
         try {
-            File controlFile = FileFactory.getControlFile();
-            LOGGER.info("Control file: {}", controlFile.toPath());
-
             Sample sample = new Sample("This is a long message to test bytes serialization");
             LOGGER.info("Custom object path: {}", PathBuilder.extractPathFromAnnotation(sample));
 
             Sample savedSample = Repository.save(sample);
             LOGGER.info("Saved sample is not null: {}", savedSample != null);
+            LOGGER.info("Saved sample id: {}", sample.getId());
 
             Sample retrievedSample = Repository.get(Sample.class);
             LOGGER.info("Retrieved sample is not null: {}", retrievedSample != null);

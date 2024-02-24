@@ -10,6 +10,7 @@ import com.georgen.hawthorne.tools.PathBuilder;
 import com.georgen.hawthorne.tools.Validator;
 
 import java.io.File;
+import java.io.IOException;
 
 import static com.georgen.hawthorne.model.constants.ConfigProperty.*;
 
@@ -76,6 +77,16 @@ public class StorageSettings {
 
     public StorageSchema getStorageSchema(){
         return this.storageSchema;
+    }
+
+    public int getPartitioningThreshold(){
+        try {
+            String stringThresholdValue = this.configReader.getProperty(PARTITIONING_THRESHOLD);
+            return stringThresholdValue != null ? Integer.valueOf(stringThresholdValue) : Integer.valueOf(PARTITIONING_THRESHOLD.getDefaultValue());
+        } catch (Exception e) {
+
+            return Integer.valueOf(PARTITIONING_THRESHOLD.getDefaultValue());
+        }
     }
 
     private String getPathRelativeToRoot(String path){

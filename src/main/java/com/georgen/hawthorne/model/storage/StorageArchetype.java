@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.georgen.hawthorne.model.constants.EntityType;
 import com.georgen.hawthorne.model.constants.IdType;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
+import com.georgen.hawthorne.model.exceptions.TypeException;
 import com.georgen.hawthorne.tools.PathBuilder;
+import com.georgen.hawthorne.tools.Validator;
+import com.georgen.hawthorne.tools.extractors.IdTypeExtractor;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StorageArchetype {
@@ -13,16 +16,17 @@ public class StorageArchetype {
     private EntityType entityType;
     private IdType idType;
     private String path;
-    private String lastId;
+    private String lastId = "0";
     private int partitionsCounter = 1;
 
-    public StorageArchetype(Object object) throws HawthorneException {
+    public StorageArchetype(Object object) throws HawthorneException, TypeException {
         Class javaClass = object.getClass();
 
         this.simpleName = javaClass.getSimpleName();
         this.fullName = javaClass.getName();
         this.entityType = EntityType.of(object);
-        this.path = PathBuilder.getPath(this.simpleName, this.entityType);
+        this.idType = IdTypeExtractor.extract(object);
+        this.path = PathBuilder.buildBasePath(object, this);
     }
 
     public String getSimpleName() {
@@ -79,6 +83,14 @@ public class StorageArchetype {
 
     public void setPartitionsCounter(int partitionsCounter) {
         this.partitionsCounter = partitionsCounter;
+    }
+
+    public void consumeCounters(StorageSchema storageSchema){
+        if (storageSchema == null || !Validator.isValid(this.simpleName)) return;
+        StorageArchetype existingArchetype = storageSchema.get(this.simpleName);
+        if (existingArchetype == null) return;
+        this.lastId = existingArchetype.getLastId();
+        this.partitionsCounter = existingArchetype.getPartitionsCounter();
     }
 
     @Override

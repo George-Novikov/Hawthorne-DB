@@ -34,7 +34,11 @@ public class StorageSchema {
         return this.schema.get(simpleName);
     }
 
-    public void save() throws Exception {
+    public void consumeLastId(StorageArchetype archetype){
+
+    }
+
+    private void save() throws Exception {
         synchronized (this){
             String storageSchemaJson = Serializer.toJson(this);
             FileManager.write(controlFile, storageSchemaJson);
@@ -50,7 +54,7 @@ public class StorageSchema {
         return addedArchetype;
     }
 
-    public StorageArchetype unregister(StorageArchetype archetype) throws Exception {
+    private StorageArchetype unregister(StorageArchetype archetype) throws Exception {
         StorageArchetype removedArchetype = this.schema.remove(archetype.getSimpleName());
         save();
         return removedArchetype;

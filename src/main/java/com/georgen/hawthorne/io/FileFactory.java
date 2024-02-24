@@ -47,12 +47,6 @@ public class FileFactory {
 
     private static void setFilePermissions(File file) throws IOException {
         if (!SystemHelper.isUnixSystem()) return;
-
-        Set<PosixFilePermission> permissions = Arrays
-                .stream(PosixFilePermission.values())
-                .filter(permission -> !permission.name().startsWith("OTHERS"))
-                .collect(Collectors.toSet());
-
-        Files.setPosixFilePermissions(file.toPath(), permissions);
+        SystemHelper.setFilePermissions(file);
     }
 }

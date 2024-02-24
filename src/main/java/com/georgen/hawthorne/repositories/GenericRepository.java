@@ -7,10 +7,10 @@ import java.io.File;
 import java.util.List;
 
 public interface GenericRepository {
-    <T> T save(StorageUnit storageUnit);
+    <C, S> S save(StorageUnit<C, S> storageUnit);
     <T, I> T get(StorageArchetype archetype, I... id);
     <I> boolean delete(StorageArchetype archetype, I... id);
     <T> List<T> list(StorageArchetype archetype);
-    <T> long count(StorageArchetype archetype);
+    long count(StorageArchetype archetype);
 
 }

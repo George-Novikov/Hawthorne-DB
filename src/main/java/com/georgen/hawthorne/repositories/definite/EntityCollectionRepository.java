@@ -10,7 +10,7 @@ import com.georgen.hawthorne.model.storage.StorageSchema;
 import com.georgen.hawthorne.model.storage.StorageUnit;
 import com.georgen.hawthorne.repositories.GenericRepository;
 import com.georgen.hawthorne.settings.StorageSettings;
-import com.georgen.hawthorne.tools.IdGenerator;
+import com.georgen.hawthorne.tools.PathBuilder;
 import com.georgen.hawthorne.tools.logging.SelfTracking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,16 +27,13 @@ public class EntityCollectionRepository implements GenericRepository, SelfTracki
             validateType(storageUnit);
 
             EntityUnit entityUnit = (EntityUnit) storageUnit;
-            IdGenerator.generateForUnit(entityUnit);
-
             StorageArchetype archetype = entityUnit.getArchetype();
+
             StorageSchema storageSchema = StorageSettings.getInstance().getStorageSchema();
+            archetype.consumeCounters(storageSchema);
             storageSchema.update(archetype);
 
-            //TODO: concat archetype root path with the file id
-            String path = archetype.getPath();
-
-            File file = FileFactory.getFile(path);
+            File file = FileFactory.getFile(PathBuilder.toEntityPath(archetype));
             FileManager.write(file, entityUnit.getContent());
 
             return file;
@@ -61,12 +58,12 @@ public class EntityCollectionRepository implements GenericRepository, SelfTracki
     }
 
     @Override
-    public <T> long count(StorageArchetype archetype) {
+    public long count(StorageArchetype archetype) {
         return 0;
     }
 
     private void validateType(StorageUnit storageUnit) throws HawthorneException {
         boolean isEntityType = storageUnit instanceof EntityUnit;
-        if (!isEntityType) throw new HawthorneException(Message.NO_ENTITY_ANNOTATION);
+        if (!isEntityType) throw new HawthorneException(Message.NOT_AN_ENTITY);
     }
 }
