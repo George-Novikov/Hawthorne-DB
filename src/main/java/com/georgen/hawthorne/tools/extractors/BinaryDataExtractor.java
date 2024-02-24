@@ -9,10 +9,25 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class ByteContentExtractor {
-    public static byte[] extract(Object object) throws HawthorneException, IllegalAccessException, InvocationTargetException {
+public class BinaryDataExtractor {
+    public static boolean isAnnotatedAsBinaryData(Object object){
         Class javaClass = object.getClass();
-        validateType(javaClass);
+
+        for (Field field : javaClass.getDeclaredFields()){
+            if (field.isAnnotationPresent(BinaryData.class)) return true;
+        }
+
+        for (Method method : javaClass.getDeclaredMethods()){
+            if (method.isAnnotationPresent(BinaryData.class)) return true;
+        }
+
+        return false;
+    }
+
+    public static byte[] extract(Object object) throws HawthorneException, IllegalAccessException, InvocationTargetException {
+        if (!isAnnotatedAsBinaryData(object)) throw new HawthorneException(Message.NO_BINARY_DATA_ANNOTATION);
+
+        Class javaClass = object.getClass();
 
         byte[] data = getFromFields(javaClass, object);
         if (data != null) return data;
@@ -45,11 +60,6 @@ public class ByteContentExtractor {
             }
         }
         return null;
-    }
-
-    private static void validateType(Class javaClass) throws HawthorneException {
-        EntityType entityType = EntityType.of(javaClass);
-        if (!entityType.isFile()) throw new HawthorneException(Message.NO_FILE_ANNOTATION);
     }
 
     private static void validateData(Object data) throws HawthorneException {

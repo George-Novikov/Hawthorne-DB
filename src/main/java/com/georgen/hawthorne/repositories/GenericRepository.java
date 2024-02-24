@@ -1,4 +1,4 @@
-package com.georgen.hawthorne.api.repositories;
+package com.georgen.hawthorne.repositories;
 
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.model.storage.StorageUnit;

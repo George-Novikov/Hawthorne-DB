@@ -4,19 +4,30 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.serialization.Serializer;
 
-public class EntityUnit extends StorageUnit<String> {
-
-    public EntityUnit(Object object) throws HawthorneException, JsonProcessingException {
+public class EntityUnit<S> extends StorageUnit<String, S> {
+    private String content;
+    public EntityUnit(S source) throws HawthorneException, JsonProcessingException {
         this(
-                new StorageArchetype(object),
-                object
+                new StorageArchetype(source),
+                source
         );
     }
 
-    public EntityUnit(StorageArchetype archetype, Object object) throws JsonProcessingException {
+    public EntityUnit(StorageArchetype archetype, S source) throws JsonProcessingException {
         this.setArchetype(archetype);
-        String jsonContent = Serializer.toJson(object);
+        String jsonContent = Serializer.toJson(source);
         this.setMetadata(jsonContent);
         this.setContent(jsonContent);
+        this.setSource(source);
+    }
+
+    @Override
+    public String getContent() {
+        return content;
+    }
+
+    @Override
+    public void setContent(String content) {
+        this.content = content;
     }
 }

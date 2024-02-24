@@ -1,4 +1,4 @@
-package com.georgen.hawthorne.api.annotations.entities;
+package com.georgen.hawthorne.api.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,5 +7,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface EntityCollection {
+public @interface SingletonEntity {
+    String name() default "";
+    String path() default "";
+    boolean hasRelativePath() default false;
 }

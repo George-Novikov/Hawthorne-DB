@@ -11,9 +11,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 public class IdTypeExtractor {
-    @Id(isGenerated = false)
-    private int id;
-
     public static IdType extract(Object object) throws TypeException, HawthorneException {
         Class javaClass = object.getClass();
 

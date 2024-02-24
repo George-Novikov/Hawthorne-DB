@@ -1,4 +1,4 @@
-package com.georgen.hawthorne.api.repositories;
+package com.georgen.hawthorne.repositories.definite;
 
 import com.georgen.hawthorne.io.FileFactory;
 import com.georgen.hawthorne.io.FileManager;
@@ -8,7 +8,9 @@ import com.georgen.hawthorne.model.storage.EntityUnit;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.model.storage.StorageSchema;
 import com.georgen.hawthorne.model.storage.StorageUnit;
+import com.georgen.hawthorne.repositories.GenericRepository;
 import com.georgen.hawthorne.settings.StorageSettings;
+import com.georgen.hawthorne.tools.IdGenerator;
 import com.georgen.hawthorne.tools.logging.SelfTracking;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,16 +24,19 @@ public class EntityCollectionRepository implements GenericRepository, SelfTracki
     @Override
     public File save(StorageUnit storageUnit){
         try {
-            LOGGER.info(start());
             validateType(storageUnit);
 
             EntityUnit entityUnit = (EntityUnit) storageUnit;
-            StorageArchetype archetype = entityUnit.getArchetype();
+            IdGenerator.generateForUnit(entityUnit);
 
+            StorageArchetype archetype = entityUnit.getArchetype();
             StorageSchema storageSchema = StorageSettings.getInstance().getStorageSchema();
             storageSchema.update(archetype);
 
-            File file = FileFactory.getFile(archetype.getPath());
+            //TODO: concat archetype root path with the file id
+            String path = archetype.getPath();
+
+            File file = FileFactory.getFile(path);
             FileManager.write(file, entityUnit.getContent());
 
             return file;

@@ -3,22 +3,34 @@ package com.georgen.hawthorne.model.storage;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.serialization.Serializer;
-import com.georgen.hawthorne.tools.extractors.ByteContentExtractor;
+import com.georgen.hawthorne.tools.extractors.BinaryDataExtractor;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class FileUnit extends StorageUnit<byte[]>{
+public class FileUnit<S> extends StorageUnit<byte[], S>{
+    private byte[] content;
 
-    public FileUnit(Object object) throws HawthorneException, JsonProcessingException, InvocationTargetException, IllegalAccessException {
+    public FileUnit(S source) throws HawthorneException, JsonProcessingException, InvocationTargetException, IllegalAccessException {
         this(
-                new StorageArchetype(object),
-                object
+                new StorageArchetype(source),
+                source
         );
     }
 
-    public FileUnit(StorageArchetype archetype, Object object) throws JsonProcessingException, HawthorneException, InvocationTargetException, IllegalAccessException {
+    public FileUnit(StorageArchetype archetype, S source) throws JsonProcessingException, HawthorneException, InvocationTargetException, IllegalAccessException {
         this.setArchetype(archetype);
-        this.setMetadata(Serializer.toJson(object));
-        this.setContent(ByteContentExtractor.extract(object));
+        this.setMetadata(Serializer.toJson(source));
+        this.setContent(BinaryDataExtractor.extract(source));
+        this.setSource(source);
+    }
+
+    @Override
+    public byte[] getContent() {
+        return content;
+    }
+
+    @Override
+    public void setContent(byte[] content) {
+        this.content = content;
     }
 }

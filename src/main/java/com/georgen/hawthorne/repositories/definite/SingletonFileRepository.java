@@ -1,7 +1,8 @@
-package com.georgen.hawthorne.api.repositories;
+package com.georgen.hawthorne.repositories.definite;
 
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.model.storage.StorageUnit;
+import com.georgen.hawthorne.repositories.GenericRepository;
 
 import java.io.File;
 import java.util.List;

@@ -1,12 +1,10 @@
 package com.georgen.hawthorne.model.constants;
 
 public enum ConfigProperty {
-    CONTROL_FILE_NAME("hawthorne.naming.control-file", "storage.json"),
+    CONTROL_FILE_NAME("hawthorne.naming.control-file", "storage-schema.json"),
     ROOT_PATH("hawthorne.naming.root-directory", "hawthorne"),
-    STORAGE_PATH("hawthorne.naming.storage-directory", "storage"),
     ENTITIES_PATH("hawthorne.naming.entities-directory", "entities"),
-    COLLECTIONS_PATH("hawthorne.naming.collections-directory", "collections"),
-    FILES_PATH("hawthorne.naming.files-directory", "files")
+    BINARY_DATA_PATH("hawthorne.naming.binary-data", "binary-data")
     ;
 
     private String name;

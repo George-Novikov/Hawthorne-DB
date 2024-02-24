@@ -14,8 +14,10 @@ public class FileManager {
     }
 
     public static String read(File file) throws Exception {
-        try (CloseableScanner scanner = new CloseableScanner(file)){
-            return scanner.read();
+        synchronized (file){
+            try (CloseableScanner scanner = new CloseableScanner(file)){
+                return scanner.read();
+            }
         }
     }
 

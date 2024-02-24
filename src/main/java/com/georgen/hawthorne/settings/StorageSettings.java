@@ -7,6 +7,7 @@ import com.georgen.hawthorne.model.messages.SystemMessage;
 import com.georgen.hawthorne.model.storage.StorageSchema;
 import com.georgen.hawthorne.serialization.StorageSchemaSerializer;
 import com.georgen.hawthorne.tools.PathBuilder;
+import com.georgen.hawthorne.tools.Validator;
 
 import java.io.File;
 
@@ -39,7 +40,7 @@ public class StorageSettings {
     public String getRootPath() {
         try {
             String rootFolderName = this.configReader.getProperty(ROOT_PATH);
-            return rootFolderName != null ? rootFolderName : ROOT_PATH.getDefaultValue();
+            return Validator.isValid(rootFolderName) ? rootFolderName : ROOT_PATH.getDefaultValue();
         } catch (Exception e){
             return ROOT_PATH.getDefaultValue();
         }
@@ -48,27 +49,20 @@ public class StorageSettings {
     public String getEntitiesPath() {
         try {
             String entitiesPath = this.configReader.getProperty(ENTITIES_PATH);
-            return getPathRelativeToRoot(entitiesPath != null ? entitiesPath : ENTITIES_PATH.getDefaultValue());
+            boolean isValidPath = Validator.isValid(entitiesPath);
+            return getPathRelativeToRoot(isValidPath ? entitiesPath : ENTITIES_PATH.getDefaultValue());
         } catch (Exception e){
             return ENTITIES_PATH.getDefaultValue();
         }
     }
 
-    public String getFilesPath() {
+    public String getBinaryDataPath() {
         try {
-            String filesPath = this.configReader.getProperty(FILES_PATH);
-            return getPathRelativeToRoot(filesPath != null ? filesPath : FILES_PATH.getDefaultValue());
+            String binaryDataPath = this.configReader.getProperty(BINARY_DATA_PATH);
+            boolean isValidPath = Validator.isValid(binaryDataPath);
+            return getPathRelativeToRoot(isValidPath ? binaryDataPath : BINARY_DATA_PATH.getDefaultValue());
         } catch (Exception e){
-            return FILES_PATH.getDefaultValue();
-        }
-    }
-
-    public String getCollectionsPath() {
-        try {
-            String collectionsPath = this.configReader.getProperty(COLLECTIONS_PATH);
-            return getPathRelativeToRoot(collectionsPath != null ? collectionsPath : COLLECTIONS_PATH.getDefaultValue());
-        } catch (Exception e){
-            return COLLECTIONS_PATH.getDefaultValue();
+            return BINARY_DATA_PATH.getDefaultValue();
         }
     }
 

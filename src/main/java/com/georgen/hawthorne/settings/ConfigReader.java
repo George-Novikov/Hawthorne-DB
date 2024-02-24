@@ -7,7 +7,6 @@ import com.georgen.hawthorne.model.constants.ConfigProperty;
 import com.georgen.hawthorne.model.constants.SystemProperty;
 import com.georgen.hawthorne.tools.PathBuilder;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -31,7 +30,7 @@ public class ConfigReader {
     private Properties initProperties() throws IOException {
         if (this.properties == null) properties = new Properties();
         ClassLoader classLoader = this.getClass().getClassLoader();
-        InputStream resourceStream = classLoader.getResourceAsStream(SystemProperty.CONFIG_FILE_NAME.getValue());
+        InputStream resourceStream = classLoader.getResourceAsStream(SystemProperty.APPLICATION_PROPERTIES_NAME.getValue());
         properties.load(resourceStream);
         return properties;
     }

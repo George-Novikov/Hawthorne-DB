@@ -6,10 +6,10 @@ import com.georgen.hawthorne.model.exceptions.HawthorneException;
 
 import java.lang.reflect.InvocationTargetException;
 
-public abstract class StorageUnit<T> {
+public abstract class StorageUnit<C, S> {
     private StorageArchetype archetype;
     private String metadata;
-    private T content;
+    private S source;
 
     public StorageArchetype getArchetype() {
         return archetype;
@@ -27,12 +27,20 @@ public abstract class StorageUnit<T> {
         this.metadata = metadata;
     }
 
-    public T getContent() {
-        return content;
+    public S getSource() {
+        return source;
     }
 
-    public void setContent(T content) {
-        this.content = content;
+    public void setSource(S source) {
+        this.source = source;
+    }
+
+    public abstract C getContent();
+
+    public abstract void setContent(C content);
+
+    public boolean hasEmptySource(){
+        return this.source == null;
     }
 
     public static StorageUnit of(Object object) throws HawthorneException, JsonProcessingException, InvocationTargetException, IllegalAccessException {

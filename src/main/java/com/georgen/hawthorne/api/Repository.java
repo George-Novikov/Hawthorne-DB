@@ -1,4 +1,4 @@
-package com.georgen.hawthorne.api.repositories;
+package com.georgen.hawthorne.api;
 
 import com.georgen.hawthorne.model.constants.EntityType;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
@@ -6,6 +6,8 @@ import com.georgen.hawthorne.model.messages.Message;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.model.storage.StorageSchema;
 import com.georgen.hawthorne.model.storage.StorageUnit;
+import com.georgen.hawthorne.repositories.GenericRepository;
+import com.georgen.hawthorne.repositories.RepositoryFactory;
 import com.georgen.hawthorne.settings.StorageSettings;
 
 import java.util.List;

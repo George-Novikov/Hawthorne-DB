@@ -1,10 +1,11 @@
 package com.georgen.hawthorne.model.sample;
 
 import com.georgen.hawthorne.api.annotations.BinaryData;
+import com.georgen.hawthorne.api.annotations.EntityCollection;
 import com.georgen.hawthorne.api.annotations.Id;
-import com.georgen.hawthorne.api.annotations.entities.SingletonEntity;
+import com.georgen.hawthorne.api.annotations.SingletonEntity;
 
-@SingletonEntity(name = "Sample")
+@SingletonEntity
 public class Sample {
     @Id
     private int id;

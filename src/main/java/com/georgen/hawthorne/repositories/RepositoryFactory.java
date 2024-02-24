@@ -1,5 +1,9 @@
-package com.georgen.hawthorne.api.repositories;
+package com.georgen.hawthorne.repositories;
 
+import com.georgen.hawthorne.repositories.definite.EntityCollectionRepository;
+import com.georgen.hawthorne.repositories.definite.FileCollectionRepository;
+import com.georgen.hawthorne.repositories.definite.SingletonEntityRepository;
+import com.georgen.hawthorne.repositories.definite.SingletonFileRepository;
 import com.georgen.hawthorne.model.constants.EntityType;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.model.storage.StorageUnit;

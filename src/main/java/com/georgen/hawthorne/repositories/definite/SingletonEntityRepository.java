@@ -1,6 +1,6 @@
-package com.georgen.hawthorne.api.repositories;
+package com.georgen.hawthorne.repositories.definite;
 
-import com.georgen.hawthorne.model.sample.Sample;
+import com.georgen.hawthorne.repositories.GenericRepository;
 import com.georgen.hawthorne.serialization.Serializer;
 import com.georgen.hawthorne.settings.StorageSettings;
 import com.georgen.hawthorne.io.FileFactory;
@@ -25,7 +25,6 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
     @Override
     public File save(StorageUnit storageUnit){
         try {
-            LOGGER.info(start());
             validateType(storageUnit);
 
             EntityUnit entityUnit = (EntityUnit) storageUnit;
@@ -47,8 +46,6 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
     @Override
     public <T, I> T get(StorageArchetype archetype, I... id){
         try {
-            LOGGER.info(start());
-
             File file = FileFactory.getFile(archetype.getPath());
             if (file == null) return null;
 
@@ -69,7 +66,6 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
     @Override
     public <I> boolean delete(StorageArchetype archetype, I... id) {
         try {
-            LOGGER.info(start());
             File file = FileFactory.getFile(archetype.getPath());
             if (file == null) throw new HawthorneException(Message.DELETE_FAIL);
             return FileManager.delete(file);
@@ -81,14 +77,12 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
 
     @Override
     public <T> List<T> list(StorageArchetype archetype) {
-        LOGGER.info(start());
         T object = get(archetype);
         return new ArrayList<T>() {{ add(object); }};
     }
 
     //TODO: maybe it would be better to return the number of versions
     public <T> long count(StorageArchetype archetype){
-        LOGGER.info(start());
         return FileFactory.isExistingFile(archetype.getPath()) ? 1 : 0;
     }
 

@@ -13,13 +13,15 @@ public class StorageArchetype {
     private EntityType entityType;
     private IdType idType;
     private String path;
+    private String lastId;
+    private int partitionsCounter = 1;
 
     public StorageArchetype(Object object) throws HawthorneException {
         Class javaClass = object.getClass();
 
         this.simpleName = javaClass.getSimpleName();
         this.fullName = javaClass.getName();
-        this.entityType = EntityType.of(javaClass);
+        this.entityType = EntityType.of(object);
         this.path = PathBuilder.getPath(this.simpleName, this.entityType);
     }
 
@@ -61,6 +63,22 @@ public class StorageArchetype {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getLastId() {
+        return lastId;
+    }
+
+    public void setLastId(String lastId) {
+        this.lastId = lastId;
+    }
+
+    public int getPartitionsCounter() {
+        return partitionsCounter;
+    }
+
+    public void setPartitionsCounter(int partitionsCounter) {
+        this.partitionsCounter = partitionsCounter;
     }
 
     @Override

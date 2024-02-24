@@ -1,9 +1,11 @@
 package com.georgen.hawthorne;
 
-import com.georgen.hawthorne.api.repositories.Repository;
+import com.georgen.hawthorne.api.Repository;
 import com.georgen.hawthorne.io.FileFactory;
 import com.georgen.hawthorne.model.constants.IdType;
 import com.georgen.hawthorne.model.sample.Sample;
+import com.georgen.hawthorne.serialization.Serializer;
+import com.georgen.hawthorne.tools.PathBuilder;
 import com.georgen.hawthorne.tools.extractors.IdTypeExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +22,8 @@ public class Hawthorne {
             LOGGER.info("Control file: {}", controlFile.toPath());
 
             Sample sample = new Sample("This is a long message to test bytes serialization");
+            LOGGER.info("Custom object path: {}", PathBuilder.extractPathFromAnnotation(sample));
+
             Sample savedSample = Repository.save(sample);
             LOGGER.info("Saved sample is not null: {}", savedSample != null);
 
@@ -31,7 +35,9 @@ public class Hawthorne {
             LOGGER.info("Retrieved sample IdType: {}", idType);
 
             List<Sample> sampleList = Repository.list(Sample.class);
-            LOGGER.info("Sample list: {}", sampleList);
+            for (Sample sampleElement : sampleList){
+                LOGGER.info("Sample list element: {}", Serializer.toJson(sampleElement));
+            }
 
             boolean isDeleted = Repository.delete(Sample.class);
             LOGGER.info("Is sample deleted: {}", isDeleted);
