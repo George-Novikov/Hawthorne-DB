@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.exceptions.TypeException;
 import com.georgen.hawthorne.serialization.Serializer;
-import com.georgen.hawthorne.tools.IdGenerator;
+import com.georgen.hawthorne.tools.id.IdGenerator;
 import com.georgen.hawthorne.tools.extractors.BinaryDataExtractor;
 
 import java.lang.reflect.InvocationTargetException;

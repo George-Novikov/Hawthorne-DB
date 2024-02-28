@@ -3,6 +3,7 @@ package com.georgen.hawthorne.model.storage;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.georgen.hawthorne.model.constants.EntityType;
 import com.georgen.hawthorne.model.constants.IdType;
+import com.georgen.hawthorne.model.constants.SystemProperty;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.exceptions.TypeException;
 import com.georgen.hawthorne.tools.PathBuilder;
@@ -17,6 +18,7 @@ public class StorageArchetype {
     private IdType idType;
     private String path;
     private String lastId = "0";
+    private String idCounterPath;
     private int partitionsCounter = 1;
 
     public StorageArchetype(Object object) throws HawthorneException, TypeException {
@@ -27,6 +29,7 @@ public class StorageArchetype {
         this.entityType = EntityType.of(object);
         this.idType = IdTypeExtractor.extract(object);
         this.path = PathBuilder.buildBasePath(object, this);
+        this.idCounterPath = PathBuilder.concat(this.path, SystemProperty.ID_COUNTER_NAME.getValue());
     }
 
     public String getSimpleName() {

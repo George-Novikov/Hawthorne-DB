@@ -30,10 +30,4 @@ public class FileManager {
     public static byte[] readBytes(File file) throws IOException {
         return Files.readAllBytes(file.toPath());
     }
-
-    public static boolean delete(File file){
-        synchronized (file){
-            return file.delete();
-        }
-    }
 }

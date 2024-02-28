@@ -7,7 +7,9 @@ public enum SystemProperty {
 
     HAWTHORNE_PROPERTIES_NAME("hawthorne.properties"),
     HAWTHORNE_YAML_NAME("hawthorne.yaml"),
-    HAWTHORNE_YML_NAME("hawthorne.yml");
+    HAWTHORNE_YML_NAME("hawthorne.yml"),
+
+    ID_COUNTER_NAME("id-counter");
 
     private String value;
 

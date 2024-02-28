@@ -2,6 +2,7 @@ package com.georgen.hawthorne.tools;
 
 import com.georgen.hawthorne.api.annotations.EntityCollection;
 import com.georgen.hawthorne.api.annotations.SingletonEntity;
+import com.georgen.hawthorne.model.constants.SystemProperty;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.settings.StorageSettings;
 import com.georgen.hawthorne.model.constants.EntityType;
@@ -23,22 +24,26 @@ public class PathBuilder {
     }
 
     public static String buildBasePath(Object object, StorageArchetype archetype){
-        EntityType entityType = archetype.getEntityType();
-
-        return entityType.isCollection() ? getCollectionPath(object, archetype) : getSingletonPath(object, archetype);
+        return buildBasePath(object, archetype, 0);
     }
 
-    private static String getSingletonPath(Object object, StorageArchetype archetype){
+    public static String buildBasePath(Object object, StorageArchetype archetype, int id){
+        EntityType entityType = archetype.getEntityType();
+        return entityType.isCollection() ? getCollectionPath(object, archetype, id) : getSingletonPath(object);
+    }
+
+    private static String getSingletonPath(Object object){
         String entitiesBasePath = StorageSettings.getInstance().getEntitiesPath();
         String customSourcePath = extractPathFromAnnotation(object);
         return concat(entitiesBasePath, customSourcePath);
     }
 
-    private static String getCollectionPath(Object object, StorageArchetype archetype){
+    private static String getCollectionPath(Object object, StorageArchetype archetype, int id){
         String entitiesBasePath = StorageSettings.getInstance().getEntitiesPath();
         String customSourcePath = extractPathFromAnnotation(object);
         String archetypeSimpleName = archetype.getSimpleName();
-        String partitionPath = String.valueOf(archetype.getPartitionsCounter());
+        //TODO: change the path building process to locate the partitions number last
+        String partitionPath = id < 1 ? String.valueOf(archetype.getPartitionsCounter()) : String.valueOf(PartitionManager.locatePartition(archetype, id));
         return concat(
                 concat(entitiesBasePath, customSourcePath),
                 concat(archetypeSimpleName, partitionPath)
@@ -58,6 +63,10 @@ public class PathBuilder {
         String basePath = concat(archetype.getPath(), binaryDataPath);
         String filePath = entityType.isCollection() ? concat(basePath, archetype.getLastId()) : concat(basePath, archetype.getSimpleName());
         return String.format("%s.%s", filePath, BINARY_DATA_EXTENSION);
+    }
+
+    public static String toIdCounterPath(String path){
+        return concat(path, SystemProperty.ID_COUNTER_NAME.getValue());
     }
 
     public static String extractPathFromAnnotation(Object object) {

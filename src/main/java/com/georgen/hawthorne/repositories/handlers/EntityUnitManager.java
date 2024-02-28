@@ -47,6 +47,6 @@ public class EntityUnitManager<T> extends StorageUnitManager<EntityUnit> {
     public <I> boolean delete(StorageArchetype archetype, I... id) throws HawthorneException, IOException {
         File file = FileFactory.getFile(PathBuilder.toEntityPath(archetype));
         if (file == null) throw new HawthorneException(Message.DELETE_FAIL);
-        return FileManager.delete(file);
+        return FileFactory.delete(file);
     }
 }

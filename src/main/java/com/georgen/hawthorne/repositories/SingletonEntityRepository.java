@@ -1,6 +1,5 @@
-package com.georgen.hawthorne.repositories.definite;
+package com.georgen.hawthorne.repositories;
 
-import com.georgen.hawthorne.repositories.GenericRepository;
 import com.georgen.hawthorne.serialization.Serializer;
 import com.georgen.hawthorne.settings.StorageSettings;
 import com.georgen.hawthorne.io.FileFactory;
@@ -20,8 +19,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingletonEntityRepository<T> implements GenericRepository, SelfTracking {
+public class SingletonEntityRepository implements GenericRepository, SelfTracking {
     private static final Logger LOGGER = LoggerFactory.getLogger(SingletonEntityRepository.class);
+
+    protected SingletonEntityRepository(){}
 
     @Override
     public <C, S> S save(StorageUnit<C, S> storageUnit){
@@ -69,7 +70,7 @@ public class SingletonEntityRepository<T> implements GenericRepository, SelfTrac
         try {
             File file = FileFactory.getFile(PathBuilder.toEntityPath(archetype));
             if (file == null) throw new HawthorneException(Message.DELETE_FAIL);
-            return FileManager.delete(file);
+            return FileFactory.delete(file);
         } catch (Exception e){
             LOGGER.error(e.getMessage(), e);
             return false;

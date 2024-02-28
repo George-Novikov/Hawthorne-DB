@@ -1,4 +1,4 @@
-package com.georgen.hawthorne.repositories.definite;
+package com.georgen.hawthorne.repositories;
 
 import com.georgen.hawthorne.io.FileFactory;
 import com.georgen.hawthorne.io.FileManager;
@@ -8,7 +8,6 @@ import com.georgen.hawthorne.model.storage.EntityUnit;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.model.storage.StorageSchema;
 import com.georgen.hawthorne.model.storage.StorageUnit;
-import com.georgen.hawthorne.repositories.GenericRepository;
 import com.georgen.hawthorne.settings.StorageSettings;
 import com.georgen.hawthorne.tools.PathBuilder;
 import com.georgen.hawthorne.tools.logging.SelfTracking;
@@ -20,7 +19,7 @@ import java.util.List;
 
 public class EntityCollectionRepository implements GenericRepository, SelfTracking {
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityCollectionRepository.class);
-
+    protected EntityCollectionRepository(){}
     @Override
     public File save(StorageUnit storageUnit){
         try {

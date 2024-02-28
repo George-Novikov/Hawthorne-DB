@@ -1,4 +1,4 @@
-package com.georgen.hawthorne.tools;
+package com.georgen.hawthorne.tools.id;
 
 import com.georgen.hawthorne.api.annotations.Id;
 import com.georgen.hawthorne.model.constants.EntityType;

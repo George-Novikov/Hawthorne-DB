@@ -6,6 +6,7 @@ import com.georgen.hawthorne.settings.StorageSettings;
 public class PartitionManager {
     public static int locatePartition(StorageArchetype archetype, int id){
         int partitioningThreshold = StorageSettings.getInstance().getPartitioningThreshold();
-        return 0;
+        int partitionsCount = archetype.getPartitionsCounter();
+        return id > partitioningThreshold * partitionsCount ? partitionsCount + 1 : partitionsCount;
     }
 }

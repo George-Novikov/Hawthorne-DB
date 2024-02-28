@@ -1,4 +1,4 @@
-package com.georgen.hawthorne.repositories.definite;
+package com.georgen.hawthorne.repositories;
 
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.model.storage.StorageUnit;
@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.List;
 
 public class SingletonFileRepository implements GenericRepository {
+    protected SingletonFileRepository(){}
     @Override
     public File save(StorageUnit storageUnit){
         return null;

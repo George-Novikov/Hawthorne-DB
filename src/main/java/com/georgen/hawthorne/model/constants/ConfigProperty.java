@@ -5,7 +5,8 @@ public enum ConfigProperty {
     ROOT_PATH("hawthorne.naming.root-directory", "hawthorne"),
     ENTITIES_PATH("hawthorne.naming.entities-directory", "entities"),
     BINARY_DATA_PATH("hawthorne.naming.binary-data", "binary-data"),
-    PARTITIONING_THRESHOLD("hawthorne.storage.partitioning-threshold", "50000")
+    PARTITIONING_THRESHOLD("hawthorne.storage.partitioning-threshold", "50000"),
+    ID_COUNTER_PATH("hawthorne.storage.partitioning-threshold", "50000");
     ;
 
     private String name;

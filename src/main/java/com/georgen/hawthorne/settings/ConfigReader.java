@@ -28,10 +28,12 @@ public class ConfigReader {
     }
 
     private Properties initProperties() throws IOException {
-        if (this.properties == null) properties = new Properties();
-        ClassLoader classLoader = this.getClass().getClassLoader();
-        InputStream resourceStream = classLoader.getResourceAsStream(SystemProperty.APPLICATION_PROPERTIES_NAME.getValue());
-        properties.load(resourceStream);
-        return properties;
+        if (this.properties == null || properties.isEmpty()){
+            properties = new Properties();
+            ClassLoader classLoader = this.getClass().getClassLoader();
+            InputStream resourceStream = classLoader.getResourceAsStream(SystemProperty.APPLICATION_PROPERTIES_NAME.getValue());
+            properties.load(resourceStream);
+        }
+        return this.properties;
     }
 }
