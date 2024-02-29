@@ -11,7 +11,8 @@ public enum Message implements Descriptive {
     NO_ID_ANNOTATION("The object cannot be processed because no fields or methods are marked with the @Id annotation."),
     FILE_IS_CORRUPTED("The file cannot be read because its structure is corrupted."),
     DELETE_FAIL("This file cannot be deleted because it does not exist."),
-    SOURCE_IS_NULL("The operation cannot proceed because the StorageUnit source object is null.");
+    SOURCE_IS_NULL("The operation cannot proceed because the StorageUnit source object is null."),
+    ID_COUNTER_ERROR("The ID counter is corrupted and cannot be read.");
 
     private String description;
 

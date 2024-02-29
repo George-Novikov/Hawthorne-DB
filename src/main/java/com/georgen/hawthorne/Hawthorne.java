@@ -24,32 +24,30 @@ public class Hawthorne {
 
     static {
         try {
-            java.util.Arrays.ArrayList array = Arrays.asList("wtf;wtf".split(";"));
-            LOGGER.info(array.getClass().getName());
-//            Sample sample = new Sample("This is a long message to test bytes serialization");
-//            LOGGER.info("Custom object path: {}", PathBuilder.extractPathFromAnnotation(sample));
-//
-//            Sample savedSample = Repository.save(sample);
-//            LOGGER.info("Saved sample is not null: {}", savedSample != null);
-//            LOGGER.info("Saved sample id: {}", sample.getId());
-//
-//            Sample retrievedSample = Repository.get(Sample.class);
-//            LOGGER.info("Retrieved sample is not null: {}", retrievedSample != null);
-//            LOGGER.info("Sample field: {}", sample.getField());
-//
-//            IdType idType = IdTypeExtractor.extract(retrievedSample);
-//            LOGGER.info("Retrieved sample IdType: {}", idType);
-//
-//            List<Sample> sampleList = Repository.list(Sample.class);
-//            for (Sample sampleElement : sampleList){
-//                LOGGER.info("Sample list element: {}", Serializer.toJson(sampleElement));
-//            }
-//
-//            boolean isDeleted = Repository.delete(Sample.class);
-//            LOGGER.info("Is sample deleted: {}", isDeleted);
-//
-//            long sampleCount = Repository.count(Sample.class);
-//            LOGGER.info("Sample count: {}", sampleCount);
+            Sample sample = new Sample("This is a long message to test bytes serialization");
+            LOGGER.info("Custom object path: {}", PathBuilder.extractPathFromAnnotation(sample));
+
+            Sample savedSample = Repository.save(sample);
+            LOGGER.info("Saved sample is not null: {}", savedSample != null);
+            LOGGER.info("Saved sample id: {}", sample.getId());
+
+            Sample retrievedSample = Repository.get(Sample.class);
+            LOGGER.info("Retrieved sample is not null: {}", retrievedSample != null);
+            LOGGER.info("Sample field: {}", sample.getField());
+
+            IdType idType = IdTypeExtractor.extract(retrievedSample);
+            LOGGER.info("Retrieved sample IdType: {}", idType);
+
+            List<Sample> sampleList = Repository.list(Sample.class);
+            for (Sample sampleElement : sampleList){
+                LOGGER.info("Sample list element: {}", Serializer.toJson(sampleElement));
+            }
+
+            boolean isDeleted = Repository.delete(Sample.class);
+            LOGGER.info("Is sample deleted: {}", isDeleted);
+
+            long sampleCount = Repository.count(Sample.class);
+            LOGGER.info("Sample count: {}", sampleCount);
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);

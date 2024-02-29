@@ -28,6 +28,8 @@ public class FileManager {
     }
 
     public static byte[] readBytes(File file) throws IOException {
-        return Files.readAllBytes(file.toPath());
+        synchronized (file){
+            return Files.readAllBytes(file.toPath());
+        }
     }
 }

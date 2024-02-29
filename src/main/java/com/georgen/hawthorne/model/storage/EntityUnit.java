@@ -6,16 +6,18 @@ import com.georgen.hawthorne.model.exceptions.TypeException;
 import com.georgen.hawthorne.serialization.Serializer;
 import com.georgen.hawthorne.tools.id.IdGenerator;
 
+import java.io.IOException;
+
 public class EntityUnit<S> extends StorageUnit<String, S> {
     private String content;
-    public EntityUnit(S source) throws HawthorneException, JsonProcessingException, TypeException, IllegalAccessException {
+    public EntityUnit(S source) throws Exception {
         this(
                 new StorageArchetype(source),
                 source
         );
     }
 
-    public EntityUnit(StorageArchetype archetype, S source) throws JsonProcessingException, HawthorneException, IllegalAccessException {
+    public EntityUnit(StorageArchetype archetype, S source) throws Exception {
         this.setArchetype(archetype);
         String jsonContent = Serializer.toJson(source);
         this.setMetadata(jsonContent);
@@ -23,7 +25,8 @@ public class EntityUnit<S> extends StorageUnit<String, S> {
         this.setSource(source);
 
         if (IdGenerator.isGenerationRequired(this)){
-            IdGenerator.generateForUnit(this);
+            Object generatedId = IdGenerator.generateForUnit(this);
+            this.setGeneratedId(generatedId);
         }
     }
 

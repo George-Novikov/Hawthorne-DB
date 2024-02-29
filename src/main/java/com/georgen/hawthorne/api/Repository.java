@@ -10,6 +10,7 @@ import com.georgen.hawthorne.repositories.GenericRepository;
 import com.georgen.hawthorne.repositories.RepositoryFactory;
 import com.georgen.hawthorne.settings.StorageSettings;
 
+import java.io.IOException;
 import java.util.List;
 
 public class Repository {
@@ -26,7 +27,7 @@ public class Repository {
         }
     }
 
-    public static <T, I> T get(Class javaClass, I... id) throws HawthorneException {
+    public static <T, I> T get(Class javaClass, I... id) throws Exception {
         StorageArchetype archetype = getArchetype(javaClass);
         if (archetype == null) return null;
 
@@ -34,7 +35,7 @@ public class Repository {
         return repository.get(archetype, id);
     }
 
-    public static <I> boolean delete(Class javaClass, I... id) throws HawthorneException {
+    public static <I> boolean delete(Class javaClass, I... id) throws HawthorneException, IOException {
         StorageArchetype archetype = getArchetype(javaClass);
         if (archetype == null) throw new HawthorneException(Message.DELETE_FAIL);
 
@@ -42,7 +43,7 @@ public class Repository {
         return repository.delete(archetype, id);
     }
 
-    public static <T> List<T> list(Class javaClass) throws HawthorneException {
+    public static <T> List<T> list(Class javaClass) throws Exception {
         StorageArchetype archetype = getArchetype(javaClass);
         if (archetype == null) return null;
 
@@ -50,7 +51,7 @@ public class Repository {
         return repository.list(archetype);
     }
 
-    public static long count(Class javaClass) throws HawthorneException {
+    public static long count(Class javaClass) throws HawthorneException, IOException {
         StorageArchetype archetype = getArchetype(javaClass);
         if (archetype == null) return 0;
 

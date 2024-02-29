@@ -10,7 +10,6 @@ import com.georgen.hawthorne.tools.PathBuilder;
 import com.georgen.hawthorne.tools.Validator;
 
 import java.io.File;
-import java.io.IOException;
 
 import static com.georgen.hawthorne.model.constants.ConfigProperty.*;
 
@@ -90,6 +89,6 @@ public class StorageSettings {
     }
 
     private String getPathRelativeToRoot(String path){
-        return PathBuilder.concat(getRootPath(), path);
+        return PathBuilder.concatenate(getRootPath(), path);
     }
 }

@@ -18,7 +18,6 @@ public class StorageArchetype {
     private IdType idType;
     private String path;
     private String lastId = "0";
-    private String idCounterPath;
     private int partitionsCounter = 1;
 
     public StorageArchetype(Object object) throws HawthorneException, TypeException {
@@ -29,7 +28,6 @@ public class StorageArchetype {
         this.entityType = EntityType.of(object);
         this.idType = IdTypeExtractor.extract(object);
         this.path = PathBuilder.buildBasePath(object, this);
-        this.idCounterPath = PathBuilder.concat(this.path, SystemProperty.ID_COUNTER_NAME.getValue());
     }
 
     public String getSimpleName() {
@@ -86,14 +84,6 @@ public class StorageArchetype {
 
     public void setPartitionsCounter(int partitionsCounter) {
         this.partitionsCounter = partitionsCounter;
-    }
-
-    public void consumeCounters(StorageSchema storageSchema){
-        if (storageSchema == null || !Validator.isValid(this.simpleName)) return;
-        StorageArchetype existingArchetype = storageSchema.get(this.simpleName);
-        if (existingArchetype == null) return;
-        this.lastId = existingArchetype.getLastId();
-        this.partitionsCounter = existingArchetype.getPartitionsCounter();
     }
 
     @Override

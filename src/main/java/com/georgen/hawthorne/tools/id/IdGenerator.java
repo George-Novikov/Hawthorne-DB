@@ -7,13 +7,15 @@ import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.messages.Message;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.model.storage.StorageUnit;
+import com.georgen.hawthorne.tools.id.counters.IdCounter;
+import com.georgen.hawthorne.tools.id.counters.IntegerCounter;
+import com.georgen.hawthorne.tools.id.counters.LongCounter;
+import com.georgen.hawthorne.tools.id.counters.UuidCounter;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.UUID;
 
 public class IdGenerator {
-    private static final int GENERATION_STEP = 1;
 
     public static boolean isGenerationRequired(StorageUnit storageUnit) throws HawthorneException {
         if (storageUnit.hasEmptySource()) throw new HawthorneException(Message.SOURCE_IS_NULL);
@@ -38,40 +40,45 @@ public class IdGenerator {
         return false;
     }
 
-    public static void generateForUnit(StorageUnit storageUnit) throws HawthorneException, IllegalAccessException {
+    public static Object generateForUnit(StorageUnit storageUnit) throws Exception {
         if (storageUnit.hasEmptySource()) throw new HawthorneException(Message.SOURCE_IS_NULL);
+        Object generatedId = null;
 
         for (Field field : storageUnit.getSource().getClass().getDeclaredFields()){
-            if (field.isAnnotationPresent(Id.class)){
-                fillIdField(storageUnit, field);
-            }
+            if (!field.isAnnotationPresent(Id.class)) continue;
+            generatedId = fillIdField(storageUnit, field);
         }
+
+       return generatedId;
     }
 
-    private static void fillIdField(StorageUnit storageUnit, Field field) throws IllegalAccessException {
+    private static Object fillIdField(StorageUnit storageUnit, Field field) throws Exception {
         Object source = storageUnit.getSource();
         StorageArchetype archetype = storageUnit.getArchetype();
         IdType idType = archetype.getIdType();
-        String lastId = archetype.getLastId();
+        IdCounter idCounter = IdCounterFactory.getInstance().getCounter(archetype);
+        if (idCounter == null) return null;
 
         field.setAccessible(true);
 
         switch (idType){
             case UUID:
-                String generatedUuid = UUID.randomUUID().toString();
+                String generatedUuid = ((UuidCounter) idCounter).getNext();
                 field.set(source, generatedUuid);
                 archetype.setLastId(generatedUuid);
-                break;
+                return generatedUuid;
             case INTEGER:
-                int generatedInteger = Integer.valueOf(lastId) + GENERATION_STEP;
+                int generatedInteger = ((IntegerCounter) idCounter).getNext();
                 field.set(source, generatedInteger);
                 archetype.setLastId(String.valueOf(generatedInteger));
-                break;
+                return generatedInteger;
             case LONG:
-                long generatedLong =  Long.valueOf(lastId) + GENERATION_STEP;
+                long generatedLong = ((LongCounter) idCounter).getNext();
                 field.set(source, generatedLong);
                 archetype.setLastId(String.valueOf(generatedLong));
-                break;
+                return generatedLong;
+            default:
+                return null;
         }
     }
 

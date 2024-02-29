@@ -10,22 +10,25 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FileFactory {
-    private static ConcurrentMap inMemoryFiles = new ConcurrentHashMap();
-    private static ConcurrentMap timeStamps = new ConcurrentHashMap();
+    /**
+     * This map ensures that all requested files with the same path will reference to the same File object,
+     * thus, properly synchronizing all input/output operations
+     */
+    private static ConcurrentMap<String, File> fileCache = new ConcurrentHashMap();
 
     public static File getFile(String path) throws IOException {
-        File operatedFile = (File) inMemoryFiles.get(path);
+        File operatedFile = fileCache.get(path);
         if (operatedFile != null) return operatedFile;
 
         File file = new File(path);
         if (!file.exists()) file = createFile(file);
-        inMemoryFiles.put(path, file);
+        fileCache.put(path, file);
 
         return file;
     }
 
-    public static boolean isExistingFile(String path){
-        File file = new File(path);
+    public static boolean isExistingFile(String path) throws IOException {
+        File file = getFile(path);
         return file.exists();
     }
 
@@ -40,13 +43,13 @@ public class FileFactory {
         }
 
         boolean isDeleted = isDeletedAtomically.get();
-        if (isDeleted) inMemoryFiles.remove(path);
+        if (isDeleted) fileCache.remove(path);
 
         return isDeleted;
     }
 
-    public static Object releaseFromMemory(File file){
-        return inMemoryFiles.remove(file.getPath());
+    public static File releaseFromMemory(File file){
+        return fileCache.remove(file);
     }
 
     private static File createFile(File file) throws IOException {

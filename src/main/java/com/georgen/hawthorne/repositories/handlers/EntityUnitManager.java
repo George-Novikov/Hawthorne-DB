@@ -19,7 +19,6 @@ public class EntityUnitManager<T> extends StorageUnitManager<EntityUnit> {
     public EntityUnit save(EntityUnit entityUnit) throws Exception {
         StorageArchetype archetype = entityUnit.getArchetype();
         StorageSchema storageSchema = StorageSettings.getInstance().getStorageSchema();
-        if (archetype.getEntityType().isCollection()) archetype.consumeCounters(storageSchema);
         storageSchema.update(archetype);
 
         File file = FileFactory.getFile(PathBuilder.toEntityPath(archetype));

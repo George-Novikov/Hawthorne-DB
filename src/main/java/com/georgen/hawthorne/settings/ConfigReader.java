@@ -19,7 +19,7 @@ public class ConfigReader {
     public String getControlFilePath() throws IOException {
         String rootFolderName = getProperty(ConfigProperty.ROOT_PATH);
         String controlFileName = getProperty(ConfigProperty.CONTROL_FILE_NAME);
-        return PathBuilder.concat(rootFolderName, controlFileName);
+        return PathBuilder.concatenate(rootFolderName, controlFileName);
     }
 
     public String getProperty(ConfigProperty property) throws IOException {

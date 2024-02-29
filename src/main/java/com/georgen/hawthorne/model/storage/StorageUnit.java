@@ -5,12 +5,14 @@ import com.georgen.hawthorne.model.constants.EntityType;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.exceptions.TypeException;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 public abstract class StorageUnit<C, S> {
     private StorageArchetype archetype;
     private String metadata;
     private S source;
+    private Object generatedId;
 
     public StorageArchetype getArchetype() {
         return archetype;
@@ -36,6 +38,14 @@ public abstract class StorageUnit<C, S> {
         this.source = source;
     }
 
+    public Object getGeneratedId() {
+        return generatedId;
+    }
+
+    public void setGeneratedId(Object generatedId) {
+        this.generatedId = generatedId;
+    }
+
     public abstract C getContent();
 
     public abstract void setContent(C content);
@@ -44,7 +54,7 @@ public abstract class StorageUnit<C, S> {
         return this.source == null;
     }
 
-    public static StorageUnit of(Object object) throws HawthorneException, JsonProcessingException, InvocationTargetException, IllegalAccessException, TypeException {
+    public static StorageUnit of(Object object) throws Exception {
         StorageArchetype archetype = new StorageArchetype(object);
         EntityType entityType = archetype.getEntityType();
 

@@ -1,5 +1,6 @@
 package com.georgen.hawthorne.repositories;
 
+import com.georgen.hawthorne.io.FileOperation;
 import com.georgen.hawthorne.serialization.Serializer;
 import com.georgen.hawthorne.settings.StorageSettings;
 import com.georgen.hawthorne.io.FileFactory;
@@ -16,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,66 +27,57 @@ public class SingletonEntityRepository implements GenericRepository, SelfTrackin
     protected SingletonEntityRepository(){}
 
     @Override
-    public <C, S> S save(StorageUnit<C, S> storageUnit){
-        try {
-            validateType(storageUnit);
-            EntityUnit entityUnit = (EntityUnit) storageUnit;
+    public <C, S> S save(StorageUnit<C, S> storageUnit) throws Exception {
+        validateType(storageUnit);
+        EntityUnit entityUnit = (EntityUnit) storageUnit;
 
-            StorageArchetype archetype = entityUnit.getArchetype();
-            StorageSchema storageSchema = StorageSettings.getInstance().getStorageSchema();
-            if (archetype.getEntityType().isCollection()) archetype.consumeCounters(storageSchema);
-            storageSchema.update(archetype);
+        StorageArchetype archetype = entityUnit.getArchetype();
+        StorageSchema storageSchema = StorageSettings.getInstance().getStorageSchema();
+        storageSchema.update(archetype);
 
-            File file = FileFactory.getFile(PathBuilder.toEntityPath(archetype));
-            FileManager.write(file, entityUnit.getContent());
+        String path = PathBuilder.toEntityPath(archetype);
 
-            return storageUnit.getSource();
-        } catch (Exception e){
-            LOGGER.error(e.getMessage(), e);
-            return null;
+        try (FileOperation fileOperation = new FileOperation(path)){
+            File file = fileOperation.getFile();
+
         }
+
+        File file = FileFactory.getFile(PathBuilder.toEntityPath(archetype));
+        FileManager.write(file, entityUnit.getContent());
+
+        return storageUnit.getSource();
     }
 
     @Override
-    public <T, I> T get(StorageArchetype archetype, I... id){
-        try {
-            File file = FileFactory.getFile(PathBuilder.toEntityPath(archetype));
-            if (file == null) return null;
+    public <T, I> T get(StorageArchetype archetype, I... id) throws Exception {
+        File file = FileFactory.getFile(PathBuilder.toEntityPath(archetype));
+        if (file == null) return null;
 
-            String json = FileManager.read(file);
-            if (json == null || json.isEmpty()) throw new HawthorneException(Message.FILE_IS_CORRUPTED);
+        String json = FileManager.read(file);
+        if (json == null || json.isEmpty()) throw new HawthorneException(Message.FILE_IS_CORRUPTED);
 
-            Class javaClass = Class.forName(archetype.getFullName());
-            T object = Serializer.deserialize(json, javaClass);
-            if (object == null) throw new HawthorneException(Message.ENTITY_RETRIEVAL_ERROR);
+        Class javaClass = Class.forName(archetype.getFullName());
+        T object = Serializer.deserialize(json, javaClass);
+        if (object == null) throw new HawthorneException(Message.ENTITY_RETRIEVAL_ERROR);
 
-            return object;
-        } catch (Exception e){
-            LOGGER.error(e.getMessage(), e);
-            return null;
-        }
+        return object;
     }
 
     @Override
-    public <I> boolean delete(StorageArchetype archetype, I... id) {
-        try {
-            File file = FileFactory.getFile(PathBuilder.toEntityPath(archetype));
-            if (file == null) throw new HawthorneException(Message.DELETE_FAIL);
-            return FileFactory.delete(file);
-        } catch (Exception e){
-            LOGGER.error(e.getMessage(), e);
-            return false;
-        }
+    public <I> boolean delete(StorageArchetype archetype, I... id) throws IOException, HawthorneException {
+        File file = FileFactory.getFile(PathBuilder.toEntityPath(archetype));
+        if (file == null) throw new HawthorneException(Message.DELETE_FAIL);
+        return FileFactory.delete(file);
     }
 
     @Override
-    public <T> List<T> list(StorageArchetype archetype) {
+    public <T> List<T> list(StorageArchetype archetype) throws Exception {
         T object = get(archetype);
         return new ArrayList<T>() {{ add(object); }};
     }
 
     //TODO: maybe it would be better to return the number of versions
-    public long count(StorageArchetype archetype){
+    public long count(StorageArchetype archetype) throws IOException {
         return FileFactory.isExistingFile(PathBuilder.toEntityPath(archetype)) ? 1 : 0;
     }
 
