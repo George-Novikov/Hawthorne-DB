@@ -29,6 +29,7 @@ public class FileUnit<S> extends StorageUnit<byte[], S>{
         if (IdGenerator.isGenerationRequired(this)){
             Object generatedId = IdGenerator.generateForUnit(this);
             this.setGeneratedId(generatedId);
+            this.setNew(true);
         }
     }
 

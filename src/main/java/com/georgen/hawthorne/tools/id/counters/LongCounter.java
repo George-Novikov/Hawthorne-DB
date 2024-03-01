@@ -27,9 +27,8 @@ public class LongCounter extends IdCounter<Long> {
     @Override
     public Long getNext() throws Exception {
         try {
-            String value = FileManager.read(counterFile);
-            if (value == null) value = DEFAULT_VALUE;
-            atomicLong.set(Long.valueOf(value));
+            long idCount = getGenerationsCount();
+            atomicLong.set(idCount);
 
             Long nextValue = atomicLong.incrementAndGet();
             FileManager.write(counterFile, String.valueOf(nextValue));
@@ -42,6 +41,8 @@ public class LongCounter extends IdCounter<Long> {
 
     @Override
     public long getGenerationsCount() throws Exception {
-        return 0;
+        String idCount = FileManager.read(counterFile);
+        if (idCount == null) idCount = DEFAULT_VALUE;
+        return Long.valueOf(idCount);
     }
 }

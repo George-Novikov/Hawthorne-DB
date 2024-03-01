@@ -4,7 +4,6 @@ import com.georgen.hawthorne.api.annotations.EntityCollection;
 import com.georgen.hawthorne.api.annotations.SingletonEntity;
 import com.georgen.hawthorne.model.constants.SystemProperty;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
-import com.georgen.hawthorne.model.storage.StorageUnit;
 import com.georgen.hawthorne.settings.StorageSettings;
 import com.georgen.hawthorne.model.constants.EntityType;
 
@@ -31,6 +30,17 @@ public class PathBuilder {
         );
     }
 
+    public static String getUuidIndexPath(StorageArchetype archetype){
+        return concatenate(
+                archetype.getPath(),
+                String.format(
+                        "%s-%s",
+                        SystemProperty.UUID_INDEX_NAME.getValue(),
+                        archetype.getPartitionsCounter()
+                )
+        );
+    }
+
     public static String buildBasePath(Object object, StorageArchetype archetype){
         EntityType entityType = archetype.getEntityType();
         return entityType.isCollection() ? getCollectionPath(object, archetype) : getSingletonPath(object);
@@ -45,31 +55,23 @@ public class PathBuilder {
     private static String getCollectionPath(Object object, StorageArchetype archetype){
         String entitiesBasePath = StorageSettings.getInstance().getEntitiesPath();
         String customSourcePath = extractPathFromAnnotation(object);
-        String archetypeSimpleName = archetype.getSimpleName();
         return concatenate(
                 concatenate(entitiesBasePath, customSourcePath),
-                archetypeSimpleName
+                archetype.getSimpleName()
         );
     }
 
-    public static String buildPath(StorageUnit storageUnit){
-        StorageArchetype archetype = storageUnit.getArchetype();
-        Object source = storageUnit.getSource();
+    public static String buildEntityPath(StorageArchetype archetype) throws Exception {
+        return buildEntityPath(archetype, false);
+    }
 
+    public static String buildEntityPath(StorageArchetype archetype, boolean isNewFile) throws Exception {
+        return buildEntityPath(archetype, isNewFile, null);
+    }
+
+    public static String buildEntityPath(StorageArchetype archetype, boolean isNewFile, Object id) throws Exception {
         EntityType entityType = archetype.getEntityType();
-
-        switch (entityType){
-            case SINGLETON_ENTITY:
-                return getSingletonEntityPath(archetype);
-            case ENTITY_COLLECTION:
-                return null;
-            case SINGLETON_FILE:
-                return null;
-            case FILE_COLLECTION:
-                return null;
-            default:
-                return null;
-        }
+        return entityType.isSingleton() ? getSingletonEntityPath(archetype) : getEntityCollectionPath(archetype, isNewFile, id);
     }
 
     public static String getSingletonEntityPath(StorageArchetype archetype){
@@ -78,24 +80,13 @@ public class PathBuilder {
         return concatenate(basePath, fileName);
     }
 
-    public static String getEntityCollectionPath(StorageUnit storageUnit){
-        StorageArchetype archetype = storageUnit.getArchetype();
-
-    }
-
-    public static String toEntityPath(StorageArchetype archetype){
-        EntityType entityType = archetype.getEntityType();
+    public static String getEntityCollectionPath(StorageArchetype archetype, boolean isNewFile, Object id) throws Exception {
         String basePath = archetype.getPath();
-        String documentPath = entityType.isCollection() ? concatenate(basePath, archetype.getLastId()) : concatenate(basePath, archetype.getSimpleName());
-        return String.format("%s.%s", documentPath, ENTITY_FILE_EXTENSION);
-    }
-
-    public static String toBinaryDataPath(StorageArchetype archetype){
-        EntityType entityType = archetype.getEntityType();
-        String binaryDataPath = StorageSettings.getInstance().getBinaryDataPath();
-        String basePath = concatenate(archetype.getPath(), binaryDataPath);
-        String filePath = entityType.isCollection() ? concatenate(basePath, archetype.getLastId()) : concatenate(basePath, archetype.getSimpleName());
-        return String.format("%s.%s", filePath, BINARY_DATA_EXTENSION);
+        int partitionNumber = PartitionManager.locatePartition(archetype, isNewFile, id);
+        return concatenate(
+                concatenate(basePath, String.valueOf(partitionNumber)),
+                String.format("%s.%s", id, ENTITY_FILE_EXTENSION)
+        );
     }
 
     public static String extractPathFromAnnotation(Object object) {

@@ -35,22 +35,19 @@ public class SingletonEntityRepository implements GenericRepository, SelfTrackin
         StorageSchema storageSchema = StorageSettings.getInstance().getStorageSchema();
         storageSchema.update(archetype);
 
-        String path = PathBuilder.toEntityPath(archetype);
+        String path = PathBuilder.buildEntityPath(archetype, storageUnit.isNew(), storageUnit.getGeneratedId());
 
         try (FileOperation fileOperation = new FileOperation(path)){
             File file = fileOperation.getFile();
-
+            FileManager.write(file, entityUnit.getContent());
         }
-
-        File file = FileFactory.getFile(PathBuilder.toEntityPath(archetype));
-        FileManager.write(file, entityUnit.getContent());
 
         return storageUnit.getSource();
     }
 
     @Override
     public <T, I> T get(StorageArchetype archetype, I... id) throws Exception {
-        File file = FileFactory.getFile(PathBuilder.toEntityPath(archetype));
+        File file = FileFactory.getFile(PathBuilder.buildEntityPath(archetype));
         if (file == null) return null;
 
         String json = FileManager.read(file);
@@ -64,8 +61,8 @@ public class SingletonEntityRepository implements GenericRepository, SelfTrackin
     }
 
     @Override
-    public <I> boolean delete(StorageArchetype archetype, I... id) throws IOException, HawthorneException {
-        File file = FileFactory.getFile(PathBuilder.toEntityPath(archetype));
+    public <I> boolean delete(StorageArchetype archetype, I... id) throws Exception {
+        File file = FileFactory.getFile(PathBuilder.buildEntityPath(archetype));
         if (file == null) throw new HawthorneException(Message.DELETE_FAIL);
         return FileFactory.delete(file);
     }
@@ -77,8 +74,8 @@ public class SingletonEntityRepository implements GenericRepository, SelfTrackin
     }
 
     //TODO: maybe it would be better to return the number of versions
-    public long count(StorageArchetype archetype) throws IOException {
-        return FileFactory.isExistingFile(PathBuilder.toEntityPath(archetype)) ? 1 : 0;
+    public long count(StorageArchetype archetype) throws Exception {
+        return FileFactory.isExistingFile(PathBuilder.buildEntityPath(archetype)) ? 1 : 0;
     }
 
     private void validateType(StorageUnit storageUnit) throws HawthorneException {

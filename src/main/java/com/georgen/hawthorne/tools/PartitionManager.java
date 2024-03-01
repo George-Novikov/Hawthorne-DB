@@ -1,28 +1,21 @@
 package com.georgen.hawthorne.tools;
 
-import com.georgen.hawthorne.io.FileFactory;
-import com.georgen.hawthorne.io.FileManager;
 import com.georgen.hawthorne.model.constants.IdType;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.model.storage.StorageUnit;
 import com.georgen.hawthorne.settings.StorageSettings;
 import com.georgen.hawthorne.tools.id.IdCounterFactory;
 import com.georgen.hawthorne.tools.id.counters.IdCounter;
-import com.georgen.hawthorne.tools.id.counters.UuidCounter;
-
-import java.io.File;
-import java.io.IOException;
 
 public class PartitionManager {
-    public static int locatePartition(StorageUnit storageUnit, boolean isNewFile) throws Exception {
-        StorageArchetype archetype = storageUnit.getArchetype();
-        Object generatedId = storageUnit.getGeneratedId();
+    public static int locatePartition(StorageArchetype archetype, boolean isNewFile, Object id) throws Exception {
         IdType idType = archetype.getIdType();
+        String stringId = String.valueOf(id);
 
         if (IdType.UUID.equals(idType)){
-            return isNewFile ? locateNewPartitionForUuid(archetype) : locateExistingPartitionForId();
+            return isNewFile ? locateNewPartitionForId(archetype, Long.valueOf(stringId)) : locateExistingPartitionForId(archetype, Long.valueOf(stringId));
         } else {
-            return isNewFile ? locateNewPartitionForId(archetype, (long) generatedId) : locateExistingPartitionForUuid();
+            return isNewFile ? locateNewPartitionForUuid(archetype) : locateExistingPartitionForUuid(archetype, stringId);
         }
     }
 
@@ -36,8 +29,17 @@ public class PartitionManager {
         return newPartitionsCount;
     }
 
-    private static int locateExistingPartitionForId(){
-        //TODO
+    private static int locateExistingPartitionForId(StorageArchetype archetype, long id){
+        int partitioningThreshold = StorageSettings.getInstance().getPartitioningThreshold();
+        int partitionsCount = archetype.getPartitionsCounter();
+
+        int targetPartitionNumber = 0;
+
+        for (int i = 1; i <= partitionsCount; i++){
+            if (id < partitioningThreshold * i) targetPartitionNumber = i;
+        }
+
+        return targetPartitionNumber;
     }
 
     private static int locateNewPartitionForUuid(StorageArchetype archetype) throws Exception {
@@ -53,7 +55,7 @@ public class PartitionManager {
         return newPartitionsCount;
     }
 
-    private static int locateExistingPartitionForUuid(){
+    private static int locateExistingPartitionForUuid(StorageArchetype archetype, String uuid){
         //TODO
     }
 }

@@ -27,6 +27,7 @@ public class EntityUnit<S> extends StorageUnit<String, S> {
         if (IdGenerator.isGenerationRequired(this)){
             Object generatedId = IdGenerator.generateForUnit(this);
             this.setGeneratedId(generatedId);
+            this.setNew(true);
         }
     }
 

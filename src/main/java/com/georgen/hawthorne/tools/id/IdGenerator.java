@@ -13,27 +13,31 @@ import com.georgen.hawthorne.tools.id.counters.LongCounter;
 import com.georgen.hawthorne.tools.id.counters.UuidCounter;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class IdGenerator {
 
-    public static boolean isGenerationRequired(StorageUnit storageUnit) throws HawthorneException {
+    public static boolean isGenerationRequired(StorageUnit storageUnit) throws HawthorneException, IllegalAccessException, InvocationTargetException {
         if (storageUnit.hasEmptySource()) throw new HawthorneException(Message.SOURCE_IS_NULL);
 
         EntityType entityType = storageUnit.getArchetype().getEntityType();
         if (!entityType.isCollection()) return false;
 
-        Class javaClass = storageUnit.getSource().getClass();
+        Object source = storageUnit.getSource();
+        Class javaClass = source.getClass();
 
         for (Field field : javaClass.getDeclaredFields()){
             if (field.isAnnotationPresent(Id.class)){
-                return field.getAnnotation(Id.class).isGenerated();
+                field.setAccessible(true);
+                return field.get(source) == null ? field.getAnnotation(Id.class).isGenerated() : false;
             }
         }
 
         for (Method method : javaClass.getDeclaredMethods()){
             if (method.isAnnotationPresent(Id.class)){
-                return method.getAnnotation(Id.class).isGenerated();
+                method.setAccessible(true);
+                return method.invoke(source) == null ? method.getAnnotation(Id.class).isGenerated() : false;
             }
         }
 

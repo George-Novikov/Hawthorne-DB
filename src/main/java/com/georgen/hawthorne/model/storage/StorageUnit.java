@@ -13,6 +13,7 @@ public abstract class StorageUnit<C, S> {
     private String metadata;
     private S source;
     private Object generatedId;
+    private boolean isNew;
 
     public StorageArchetype getArchetype() {
         return archetype;
@@ -44,6 +45,14 @@ public abstract class StorageUnit<C, S> {
 
     public void setGeneratedId(Object generatedId) {
         this.generatedId = generatedId;
+    }
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    public void setNew(boolean aNew) {
+        isNew = aNew;
     }
 
     public abstract C getContent();

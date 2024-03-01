@@ -2,7 +2,6 @@ package com.georgen.hawthorne.tools.id.counters;
 
 import com.georgen.hawthorne.io.FileFactory;
 import com.georgen.hawthorne.io.FileManager;
-import com.georgen.hawthorne.model.constants.SystemProperty;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.messages.Message;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
@@ -27,9 +26,8 @@ public class IntegerCounter extends IdCounter<Integer> {
     @Override
     public Integer getNext() throws Exception {
         try {
-            String value = FileManager.read(counterFile);
-            if (value == null) value = DEFAULT_VALUE;
-            atomicInteger.set(Integer.valueOf(value));
+            long idCount = getGenerationsCount();
+            atomicInteger.set(Math.toIntExact(idCount));
 
             Integer nextValue = atomicInteger.incrementAndGet();
             FileManager.write(counterFile, String.valueOf(nextValue));
@@ -42,6 +40,8 @@ public class IntegerCounter extends IdCounter<Integer> {
 
     @Override
     public long getGenerationsCount() throws Exception {
-        return 0;
+        String idCount = FileManager.read(counterFile);
+        if (idCount == null) idCount = DEFAULT_VALUE;
+        return Long.valueOf(idCount);
     }
 }

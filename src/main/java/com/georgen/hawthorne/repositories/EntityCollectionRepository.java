@@ -31,7 +31,8 @@ public class EntityCollectionRepository implements GenericRepository, SelfTracki
             StorageSchema storageSchema = StorageSettings.getInstance().getStorageSchema();
             storageSchema.update(archetype);
 
-            File file = FileFactory.getFile(PathBuilder.toEntityPath(archetype));
+            String path = PathBuilder.buildEntityPath(archetype, storageUnit.isNew(), storageUnit.getGeneratedId());
+            File file = FileFactory.getFile(path);
             FileManager.write(file, entityUnit.getContent());
 
             return file;
