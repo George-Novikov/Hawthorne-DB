@@ -16,13 +16,17 @@ public class FileFactory {
      */
     private static ConcurrentMap<String, File> fileCache = new ConcurrentHashMap();
 
-    public static File getFile(String path) throws IOException {
+    public static File getFile(String path) throws IOException{
+        return getFile(path, false);
+    }
+
+    public static File getFile(String path, boolean isSearchRequest) throws IOException {
         File operatedFile = fileCache.get(path);
         if (operatedFile != null) return operatedFile;
 
         File file = new File(path);
-        if (!file.exists()) file = createFile(file);
-        fileCache.put(path, file);
+        if (!isSearchRequest && !file.exists()) file = createFile(file);
+        if (file.exists()) fileCache.put(path, file);
 
         return file;
     }

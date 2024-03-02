@@ -31,7 +31,7 @@ public enum EntityType {
 //            return hasBinaryData(object) ? FILE_COLLECTION : ENTITY_COLLECTION;
 //        }
 
-        throw new HawthorneException(Message.NOT_COMPATIBLE);
+        throw new HawthorneException(Message.NOT_ANNOTATED);
     }
 
     public static boolean isTyped(Class javaClass){

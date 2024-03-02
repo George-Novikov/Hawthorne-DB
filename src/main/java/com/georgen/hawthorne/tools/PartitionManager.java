@@ -1,61 +1,74 @@
 package com.georgen.hawthorne.tools;
 
+import com.georgen.hawthorne.io.FileFactory;
 import com.georgen.hawthorne.model.constants.IdType;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
-import com.georgen.hawthorne.model.storage.StorageUnit;
 import com.georgen.hawthorne.settings.StorageSettings;
-import com.georgen.hawthorne.tools.id.IdCounterFactory;
-import com.georgen.hawthorne.tools.id.counters.IdCounter;
+import com.georgen.hawthorne.tools.id.UuidSearcher;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PartitionManager {
-    public static int locatePartition(StorageArchetype archetype, boolean isNewFile, Object id) throws Exception {
+    public static int locatePartition(StorageArchetype archetype, Object id) throws Exception {
         IdType idType = archetype.getIdType();
         String stringId = String.valueOf(id);
 
         if (IdType.UUID.equals(idType)){
-            return isNewFile ? locateNewPartitionForId(archetype, Long.valueOf(stringId)) : locateExistingPartitionForId(archetype, Long.valueOf(stringId));
+            return locateExistingPartitionForUuid(archetype, stringId);
         } else {
-            return isNewFile ? locateNewPartitionForUuid(archetype) : locateExistingPartitionForUuid(archetype, stringId);
+            Long longId = Long.valueOf(stringId);
+            return locateExistingPartitionForId(archetype, longId);
         }
-    }
-
-    private static int locateNewPartitionForId(StorageArchetype archetype, long id){
-        int partitioningThreshold = StorageSettings.getInstance().getPartitioningThreshold();
-        int partitionsCount = archetype.getPartitionsCounter();
-
-        int newPartitionsCount = id > partitioningThreshold * partitionsCount ? partitionsCount + 1 : partitionsCount;
-        archetype.setPartitionsCounter(newPartitionsCount);
-
-        return newPartitionsCount;
     }
 
     private static int locateExistingPartitionForId(StorageArchetype archetype, long id){
         int partitioningThreshold = StorageSettings.getInstance().getPartitioningThreshold();
-        int partitionsCount = archetype.getPartitionsCounter();
+        int partitionsCount = archetype.getPartitionCounter();
 
         int targetPartitionNumber = 0;
 
         for (int i = 1; i <= partitionsCount; i++){
-            if (id < partitioningThreshold * i) targetPartitionNumber = i;
+            if (id < partitioningThreshold * i){
+                targetPartitionNumber = i;
+                break;
+            }
         }
 
         return targetPartitionNumber;
     }
 
-    private static int locateNewPartitionForUuid(StorageArchetype archetype) throws Exception {
-        int partitioningThreshold = StorageSettings.getInstance().getPartitioningThreshold();
-        int partitionsCount = archetype.getPartitionsCounter();
+    private static int locateExistingPartitionForUuid(StorageArchetype archetype, String uuid) throws IOException {
+        int partitionsCount = archetype.getPartitionCounter();
 
-        IdCounter idCounter = IdCounterFactory.getInstance().getCounter(archetype);
-        long generationsCount = idCounter.getGenerationsCount();
+        for (int i = 1; i <= partitionsCount; i++){
+            String uuidIndexPath = PathBuilder.getUuidIndexPath(archetype, i);
+            File uuidIndexFile = FileFactory.getFile(uuidIndexPath);
+            if (uuidIndexFile == null) continue;
 
-        int newPartitionsCount = generationsCount > partitioningThreshold * partitionsCount ? partitionsCount + 1 : partitionsCount;
-        archetype.setPartitionsCounter(newPartitionsCount);
+            boolean isPresent = UuidSearcher.isUuidPresent(uuidIndexFile, uuid);
+            if (isPresent) return i;
+        }
 
-        return newPartitionsCount;
+        return 0;
     }
 
-    private static int locateExistingPartitionForUuid(StorageArchetype archetype, String uuid){
-        //TODO
+    public static boolean isUuidPresent(File uuidIndexFile, String uuid) throws IOException {
+        List<String> lines = null;
+        BufferedReader reader = null;
+
+        try {
+            reader = new BufferedReader(new FileReader(uuidIndexFile));
+            lines = reader.lines().collect(Collectors.toList());
+            Collections.sort(lines);
+            return Collections.binarySearch(lines, uuid) >= 0;
+        } finally {
+            if (reader != null) reader.close();
+        }
     }
 }

@@ -3,11 +3,9 @@ package com.georgen.hawthorne.model.storage;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.georgen.hawthorne.model.constants.EntityType;
 import com.georgen.hawthorne.model.constants.IdType;
-import com.georgen.hawthorne.model.constants.SystemProperty;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.exceptions.TypeException;
 import com.georgen.hawthorne.tools.PathBuilder;
-import com.georgen.hawthorne.tools.Validator;
 import com.georgen.hawthorne.tools.extractors.IdTypeExtractor;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,8 +15,7 @@ public class StorageArchetype {
     private EntityType entityType;
     private IdType idType;
     private String path;
-    private String lastId = "0";
-    private int partitionsCounter = 1;
+    private Integer partitionCounter = 1;
 
     public StorageArchetype(Object object) throws HawthorneException, TypeException {
         Class javaClass = object.getClass();
@@ -70,20 +67,12 @@ public class StorageArchetype {
         this.path = path;
     }
 
-    public String getLastId() {
-        return lastId;
+    public Integer getPartitionCounter() {
+        return partitionCounter;
     }
 
-    public void setLastId(String lastId) {
-        this.lastId = lastId;
-    }
-
-    public int getPartitionsCounter() {
-        return partitionsCounter;
-    }
-
-    public void setPartitionsCounter(int partitionsCounter) {
-        this.partitionsCounter = partitionsCounter;
+    public void setPartitionCounter(Integer partitionCounter) {
+        this.partitionCounter = partitionCounter;
     }
 
     @Override
@@ -95,6 +84,7 @@ public class StorageArchetype {
         if (this.entityType != null) hashCode = 31 * hashCode + this.entityType.hashCode();
         if (this.idType != null) hashCode = 31 * hashCode + this.idType.hashCode();
         if (this.path != null) hashCode = 31 * hashCode + this.path.hashCode();
+        if (this.partitionCounter != null) hashCode = 31 * hashCode + this.partitionCounter.hashCode();
 
         return hashCode;
     }
@@ -122,6 +112,9 @@ public class StorageArchetype {
         boolean isPathEqual = (this.path == null && other.getPath() == null)
                 || (this.path != null && this.path.equals(other.getPath()));
 
-        return isSimpleNameEqual && isFullNameEqual && isEntityTypeEqual && isIdTypeEqual && isPathEqual;
+        boolean isPartitionsCounterEqual = (this.partitionCounter == null && other.getPartitionCounter() == null)
+                || (this.partitionCounter != null && this.partitionCounter.equals(other.getPartitionCounter()));
+
+        return isSimpleNameEqual && isFullNameEqual && isEntityTypeEqual && isIdTypeEqual && isPathEqual && isPartitionsCounterEqual;
     }
 }

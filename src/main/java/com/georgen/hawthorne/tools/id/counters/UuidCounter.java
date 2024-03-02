@@ -14,39 +14,34 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class UuidCounter extends IdCounter<String> {
+    private StorageArchetype archetype;
     private File counterFile;
-    private File uuidIndexFile;
     private AtomicLong atomicLong;
-    private int partitionNumber;
 
     public UuidCounter(StorageArchetype archetype) throws IOException {
+        this.archetype = archetype;
+
         this.counterFile = FileFactory.getFile(
                 PathBuilder.getIdCounterPath(archetype)
         );
 
-        this.uuidIndexFile = FileFactory.getFile(
-                PathBuilder.getUuidIndexPath(archetype)
-        );
-
         this.atomicLong = new AtomicLong();
-        this.partitionNumber = archetype.getPartitionsCounter();
     }
 
     @Override
     public String getNext() throws Exception {
         try {
-            String nextValue = UUID.randomUUID().toString();
-
             long idCount = getGenerationsCount();
-            int partitioningThreshold = StorageSettings.getInstance().getPartitioningThreshold();
-            int targetPartitionNumber = idCount > partitionNumber * partitioningThreshold ? partitionNumber + 1 : partitionNumber;
-
-
             atomicLong.set(idCount);
-            Long incrementedLong = atomicLong.incrementAndGet();
-            FileManager.write(counterFile, String.valueOf(incrementedLong));
 
-            return nextValue;
+            Long incrementedCount = atomicLong.incrementAndGet();
+            String nextUuid = UUID.randomUUID().toString();
+
+            updateArchetypePartitionInfo(incrementedCount);
+            writeToUuidIndex(nextUuid);
+            saveCounterValue(incrementedCount);
+
+            return nextUuid;
         } catch (Exception e) {
             throw new HawthorneException(Message.ID_COUNTER_ERROR);
         }
@@ -57,5 +52,24 @@ public class UuidCounter extends IdCounter<String> {
         String idCount = FileManager.read(counterFile);
         if (idCount == null) idCount = "0";
         return Long.valueOf(idCount);
+    }
+
+    private void updateArchetypePartitionInfo(long idCount) throws Exception {
+        int partitioningThreshold = StorageSettings.getInstance().getPartitioningThreshold();
+
+        int currentPartition = archetype.getPartitionCounter();
+        int targetPartition = idCount > currentPartition * partitioningThreshold ? currentPartition + 1 : currentPartition;
+
+        archetype.setPartitionCounter(targetPartition);
+    }
+
+    private void writeToUuidIndex(String uuid) throws Exception {
+        String uuidIndexPath = PathBuilder.getUuidIndexPath(archetype);
+        File uuidIndexFile = FileFactory.getFile(uuidIndexPath);
+        FileManager.append(uuidIndexFile, uuid);
+    }
+
+    private void saveCounterValue(Long incrementedCount) throws Exception {
+        FileManager.write(counterFile, String.valueOf(incrementedCount));
     }
 }

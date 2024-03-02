@@ -3,10 +3,10 @@ package com.georgen.hawthorne.tools.id.counters;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 
 
-import java.io.File;
 import java.io.IOException;
 
 public abstract class IdCounter<T> {
+    protected static final String DEFAULT_ID_COUNT_STRING_VALUE = "0";
     public abstract T getNext() throws Exception;
     public abstract long getGenerationsCount() throws Exception;
 

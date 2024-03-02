@@ -13,9 +13,17 @@ public class FileManager {
         }
     }
 
+    public static void append(File file, String content) throws Exception {
+        synchronized (file){
+            try (CloseableWriter writer = new CloseableWriter(file, true)){
+                writer.append(content);
+            }
+        }
+    }
+
     public static String read(File file) throws Exception {
         synchronized (file){
-            try (CloseableScanner scanner = new CloseableScanner(file)){
+            try (CloseableReader scanner = new CloseableReader(file)){
                 return scanner.read();
             }
         }

@@ -69,17 +69,14 @@ public class IdGenerator {
             case UUID:
                 String generatedUuid = ((UuidCounter) idCounter).getNext();
                 field.set(source, generatedUuid);
-                archetype.setLastId(generatedUuid);
                 return generatedUuid;
             case INTEGER:
                 int generatedInteger = ((IntegerCounter) idCounter).getNext();
                 field.set(source, generatedInteger);
-                archetype.setLastId(String.valueOf(generatedInteger));
                 return generatedInteger;
             case LONG:
                 long generatedLong = ((LongCounter) idCounter).getNext();
                 field.set(source, generatedLong);
-                archetype.setLastId(String.valueOf(generatedLong));
                 return generatedLong;
             default:
                 return null;

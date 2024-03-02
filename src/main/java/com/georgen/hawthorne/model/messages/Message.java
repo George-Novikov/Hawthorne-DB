@@ -1,7 +1,7 @@
 package com.georgen.hawthorne.model.messages;
 
 public enum Message implements Descriptive {
-    NOT_COMPATIBLE("File cannot be saved because it is not annotated as a Hawthorne entity."),
+    NOT_ANNOTATED("File cannot be saved because it is not annotated as a Hawthorne entity."),
     NO_BINARY_DATA_ANNOTATION("The object data cannot be processed because the @BinaryData annotation is missing."),
     NOT_A_BYTE_ARRAY("The @BinaryData annotation is applicable only to fields of type byte[]."),
     BINARY_DATA_IS_NULL("The field of method annotated with @BinaryData is null."),
@@ -12,7 +12,8 @@ public enum Message implements Descriptive {
     FILE_IS_CORRUPTED("The file cannot be read because its structure is corrupted."),
     DELETE_FAIL("This file cannot be deleted because it does not exist."),
     SOURCE_IS_NULL("The operation cannot proceed because the StorageUnit source object is null."),
-    ID_COUNTER_ERROR("The ID counter is corrupted and cannot be read.");
+    ID_COUNTER_ERROR("The ID counter is corrupted and cannot be read."),
+    ID_IS_NULL("The request is missing the id parameter.");
 
     private String description;
 

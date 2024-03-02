@@ -8,6 +8,7 @@ import com.georgen.hawthorne.model.storage.EntityUnit;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.model.storage.StorageSchema;
 import com.georgen.hawthorne.model.storage.StorageUnit;
+import com.georgen.hawthorne.serialization.Serializer;
 import com.georgen.hawthorne.settings.StorageSettings;
 import com.georgen.hawthorne.tools.PathBuilder;
 import com.georgen.hawthorne.tools.logging.SelfTracking;
@@ -17,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.util.List;
 
-public class EntityCollectionRepository implements GenericRepository, SelfTracking {
+public class EntityCollectionRepository<I> implements GenericRepository, SelfTracking {
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityCollectionRepository.class);
     protected EntityCollectionRepository(){}
     @Override
@@ -31,7 +32,7 @@ public class EntityCollectionRepository implements GenericRepository, SelfTracki
             StorageSchema storageSchema = StorageSettings.getInstance().getStorageSchema();
             storageSchema.update(archetype);
 
-            String path = PathBuilder.buildEntityPath(archetype, storageUnit.isNew(), storageUnit.getGeneratedId());
+            String path = PathBuilder.getEntityPath(archetype, storageUnit.getGeneratedId(), storageUnit.isNew());
             File file = FileFactory.getFile(path);
             FileManager.write(file, entityUnit.getContent());
 
@@ -42,9 +43,24 @@ public class EntityCollectionRepository implements GenericRepository, SelfTracki
     }
 
     @Override
-    public <T, I> T get(StorageArchetype archetype, I... id){
-        return null;
+    public <T, I> T get(StorageArchetype archetype, I... id) throws Exception {
+        if (id == null || id.length == 0) throw new HawthorneException(Message.ID_IS_NULL);
+        String path = PathBuilder.getEntityPath(archetype, id[0], false);
+
+        File file = FileFactory.getFile(path);
+        if (file == null) return null;
+
+        String json = FileManager.read(file);
+        if (json == null || json.isEmpty()) throw new HawthorneException(Message.FILE_IS_CORRUPTED);
+
+        Class javaClass = Class.forName(archetype.getFullName());
+        T object = Serializer.deserialize(json, javaClass);
+        if (object == null) throw new HawthorneException(Message.ENTITY_RETRIEVAL_ERROR);
+
+        return object;
     }
+
+
 
     @Override
     public <I> boolean delete(StorageArchetype archetype, I... id) {

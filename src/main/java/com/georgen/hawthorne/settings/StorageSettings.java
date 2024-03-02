@@ -56,16 +56,6 @@ public class StorageSettings {
         }
     }
 
-    public String getBinaryDataPath() {
-        try {
-            String binaryDataPath = this.configReader.getProperty(BINARY_DATA_PATH);
-            boolean isValidPath = Validator.isValid(binaryDataPath);
-            return getPathRelativeToRoot(isValidPath ? binaryDataPath : BINARY_DATA_PATH.getDefaultValue());
-        } catch (Exception e){
-            return BINARY_DATA_PATH.getDefaultValue();
-        }
-    }
-
     public File getControlFile() {
         try {
             return FileFactory.getFile(configReader.getControlFilePath());

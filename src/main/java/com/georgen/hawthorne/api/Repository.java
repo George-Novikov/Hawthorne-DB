@@ -60,7 +60,7 @@ public class Repository {
     }
 
     private static StorageArchetype getArchetype(Class javaClass) throws HawthorneException {
-        if (!EntityType.isTyped(javaClass)) throw new HawthorneException(Message.NOT_COMPATIBLE);
+        if (!EntityType.isTyped(javaClass)) throw new HawthorneException(Message.NOT_ANNOTATED);
         StorageSchema schema = StorageSettings.getInstance().getStorageSchema();
         return schema.get(javaClass.getSimpleName());
     }
