@@ -65,7 +65,7 @@ public class FileFactory {
         this.fileCache.put(file.getPath(), file);
     }
 
-    public File releaseFromCache(File file) throws JsonProcessingException {
+    public File releaseFromCache(File file){
         File releasedFile = fileCache.remove(file.getPath());
         return releasedFile;
     }

@@ -71,4 +71,12 @@ public class ListRequestScope {
     public void setEndPartitionCount(int endPartitionCount) {
         this.endPartitionCount = endPartitionCount;
     }
+
+    public boolean hasMiddlePartitions(){
+        return this.numberOfMiddlePartitions > 0;
+    }
+
+    public boolean hasEndPartition(){
+        return endPartition != startPartition;
+    }
 }

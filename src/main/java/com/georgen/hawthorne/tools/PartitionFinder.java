@@ -81,10 +81,10 @@ public class PartitionFinder {
         int partitionsCount = archetype.getPartitionCounter();
 
         int startPartition = locateListStartPartition(partitioningThreshold, partitionsCount, offset);
-        int endPartition = locateListEndPartition(partitioningThreshold, partitionsCount, limit, offset);
-        int numberOfMiddlePartitions = countNumberOfMiddlePartitions(startPartition, endPartition);
         int startPartitionCount = countStartPartitionObjects(partitioningThreshold, startPartition, offset);
+        int endPartition = locateListEndPartition(partitioningThreshold, partitionsCount, limit, offset);
         int endPartitionCount = countEndPartitionObjects(partitioningThreshold, startPartitionCount, limit);
+        int numberOfMiddlePartitions = countNumberOfMiddlePartitions(startPartition, endPartition);
 
         return new ListRequestScope(
                 startPartition,
@@ -98,26 +98,26 @@ public class PartitionFinder {
 
     public static int locateListStartPartition(int partitioningThreshold, int partitionsCount, int offset){
         if (offset <= partitioningThreshold) return 1;
-        int listStartPartitionNumber = 1;
+        int startPartitionNumber = 1;
         for (int i = 1; i <= partitionsCount; i++){
             if (offset <= i * partitioningThreshold){
-                listStartPartitionNumber = i;
+                startPartitionNumber = i;
                 break;
             }
         }
-        return listStartPartitionNumber;
+        return startPartitionNumber;
     }
 
     public static int locateListEndPartition(int partitioningThreshold, int partitionsCount, int limit, int offset){
         if (limit + offset <= partitioningThreshold) return 1;
-        int listEndPartitionNumber = 1;
+        int endPartitionNumber = 1;
         for (int i = 1; i <= partitionsCount; i++){
             if (limit + offset <= i * partitioningThreshold){
-                listEndPartitionNumber = i;
+                endPartitionNumber = i;
                 break;
             }
         }
-        return listEndPartitionNumber;
+        return endPartitionNumber;
     }
 
     public static int countNumberOfMiddlePartitions(int startPartition, int endPartition){

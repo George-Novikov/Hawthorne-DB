@@ -2,20 +2,23 @@ package com.georgen.hawthorne.repositories;
 
 import com.georgen.hawthorne.io.FileManager;
 import com.georgen.hawthorne.io.FileOperation;
+import com.georgen.hawthorne.model.constants.FileExtension;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.messages.Message;
 import com.georgen.hawthorne.model.storage.*;
+import com.georgen.hawthorne.tools.EntityConverter;
 import com.georgen.hawthorne.tools.PartitionFinder;
-import com.georgen.hawthorne.tools.Serializer;
 import com.georgen.hawthorne.settings.StorageSettings;
 import com.georgen.hawthorne.tools.PathBuilder;
 import com.georgen.hawthorne.tools.logging.SelfTracking;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityCollectionRepository<I> implements GenericRepository, SelfTracking {
+public class EntityCollectionRepository implements GenericRepository, SelfTracking {
     protected EntityCollectionRepository(){}
     @Override
     public <C, S> S save(StorageUnit<C, S> storageUnit) throws Exception {
@@ -43,15 +46,7 @@ public class EntityCollectionRepository<I> implements GenericRepository, SelfTra
         String path = PathBuilder.getEntityPath(archetype, id[0], false);
         try (FileOperation fileOperation = new FileOperation(path, false)){
             File file = fileOperation.getFile();
-
-            String json = FileManager.read(file);
-            if (json == null || json.isEmpty()) throw new HawthorneException(Message.FILE_IS_CORRUPTED);
-
-            Class javaClass = Class.forName(archetype.getFullName());
-            T object = Serializer.deserialize(json, javaClass);
-            if (object == null) throw new HawthorneException(Message.ENTITY_RETRIEVAL_ERROR);
-
-            return object;
+            return EntityConverter.convert(file, archetype);
         }
     }
 
@@ -66,27 +61,66 @@ public class EntityCollectionRepository<I> implements GenericRepository, SelfTra
     }
 
     @Override
-    public <T> List<T> list(StorageArchetype archetype, int limit, int offset) throws Exception {
-        int partitionCount = archetype.getPartitionCounter();
-
-        List<T> objects = new ArrayList<>();
-        List<File> entityFiles = new ArrayList<>();
-        ListRequestScope listRequestScope = PartitionFinder.getListRequestScope(archetype, limit, offset);
-
-        for (int i = 1; i <= partitionCount; i++){
-            String path = PathBuilder.concatenate(archetype.getPath(), i);
-            try (FileOperation fileOperation = new FileOperation(path, true)){
-                List<File> partitionFiles = fileOperation.listBinaryFiles(limit, offset);
-                entityFiles.addAll(partitionFiles);
-            }
-        }
-
-        return null;
+    public long count(StorageArchetype archetype) {
+        return 0;
     }
 
     @Override
-    public long count(StorageArchetype archetype) {
-        return 0;
+    public <T> List<T> list(StorageArchetype archetype, int limit, int offset) throws Exception {
+        List<File> files = listRequestedFiles(archetype, limit, offset);
+        List<T> objects = new ArrayList<>();
+
+        for (File file : files){
+            objects.add(
+                    EntityConverter.convert(file, archetype)
+            );
+        }
+
+        return objects;
+    }
+
+    private List<File> listRequestedFiles(StorageArchetype archetype, int limit, int offset) throws Exception {
+        ListRequestScope listRequestScope = PartitionFinder.getListRequestScope(archetype, limit, offset);
+
+        List<File> files = listStartPartitionFiles(archetype, listRequestScope, offset);
+        if (listRequestScope.hasMiddlePartitions()){
+            files.addAll(listMiddlePartitionsFiles(archetype, listRequestScope));
+        }
+        if (listRequestScope.hasEndPartition()){
+            files.addAll(listEndPartitionFiles(archetype, listRequestScope));
+        }
+
+        return files;
+    }
+
+    private List<File> listStartPartitionFiles(StorageArchetype archetype, ListRequestScope listRequestScope, int offset) throws Exception {
+        String path = PathBuilder.concatenate(archetype.getPath(), listRequestScope.getStartPartition());
+        try (FileOperation fileOperation = new FileOperation(path, true)){
+            return fileOperation.listEntityFiles(listRequestScope.getStartPartitionCount(), offset);
+        }
+    }
+
+    private List<File> listMiddlePartitionsFiles(StorageArchetype archetype, ListRequestScope listRequestScope) throws Exception {
+        List<File> files = new ArrayList<>();
+
+        int start = listRequestScope.getStartPartition() + 1;
+        int end = listRequestScope.getStartPartition() + listRequestScope.getNumberOfMiddlePartitions();
+
+        for (int i = start; i <= end; i++){
+            String path = PathBuilder.concatenate(archetype.getPath(), i);
+            try (FileOperation fileOperation = new FileOperation(path, true)){
+                List<File> partitionFiles = fileOperation.listEntityFiles(listRequestScope.getSizeOfMiddlePartitions(), 0);
+                files.addAll(partitionFiles);
+            }
+        }
+        return files;
+    }
+
+    private List<File> listEndPartitionFiles(StorageArchetype archetype, ListRequestScope listRequestScope) throws Exception{
+        String path = PathBuilder.concatenate(archetype.getPath(), listRequestScope.getEndPartition());
+        try (FileOperation fileOperation = new FileOperation(path, true)){
+            return fileOperation.listEntityFiles(listRequestScope.getEndPartitionCount(), 0);
+        }
     }
 
     private void validateType(StorageUnit storageUnit) throws HawthorneException {
