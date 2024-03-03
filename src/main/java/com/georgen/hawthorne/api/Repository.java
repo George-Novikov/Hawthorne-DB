@@ -43,12 +43,12 @@ public class Repository {
         return repository.delete(archetype, id);
     }
 
-    public static <T> List<T> list(Class javaClass) throws Exception {
+    public static <T> List<T> list(Class javaClass, int limit, int offset) throws Exception {
         StorageArchetype archetype = getArchetype(javaClass);
         if (archetype == null) return null;
 
         GenericRepository repository = factory.getRepository(archetype);
-        return repository.list(archetype);
+        return repository.list(archetype, limit, offset);
     }
 
     public static long count(Class javaClass) throws Exception {

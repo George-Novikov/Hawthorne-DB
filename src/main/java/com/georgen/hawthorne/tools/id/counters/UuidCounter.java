@@ -18,7 +18,7 @@ public class UuidCounter extends IdCounter<String> {
     private File counterFile;
     private AtomicLong atomicLong;
 
-    public UuidCounter(StorageArchetype archetype) throws IOException {
+    public UuidCounter(StorageArchetype archetype) throws IOException, HawthorneException {
         this.archetype = archetype;
 
         this.counterFile = FileFactory.getInstance().getFile(

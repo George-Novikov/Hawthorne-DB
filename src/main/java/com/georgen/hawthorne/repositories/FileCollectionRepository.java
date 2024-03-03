@@ -25,7 +25,7 @@ public class FileCollectionRepository implements GenericRepository {
     }
 
     @Override
-    public <T> List<T> list(StorageArchetype archetype) {
+    public <T> List<T> list(StorageArchetype archetype, int limit, int offset) {
         return null;
     }
 

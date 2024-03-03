@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class CloseableScanner implements AutoCloseable {
     private Scanner scanner;
 
-    public CloseableScanner(File file) throws FileNotFoundException {
+    protected CloseableScanner(File file) throws FileNotFoundException {
         this.scanner = new Scanner(file);
     }
 

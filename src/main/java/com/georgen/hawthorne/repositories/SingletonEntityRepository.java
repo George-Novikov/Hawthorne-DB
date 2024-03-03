@@ -1,9 +1,7 @@
 package com.georgen.hawthorne.repositories;
 
 import com.georgen.hawthorne.io.FileOperation;
-import com.georgen.hawthorne.serialization.Serializer;
 import com.georgen.hawthorne.settings.StorageSettings;
-import com.georgen.hawthorne.io.FileFactory;
 import com.georgen.hawthorne.io.FileManager;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.messages.Message;
@@ -12,6 +10,7 @@ import com.georgen.hawthorne.model.storage.StorageSchema;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.model.storage.StorageUnit;
 import com.georgen.hawthorne.tools.PathBuilder;
+import com.georgen.hawthorne.tools.EntityConverter;
 import com.georgen.hawthorne.tools.logging.SelfTracking;
 
 import java.io.File;
@@ -47,15 +46,7 @@ public class SingletonEntityRepository implements GenericRepository, SelfTrackin
 
         try (FileOperation fileOperation = new FileOperation(path, false)){
             File file = fileOperation.getFile();
-
-            String json = FileManager.read(file);
-            if (json == null || json.isEmpty()) throw new HawthorneException(Message.FILE_IS_CORRUPTED);
-
-            Class javaClass = Class.forName(archetype.getFullName());
-            T object = Serializer.deserialize(json, javaClass);
-            if (object == null) throw new HawthorneException(Message.ENTITY_RETRIEVAL_ERROR);
-
-            return object;
+            return EntityConverter.convert(file, archetype);
         }
     }
 
@@ -69,7 +60,7 @@ public class SingletonEntityRepository implements GenericRepository, SelfTrackin
     }
 
     @Override
-    public <T> List<T> list(StorageArchetype archetype) throws Exception {
+    public <T> List<T> list(StorageArchetype archetype, int limit, int offset) throws Exception {
         T object = get(archetype);
         return new ArrayList<T>() {{ add(object); }};
     }

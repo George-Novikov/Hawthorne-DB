@@ -19,11 +19,13 @@ import java.io.File;
  * @BinaryData (collection) path: hawthorneRoot/entities/customPath/classSimpleName/partitionNumber/id.bin
  */
 public class PathBuilder {
-    private static final String ENTITY_FILE_EXTENSION = "json";
-    private static final String BINARY_DATA_EXTENSION = "bin";
 
     public static String concatenate(String parentPath, String childPath){
         return String.format("%s%s%s", parentPath, File.separator, childPath);
+    }
+
+    public static String concatenate(String parentPath, int partitionNumber){
+        return concatenate(parentPath, String.valueOf(partitionNumber));
     }
 
     public static String buildBasePath(Object source, StorageArchetype archetype){
@@ -40,11 +42,11 @@ public class PathBuilder {
     }
 
     public static String getEntityPath(StorageArchetype archetype, Object id, boolean isNewFile) throws Exception {
-        return getFinalFilePath(archetype, id, ENTITY_FILE_EXTENSION, isNewFile);
+        return getFinalFilePath(archetype, id, SystemProperty.ENTITY_FILE_EXTENSION.getValue(), isNewFile);
     }
 
     public static String getBinaryDataPath(StorageArchetype archetype, Object id, boolean isNewFile) throws Exception {
-        return getFinalFilePath(archetype, id, BINARY_DATA_EXTENSION, isNewFile);
+        return getFinalFilePath(archetype, id, SystemProperty.BINARY_DATA_EXTENSION.getValue(), isNewFile);
     }
 
     public static String getFinalFilePath(StorageArchetype archetype, Object id, String fileExtension, boolean isNewFile) throws Exception {

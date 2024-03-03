@@ -17,7 +17,7 @@ public class LongCounter extends IdCounter<Long> {
     private File counterFile;
     private AtomicLong atomicLong;
 
-    public LongCounter(StorageArchetype archetype) throws IOException {
+    public LongCounter(StorageArchetype archetype) throws IOException, HawthorneException {
         this.archetype = archetype;
 
         this.counterFile = FileFactory.getInstance().getFile(

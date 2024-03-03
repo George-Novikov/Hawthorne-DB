@@ -1,5 +1,6 @@
 package com.georgen.hawthorne.tools.id.counters;
 
+import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 
 
@@ -10,7 +11,7 @@ public abstract class IdCounter<T> {
     public abstract T getNext() throws Exception;
     public abstract long getGenerationsCount() throws Exception;
 
-    public static IdCounter of(StorageArchetype archetype) throws IOException {
+    public static IdCounter of(StorageArchetype archetype) throws IOException, HawthorneException {
         switch (archetype.getIdType()){
             case UUID:
                 return new UuidCounter(archetype);

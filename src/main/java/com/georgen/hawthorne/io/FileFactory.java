@@ -1,8 +1,12 @@
 package com.georgen.hawthorne.io;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.georgen.hawthorne.model.constants.SystemProperty;
+import com.georgen.hawthorne.model.exceptions.HawthorneException;
+import com.georgen.hawthorne.model.messages.Message;
 import com.georgen.hawthorne.settings.StorageSettings;
 import com.georgen.hawthorne.tools.PartitionFinder;
+import com.georgen.hawthorne.tools.Serializer;
 import com.georgen.hawthorne.tools.SystemHelper;
 import com.georgen.hawthorne.tools.id.counters.IntegerCounter;
 import com.georgen.hawthorne.tools.id.counters.LongCounter;
@@ -19,15 +23,13 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FileFactory {
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileFactory.class);
     private static final List<Class> PERMITTED_CALLERS = Arrays.asList(
             StorageSettings.class, FileOperation.class, PartitionFinder.class,
             IntegerCounter.class, LongCounter.class, UuidCounter.class
     );
-    /**
-     * This map ensures that all requested files with the same path will reference to the same File object,
-     * thus, properly synchronizing all input/output operations
-     */
+
+    // This map ensures that all requested files with the same path will reference to the same File object,
+    // thus, properly synchronizing all input/output operations
     private ConcurrentMap<String, File> fileCache;
 
     private FileFactory(){ this.fileCache = new ConcurrentHashMap<>(); }
@@ -59,8 +61,13 @@ public class FileFactory {
         return isDeleted;
     }
 
-    public File releaseFromMemory(File file){
-        return fileCache.remove(file);
+    public void registerInCache(File file){
+        this.fileCache.put(file.getPath(), file);
+    }
+
+    public File releaseFromCache(File file) throws JsonProcessingException {
+        File releasedFile = fileCache.remove(file.getPath());
+        return releasedFile;
     }
 
     private File createFile(File file) throws IOException {
@@ -77,9 +84,10 @@ public class FileFactory {
         SystemHelper.setFilePermissions(file);
     }
 
-    public static FileFactory getInstance(){
+    public static FileFactory getInstance() throws HawthorneException {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
-        LOGGER.info("FileFactory caller: {}", stackTrace[2].getClassName());
+        boolean isPermittedCaller = PERMITTED_CALLERS.stream().anyMatch(caller -> caller.getName().equals(stackTrace[2].getClassName()));
+        if (!isPermittedCaller) throw new HawthorneException(Message.PERMISSION_DENIED);
         return FileFactoryHolder.INSTANCE;
     }
 

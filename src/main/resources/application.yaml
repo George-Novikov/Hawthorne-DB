@@ -1,8 +1,7 @@
 hawthorne:
   naming:
-    root-directory: hawthorne
     control-file: storage.json
-    storage-directory: storage
+    root-directory: hawthorne
     entities-directory: entities
-    collections-directory: collections
-    files-directory: files
+  storage:
+    partitioning-threshold: 50000

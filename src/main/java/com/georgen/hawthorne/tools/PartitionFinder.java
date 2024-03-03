@@ -2,6 +2,8 @@ package com.georgen.hawthorne.tools;
 
 import com.georgen.hawthorne.io.FileFactory;
 import com.georgen.hawthorne.model.constants.IdType;
+import com.georgen.hawthorne.model.exceptions.HawthorneException;
+import com.georgen.hawthorne.model.storage.ListRequestScope;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.settings.StorageSettings;
 
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class PartitionFinder {
+
     public static int locatePartition(StorageArchetype archetype, Object id) throws Exception {
         if (archetype.getEntityType().isSingleton()) return 0;
 
@@ -44,7 +47,7 @@ public class PartitionFinder {
         return targetPartitionNumber;
     }
 
-    private static int locateExistingPartitionForUuid(StorageArchetype archetype, String uuid) throws IOException {
+    private static int locateExistingPartitionForUuid(StorageArchetype archetype, String uuid) throws IOException, HawthorneException {
         int partitionsCount = archetype.getPartitionCounter();
 
         for (int i = 1; i <= partitionsCount; i++){
@@ -72,4 +75,66 @@ public class PartitionFinder {
             if (reader != null) reader.close();
         }
     }
+
+    public static ListRequestScope getListRequestScope(StorageArchetype archetype, int limit, int offset){
+        int partitioningThreshold = StorageSettings.getInstance().getPartitioningThreshold();
+        int partitionsCount = archetype.getPartitionCounter();
+
+        int startPartition = locateListStartPartition(partitioningThreshold, partitionsCount, offset);
+        int endPartition = locateListEndPartition(partitioningThreshold, partitionsCount, limit, offset);
+        int numberOfMiddlePartitions = countNumberOfMiddlePartitions(startPartition, endPartition);
+        int startPartitionCount = countStartPartitionObjects(partitioningThreshold, startPartition, offset);
+        int endPartitionCount = countEndPartitionObjects(partitioningThreshold, startPartitionCount, limit);
+
+        return new ListRequestScope(
+                startPartition,
+                startPartitionCount,
+                numberOfMiddlePartitions,
+                partitioningThreshold,
+                endPartition,
+                endPartitionCount
+        );
+    }
+
+    public static int locateListStartPartition(int partitioningThreshold, int partitionsCount, int offset){
+        if (offset <= partitioningThreshold) return 1;
+        int listStartPartitionNumber = 1;
+        for (int i = 1; i <= partitionsCount; i++){
+            if (offset <= i * partitioningThreshold){
+                listStartPartitionNumber = i;
+                break;
+            }
+        }
+        return listStartPartitionNumber;
+    }
+
+    public static int locateListEndPartition(int partitioningThreshold, int partitionsCount, int limit, int offset){
+        if (limit + offset <= partitioningThreshold) return 1;
+        int listEndPartitionNumber = 1;
+        for (int i = 1; i <= partitionsCount; i++){
+            if (limit + offset <= i * partitioningThreshold){
+                listEndPartitionNumber = i;
+                break;
+            }
+        }
+        return listEndPartitionNumber;
+    }
+
+    public static int countNumberOfMiddlePartitions(int startPartition, int endPartition){
+        int count = endPartition - startPartition - 1;
+        return count < 0 ? 0 : count;
+    }
+
+    public static int countStartPartitionObjects(int partitioningThreshold, int startPartitionNumber, int offset){
+        return (partitioningThreshold * startPartitionNumber) - offset;
+    }
+
+    public static int countEndPartitionObjects(int partitioningThreshold, int startPartitionCount, int limit){
+        int count = limit - startPartitionCount;
+        while (count < partitioningThreshold){
+            count = count - partitioningThreshold;
+        }
+        return count;
+    }
+
 }

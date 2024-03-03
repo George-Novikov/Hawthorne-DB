@@ -1,22 +1,14 @@
 package com.georgen.hawthorne;
 
 import com.georgen.hawthorne.api.Repository;
-import com.georgen.hawthorne.io.FileFactory;
 import com.georgen.hawthorne.model.constants.IdType;
 import com.georgen.hawthorne.model.sample.Sample;
-import com.georgen.hawthorne.serialization.Serializer;
+import com.georgen.hawthorne.tools.Serializer;
 import com.georgen.hawthorne.tools.PathBuilder;
 import com.georgen.hawthorne.tools.extractors.IdTypeExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class Hawthorne {
@@ -38,7 +30,7 @@ public class Hawthorne {
             IdType idType = IdTypeExtractor.extract(retrievedSample);
             LOGGER.info("Retrieved sample IdType: {}", idType);
 
-            List<Sample> sampleList = Repository.list(Sample.class);
+            List<Sample> sampleList = Repository.list(Sample.class, 5, 0);
             for (Sample sampleElement : sampleList){
                 LOGGER.info("Sample list element: {}", Serializer.toJson(sampleElement));
             }

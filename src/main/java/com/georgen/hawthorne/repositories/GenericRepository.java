@@ -12,7 +12,7 @@ public interface GenericRepository {
     <C, S> S save(StorageUnit<C, S> storageUnit) throws Exception;
     <T, I> T get(StorageArchetype archetype, I... id) throws Exception;
     <I> boolean delete(StorageArchetype archetype, I... id) throws Exception;
-    <T> List<T> list(StorageArchetype archetype) throws Exception;
+    <T> List<T> list(StorageArchetype archetype, int limit, int offset) throws Exception;
     long count(StorageArchetype archetype) throws Exception;
 
 }

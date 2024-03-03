@@ -8,7 +8,7 @@ import java.io.Writer;
 public class CloseableWriter implements AutoCloseable {
     private FileWriter fileWriter;
 
-    public CloseableWriter(File file, boolean isAppended) throws IOException {
+    protected CloseableWriter(File file, boolean isAppended) throws IOException {
         this.fileWriter = new FileWriter(file, isAppended);
     }
 

@@ -17,7 +17,7 @@ public class IntegerCounter extends IdCounter<Integer> {
     private File counterFile;
     private AtomicInteger atomicInteger;
 
-    public IntegerCounter(StorageArchetype archetype) throws IOException {
+    public IntegerCounter(StorageArchetype archetype) throws IOException, HawthorneException {
         this.archetype = archetype;
 
         this.counterFile = FileFactory.getInstance().getFile(

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class CloseableReader implements AutoCloseable {
     private BufferedReader reader;
 
-    public CloseableReader(File file) throws FileNotFoundException {
+    protected CloseableReader(File file) throws FileNotFoundException {
         this.reader = new BufferedReader(
                 new FileReader(file)
         );

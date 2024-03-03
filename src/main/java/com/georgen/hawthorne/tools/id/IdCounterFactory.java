@@ -1,5 +1,6 @@
 package com.georgen.hawthorne.tools.id;
 
+import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.tools.id.counters.IdCounter;
 
@@ -14,7 +15,7 @@ public class IdCounterFactory {
         this.idCounters = new ConcurrentHashMap();
     }
 
-    public IdCounter getCounter(StorageArchetype archetype) throws IOException {
+    public IdCounter getCounter(StorageArchetype archetype) throws IOException, HawthorneException {
         IdCounter idCounter = idCounters.get(archetype.getSimpleName());
         if (idCounter != null) return idCounter;
 

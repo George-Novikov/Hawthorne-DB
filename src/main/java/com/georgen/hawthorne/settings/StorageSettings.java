@@ -5,7 +5,7 @@ import com.georgen.hawthorne.io.FileManager;
 import com.georgen.hawthorne.model.exceptions.InitializationException;
 import com.georgen.hawthorne.model.messages.SystemMessage;
 import com.georgen.hawthorne.model.storage.StorageSchema;
-import com.georgen.hawthorne.serialization.StorageSchemaSerializer;
+import com.georgen.hawthorne.tools.Serializer;
 import com.georgen.hawthorne.tools.PathBuilder;
 import com.georgen.hawthorne.tools.Validator;
 
@@ -23,7 +23,7 @@ public class StorageSettings {
 
         try {
             String storageSchemaJson = FileManager.read(controlFile);
-            this.storageSchema = StorageSchemaSerializer.deserialize(storageSchemaJson);
+            this.storageSchema = Serializer.deserialize(storageSchemaJson, StorageSchema.class);
         } catch (Exception e){
             this.storageSchema = new StorageSchema(controlFile);
         }

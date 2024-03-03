@@ -2,7 +2,7 @@ package com.georgen.hawthorne.model.storage;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.georgen.hawthorne.io.FileManager;
-import com.georgen.hawthorne.serialization.Serializer;
+import com.georgen.hawthorne.tools.Serializer;
 
 import java.io.File;
 import java.util.concurrent.ConcurrentHashMap;
