@@ -14,9 +14,6 @@ public class EntityUnit<S> extends StorageUnit<String, S> {
 
     public EntityUnit(StorageArchetype archetype, S source) throws Exception {
         this.setArchetype(archetype);
-        String jsonContent = Serializer.toJson(source);
-        this.setMetadata(jsonContent);
-        this.setContent(jsonContent);
         this.setSource(source);
 
         if (IdGenerator.isGenerationRequired(this)){
@@ -24,6 +21,10 @@ public class EntityUnit<S> extends StorageUnit<String, S> {
             this.setGeneratedId(generatedId);
             this.setNew(true);
         }
+
+        String jsonContent = Serializer.toJson(source);
+        this.setMetadata(jsonContent);
+        this.setContent(jsonContent);
     }
 
     @Override

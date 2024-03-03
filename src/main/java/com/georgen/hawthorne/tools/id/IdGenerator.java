@@ -75,20 +75,24 @@ public class IdGenerator {
         IdCounter idCounter = IdCounterFactory.getInstance().getCounter(archetype);
         if (idCounter == null) return null;
 
+        boolean isAccessible = field.isAccessible();
         field.setAccessible(true);
 
         switch (idType){
             case UUID:
                 String generatedUuid = ((UuidCounter) idCounter).getNext();
                 field.set(source, generatedUuid);
+                field.setAccessible(isAccessible);
                 return generatedUuid;
             case INTEGER:
                 int generatedInteger = ((IntegerCounter) idCounter).getNext();
                 field.set(source, generatedInteger);
+                field.setAccessible(isAccessible);
                 return generatedInteger;
             case LONG:
                 long generatedLong = ((LongCounter) idCounter).getNext();
                 field.set(source, generatedLong);
+                field.setAccessible(isAccessible);
                 return generatedLong;
             default:
                 return null;

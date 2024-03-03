@@ -16,8 +16,6 @@ public class FileUnit<S> extends StorageUnit<byte[], S>{
 
     public FileUnit(StorageArchetype archetype, S source) throws Exception {
         this.setArchetype(archetype);
-        this.setMetadata(Serializer.toJson(source));
-        this.setContent(BinaryDataExtractor.extract(source));
         this.setSource(source);
 
         if (IdGenerator.isGenerationRequired(this)){
@@ -25,6 +23,9 @@ public class FileUnit<S> extends StorageUnit<byte[], S>{
             this.setGeneratedId(generatedId);
             this.setNew(true);
         }
+
+        this.setMetadata(Serializer.toJson(source));
+        this.setContent(BinaryDataExtractor.extract(source));
     }
 
     @Override

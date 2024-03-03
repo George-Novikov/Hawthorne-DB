@@ -11,6 +11,7 @@ import java.io.File;
 
 public class EntityConverter {
     public static <T> T convert(File file, StorageArchetype archetype) throws Exception {
+        if (!file.exists()) return null;
         String json = FileManager.read(file);
         if (json == null || json.isEmpty()) throw new HawthorneException(Message.FILE_IS_CORRUPTED);
 

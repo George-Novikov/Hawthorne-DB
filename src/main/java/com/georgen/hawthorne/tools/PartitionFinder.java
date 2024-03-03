@@ -81,7 +81,7 @@ public class PartitionFinder {
         int partitionsCount = archetype.getPartitionCounter();
 
         int startPartition = locateListStartPartition(partitioningThreshold, partitionsCount, offset);
-        int startPartitionCount = countStartPartitionObjects(partitioningThreshold, startPartition, offset);
+        int startPartitionCount = countStartPartitionObjects(partitioningThreshold, startPartition, limit, offset);
         int endPartition = locateListEndPartition(partitioningThreshold, partitionsCount, limit, offset);
         int endPartitionCount = countEndPartitionObjects(partitioningThreshold, startPartitionCount, limit);
         int numberOfMiddlePartitions = countNumberOfMiddlePartitions(startPartition, endPartition);
@@ -108,6 +108,11 @@ public class PartitionFinder {
         return startPartitionNumber;
     }
 
+    public static int countStartPartitionObjects(int partitioningThreshold, int startPartitionNumber, int limit, int offset){
+        if (partitioningThreshold > limit + offset) return limit;
+        return (partitioningThreshold * startPartitionNumber) - offset;
+    }
+
     public static int locateListEndPartition(int partitioningThreshold, int partitionsCount, int limit, int offset){
         if (limit + offset <= partitioningThreshold) return 1;
         int endPartitionNumber = 1;
@@ -120,21 +125,17 @@ public class PartitionFinder {
         return endPartitionNumber;
     }
 
-    public static int countNumberOfMiddlePartitions(int startPartition, int endPartition){
-        int count = endPartition - startPartition - 1;
-        return count < 0 ? 0 : count;
-    }
-
-    public static int countStartPartitionObjects(int partitioningThreshold, int startPartitionNumber, int offset){
-        return (partitioningThreshold * startPartitionNumber) - offset;
-    }
-
     public static int countEndPartitionObjects(int partitioningThreshold, int startPartitionCount, int limit){
         int count = limit - startPartitionCount;
-        while (count < partitioningThreshold){
+        while (count > partitioningThreshold){
             count = count - partitioningThreshold;
         }
         return count;
+    }
+
+    public static int countNumberOfMiddlePartitions(int startPartition, int endPartition){
+        int count = endPartition - startPartition - 1;
+        return count < 0 ? 0 : count;
     }
 
 }

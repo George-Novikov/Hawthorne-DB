@@ -109,7 +109,11 @@ public class EntityCollectionRepository implements GenericRepository, SelfTracki
     private List<File> listStartPartitionFiles(StorageArchetype archetype, ListRequestScope listRequestScope, int offset) throws Exception {
         String path = PathBuilder.concatenate(archetype.getPath(), listRequestScope.getStartPartition());
         try (FileOperation fileOperation = new FileOperation(path, false)){
-            return fileOperation.listEntityFiles(listRequestScope.getStartPartitionCount(), offset);
+            return fileOperation.listFilesByExtension(
+                    FileExtension.ENTITY_FILE_EXTENSION,
+                    listRequestScope.getStartPartitionCount(),
+                    offset
+            );
         }
     }
 
@@ -122,7 +126,11 @@ public class EntityCollectionRepository implements GenericRepository, SelfTracki
         for (int i = start; i <= end; i++){
             String path = PathBuilder.concatenate(archetype.getPath(), i);
             try (FileOperation fileOperation = new FileOperation(path, false)){
-                List<File> partitionFiles = fileOperation.listEntityFiles(listRequestScope.getSizeOfMiddlePartitions(), 0);
+                List<File> partitionFiles = fileOperation.listFilesByExtension(
+                        FileExtension.ENTITY_FILE_EXTENSION,
+                        listRequestScope.getSizeOfMiddlePartitions(),
+                        0
+                );
                 files.addAll(partitionFiles);
             }
         }
@@ -132,7 +140,11 @@ public class EntityCollectionRepository implements GenericRepository, SelfTracki
     private List<File> listEndPartitionFiles(StorageArchetype archetype, ListRequestScope listRequestScope) throws Exception{
         String path = PathBuilder.concatenate(archetype.getPath(), listRequestScope.getEndPartition());
         try (FileOperation fileOperation = new FileOperation(path, false)){
-            return fileOperation.listEntityFiles(listRequestScope.getEndPartitionCount(), 0);
+            return fileOperation.listFilesByExtension(
+                    FileExtension.ENTITY_FILE_EXTENSION,
+                    listRequestScope.getEndPartitionCount(),
+                    0
+            );
         }
     }
 

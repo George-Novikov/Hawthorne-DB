@@ -29,12 +29,13 @@ public class Hawthorne {
 
             Sample retrievedSample = Repository.get(Sample.class, 3);
             LOGGER.info("Retrieved sample is not null: {}", retrievedSample != null);
-            LOGGER.info("Sample field: {}", retrievedSample.getField());
+            if (retrievedSample != null){
+                LOGGER.info("Sample field: {}", retrievedSample.getField());
+                IdType idType = IdTypeExtractor.extract(retrievedSample);
+                LOGGER.info("Retrieved sample IdType: {}", idType);
+            }
 
-            IdType idType = IdTypeExtractor.extract(retrievedSample);
-            LOGGER.info("Retrieved sample IdType: {}", idType);
-
-            List<Sample> sampleList = Repository.list(Sample.class, 5, 0);
+            List<Sample> sampleList = Repository.list(Sample.class, 5, 3);
             for (Sample sampleElement : sampleList){
                 LOGGER.info("Sample list element: {}", Serializer.toJson(sampleElement));
             }
