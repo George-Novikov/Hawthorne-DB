@@ -44,14 +44,14 @@ public class UuidCounter extends IdCounter<String> {
 
             return nextUuid;
         } catch (Exception e) {
-            throw new HawthorneException(Message.ID_COUNTER_ERROR);
+            throw new HawthorneException(Message.ID_COUNTER_ERROR, e);
         }
     }
 
     @Override
     public long getGenerationsCount() throws Exception {
         String idCount = FileManager.read(counterFile);
-        if (idCount == null) idCount = "0";
+        if (idCount == null || idCount.isEmpty()) idCount = "0";
         return Long.valueOf(idCount);
     }
 

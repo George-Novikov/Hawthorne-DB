@@ -40,14 +40,14 @@ public class IntegerCounter extends IdCounter<Integer> {
 
             return newValue;
         } catch (Exception e){
-            throw new HawthorneException(Message.ID_COUNTER_ERROR);
+            throw new HawthorneException(Message.ID_COUNTER_ERROR, e);
         }
     }
 
     @Override
     public long getGenerationsCount() throws Exception {
         String idCount = FileManager.read(counterFile);
-        if (idCount == null) idCount = DEFAULT_ID_COUNT_STRING_VALUE;
+        if (idCount == null || idCount.isEmpty()) idCount = DEFAULT_ID_COUNT_STRING_VALUE;
         return Long.valueOf(idCount);
     }
 

@@ -30,18 +30,30 @@ public class IdGenerator {
         for (Field field : javaClass.getDeclaredFields()){
             if (field.isAnnotationPresent(Id.class)){
                 field.setAccessible(true);
-                return field.get(source) == null ? field.getAnnotation(Id.class).isGenerated() : false;
+                return isValueNull(field, source) ? field.getAnnotation(Id.class).isGenerated() : false;
             }
         }
 
         for (Method method : javaClass.getDeclaredMethods()){
             if (method.isAnnotationPresent(Id.class)){
                 method.setAccessible(true);
-                return method.invoke(source) == null ? method.getAnnotation(Id.class).isGenerated() : false;
+                return isValueNull(method, source) ? method.getAnnotation(Id.class).isGenerated() : false;
             }
         }
 
         return false;
+    }
+
+    private static boolean isValueNull(Field field, Object source) throws IllegalAccessException {
+        Object value = field.get(source);
+        String stringValue = value != null ? String.valueOf(value) : "0";
+        return value == null || stringValue.equals("0") || stringValue.equals("0L");
+    }
+
+    private static boolean isValueNull(Method method, Object source) throws InvocationTargetException, IllegalAccessException {
+        Object value = method.invoke(source);
+        String stringValue = value != null ? String.valueOf(value) : "0";
+        return value == null || stringValue.equals("0") || stringValue.equals("0L");
     }
 
     public static Object generateForUnit(StorageUnit storageUnit) throws Exception {

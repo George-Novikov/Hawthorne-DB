@@ -9,6 +9,7 @@ import com.georgen.hawthorne.tools.extractors.IdTypeExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Hawthorne {
@@ -16,16 +17,19 @@ public class Hawthorne {
 
     static {
         try {
-            Sample sample = new Sample("This is a long message to test bytes serialization");
-            LOGGER.info("Custom object path: {}", PathBuilder.extractPathFromAnnotation(sample));
 
-            Sample savedSample = Repository.save(sample);
-            LOGGER.info("Saved sample is not null: {}", savedSample != null);
-            LOGGER.info("Saved sample id: {}", sample.getId());
+            List<Sample> samples = new ArrayList<>();
+            for (int i = 0; i < 10; i++){
+                samples.add(new Sample("This is a long message to test bytes serialization"));
 
-            Sample retrievedSample = Repository.get(Sample.class);
+                Sample savedSample = Repository.save(samples.get(i));
+                LOGGER.info("Saved sample is not null: {}", savedSample != null);
+                LOGGER.info("Saved sample id: {}", savedSample.getId());
+            }
+
+            Sample retrievedSample = Repository.get(Sample.class, 3);
             LOGGER.info("Retrieved sample is not null: {}", retrievedSample != null);
-            LOGGER.info("Sample field: {}", sample.getField());
+            LOGGER.info("Sample field: {}", retrievedSample.getField());
 
             IdType idType = IdTypeExtractor.extract(retrievedSample);
             LOGGER.info("Retrieved sample IdType: {}", idType);
@@ -35,7 +39,7 @@ public class Hawthorne {
                 LOGGER.info("Sample list element: {}", Serializer.toJson(sampleElement));
             }
 
-            boolean isDeleted = Repository.delete(Sample.class);
+            boolean isDeleted = Repository.delete(Sample.class, 3);
             LOGGER.info("Is sample deleted: {}", isDeleted);
 
             long sampleCount = Repository.count(Sample.class);

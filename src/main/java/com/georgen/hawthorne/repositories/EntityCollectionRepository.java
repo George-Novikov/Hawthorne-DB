@@ -15,8 +15,11 @@ import com.georgen.hawthorne.tools.logging.SelfTracking;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class EntityCollectionRepository implements GenericRepository, SelfTracking {
     protected EntityCollectionRepository(){}
@@ -61,8 +64,18 @@ public class EntityCollectionRepository implements GenericRepository, SelfTracki
     }
 
     @Override
-    public long count(StorageArchetype archetype) {
-        return 0;
+    public long count(StorageArchetype archetype) throws IOException {
+        int partitionsCount = archetype.getPartitionCounter();
+        long count = 0;
+
+        for (int i = 1; i <= partitionsCount; i++){
+            String path = PathBuilder.concatenate(archetype.getPath(), i);
+            try (Stream<Path> files = Files.list(Paths.get(path))){
+                count += files.count();
+            }
+        }
+
+        return count;
     }
 
     @Override
@@ -95,7 +108,7 @@ public class EntityCollectionRepository implements GenericRepository, SelfTracki
 
     private List<File> listStartPartitionFiles(StorageArchetype archetype, ListRequestScope listRequestScope, int offset) throws Exception {
         String path = PathBuilder.concatenate(archetype.getPath(), listRequestScope.getStartPartition());
-        try (FileOperation fileOperation = new FileOperation(path, true)){
+        try (FileOperation fileOperation = new FileOperation(path, false)){
             return fileOperation.listEntityFiles(listRequestScope.getStartPartitionCount(), offset);
         }
     }
@@ -108,7 +121,7 @@ public class EntityCollectionRepository implements GenericRepository, SelfTracki
 
         for (int i = start; i <= end; i++){
             String path = PathBuilder.concatenate(archetype.getPath(), i);
-            try (FileOperation fileOperation = new FileOperation(path, true)){
+            try (FileOperation fileOperation = new FileOperation(path, false)){
                 List<File> partitionFiles = fileOperation.listEntityFiles(listRequestScope.getSizeOfMiddlePartitions(), 0);
                 files.addAll(partitionFiles);
             }
@@ -118,7 +131,7 @@ public class EntityCollectionRepository implements GenericRepository, SelfTracki
 
     private List<File> listEndPartitionFiles(StorageArchetype archetype, ListRequestScope listRequestScope) throws Exception{
         String path = PathBuilder.concatenate(archetype.getPath(), listRequestScope.getEndPartition());
-        try (FileOperation fileOperation = new FileOperation(path, true)){
+        try (FileOperation fileOperation = new FileOperation(path, false)){
             return fileOperation.listEntityFiles(listRequestScope.getEndPartitionCount(), 0);
         }
     }

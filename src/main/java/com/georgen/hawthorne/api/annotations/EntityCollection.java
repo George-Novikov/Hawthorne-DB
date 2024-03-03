@@ -10,5 +10,4 @@ import java.lang.annotation.Target;
 public @interface EntityCollection {
     String name() default "";
     String path() default "";
-    boolean hasRelativePath() default false;
 }
