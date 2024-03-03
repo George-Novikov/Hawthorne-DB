@@ -4,7 +4,6 @@ import com.georgen.hawthorne.io.FileFactory;
 import com.georgen.hawthorne.model.constants.IdType;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.settings.StorageSettings;
-import com.georgen.hawthorne.tools.id.UuidSearcher;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -14,8 +13,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PartitionManager {
+public class PartitionFinder {
     public static int locatePartition(StorageArchetype archetype, Object id) throws Exception {
+        if (archetype.getEntityType().isSingleton()) return 0;
+
         IdType idType = archetype.getIdType();
         String stringId = String.valueOf(id);
 
@@ -48,10 +49,10 @@ public class PartitionManager {
 
         for (int i = 1; i <= partitionsCount; i++){
             String uuidIndexPath = PathBuilder.getUuidIndexPath(archetype, i);
-            File uuidIndexFile = FileFactory.getFile(uuidIndexPath);
-            if (uuidIndexFile == null) continue;
+            File uuidIndexFile = FileFactory.getInstance().getFile(uuidIndexPath, false);
+            if (uuidIndexFile == null || uuidIndexFile.exists()) continue;
 
-            boolean isPresent = UuidSearcher.isUuidPresent(uuidIndexFile, uuid);
+            boolean isPresent = isUuidPresent(uuidIndexFile, uuid);
             if (isPresent) return i;
         }
 

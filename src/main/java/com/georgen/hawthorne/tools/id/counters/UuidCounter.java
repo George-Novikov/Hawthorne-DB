@@ -21,8 +21,9 @@ public class UuidCounter extends IdCounter<String> {
     public UuidCounter(StorageArchetype archetype) throws IOException {
         this.archetype = archetype;
 
-        this.counterFile = FileFactory.getFile(
-                PathBuilder.getIdCounterPath(archetype)
+        this.counterFile = FileFactory.getInstance().getFile(
+                PathBuilder.getIdCounterPath(archetype),
+                true
         );
 
         this.atomicLong = new AtomicLong();
@@ -65,7 +66,7 @@ public class UuidCounter extends IdCounter<String> {
 
     private void writeToUuidIndex(String uuid) throws Exception {
         String uuidIndexPath = PathBuilder.getUuidIndexPath(archetype);
-        File uuidIndexFile = FileFactory.getFile(uuidIndexPath);
+        File uuidIndexFile = FileFactory.getInstance().getFile(uuidIndexPath, true);
         FileManager.append(uuidIndexFile, uuid);
     }
 

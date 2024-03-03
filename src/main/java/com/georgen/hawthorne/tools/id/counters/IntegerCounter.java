@@ -20,8 +20,9 @@ public class IntegerCounter extends IdCounter<Integer> {
     public IntegerCounter(StorageArchetype archetype) throws IOException {
         this.archetype = archetype;
 
-        this.counterFile = FileFactory.getFile(
-                PathBuilder.getIdCounterPath(archetype)
+        this.counterFile = FileFactory.getInstance().getFile(
+                PathBuilder.getIdCounterPath(archetype),
+                true
         );
 
         this.atomicInteger = new AtomicInteger();

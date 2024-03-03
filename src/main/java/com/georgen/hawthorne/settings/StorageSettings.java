@@ -58,7 +58,7 @@ public class StorageSettings {
 
     public File getControlFile() {
         try {
-            return FileFactory.getFile(configReader.getControlFilePath());
+            return FileFactory.getInstance().getFile(configReader.getControlFilePath(), true);
         } catch (Exception e){
             throw new InitializationException(SystemMessage.CONTROL_FILE_LOAD_FAIL, e);
         }

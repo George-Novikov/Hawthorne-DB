@@ -13,15 +13,12 @@ import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.model.storage.StorageUnit;
 import com.georgen.hawthorne.tools.PathBuilder;
 import com.georgen.hawthorne.tools.logging.SelfTracking;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SingletonEntityRepository implements GenericRepository, SelfTracking {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SingletonEntityRepository.class);
 
     protected SingletonEntityRepository(){}
 
@@ -36,7 +33,7 @@ public class SingletonEntityRepository implements GenericRepository, SelfTrackin
 
         String path = PathBuilder.getEntityPath(archetype, storageUnit.getGeneratedId(), storageUnit.isNew());
 
-        try (FileOperation fileOperation = new FileOperation(path)){
+        try (FileOperation fileOperation = new FileOperation(path, true)){
             File file = fileOperation.getFile();
             FileManager.write(file, entityUnit.getContent());
         }
@@ -46,24 +43,29 @@ public class SingletonEntityRepository implements GenericRepository, SelfTrackin
 
     @Override
     public <T, I> T get(StorageArchetype archetype, I... id) throws Exception {
-        File file = FileFactory.getFile(PathBuilder.getEntityPath(archetype));
-        if (file == null) return null;
+        String path = PathBuilder.getEntityPath(archetype);
 
-        String json = FileManager.read(file);
-        if (json == null || json.isEmpty()) throw new HawthorneException(Message.FILE_IS_CORRUPTED);
+        try (FileOperation fileOperation = new FileOperation(path, false)){
+            File file = fileOperation.getFile();
 
-        Class javaClass = Class.forName(archetype.getFullName());
-        T object = Serializer.deserialize(json, javaClass);
-        if (object == null) throw new HawthorneException(Message.ENTITY_RETRIEVAL_ERROR);
+            String json = FileManager.read(file);
+            if (json == null || json.isEmpty()) throw new HawthorneException(Message.FILE_IS_CORRUPTED);
 
-        return object;
+            Class javaClass = Class.forName(archetype.getFullName());
+            T object = Serializer.deserialize(json, javaClass);
+            if (object == null) throw new HawthorneException(Message.ENTITY_RETRIEVAL_ERROR);
+
+            return object;
+        }
     }
 
     @Override
     public <I> boolean delete(StorageArchetype archetype, I... id) throws Exception {
-        File file = FileFactory.getFile(PathBuilder.getEntityPath(archetype));
-        if (file == null) throw new HawthorneException(Message.DELETE_FAIL);
-        return FileFactory.delete(file);
+        String path = PathBuilder.getEntityPath(archetype);
+
+        try (FileOperation fileOperation = new FileOperation(path, false)){
+            return fileOperation.delete();
+        }
     }
 
     @Override
@@ -74,7 +76,10 @@ public class SingletonEntityRepository implements GenericRepository, SelfTrackin
 
     //TODO: maybe it would be better to return the number of versions
     public long count(StorageArchetype archetype) throws Exception {
-        return FileFactory.isExistingFile(PathBuilder.getEntityPath(archetype)) ? 1 : 0;
+        String path = PathBuilder.getEntityPath(archetype);
+        try (FileOperation fileOperation = new FileOperation(path, false)){
+            return fileOperation.isExistingFile() ? 1 : 0;
+        }
     }
 
     private void validateType(StorageUnit storageUnit) throws HawthorneException {

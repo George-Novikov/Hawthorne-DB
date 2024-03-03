@@ -13,7 +13,8 @@ public enum Message implements Descriptive {
     DELETE_FAIL("This file cannot be deleted because it does not exist."),
     SOURCE_IS_NULL("The operation cannot proceed because the StorageUnit source object is null."),
     ID_COUNTER_ERROR("The ID counter is corrupted and cannot be read."),
-    ID_IS_NULL("The request is missing the id parameter.");
+    ID_IS_NULL("The request is missing the id parameter."),
+    ;
 
     private String description;
 

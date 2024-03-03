@@ -48,15 +48,13 @@ public class PathBuilder {
     }
 
     public static String getFinalFilePath(StorageArchetype archetype, Object id, String fileExtension, boolean isNewFile) throws Exception {
-        if (id == null) throw new HawthorneException(Message.ID_IS_NULL);
-
         EntityType entityType = archetype.getEntityType();
         boolean isSingleton = entityType.isSingleton();
 
         String basePath = archetype.getPath();
-        int partitionNumber = isNewFile ? archetype.getPartitionCounter() : PartitionManager.locatePartition(archetype, id);
+        int partitionNumber = isNewFile ? archetype.getPartitionCounter() : PartitionFinder.locatePartition(archetype, id);
         String partitionPath = String.valueOf(partitionNumber);
-        String entityName = isSingleton ? archetype.getSimpleName() : String.valueOf(id);
+        String entityName = isSingleton ? archetype.getSimpleName() : String.valueOf(id != null ? id : 0);
 
         return concatenate(
                 isSingleton ? basePath : concatenate(basePath, partitionPath),
@@ -102,7 +100,7 @@ public class PathBuilder {
 
     public static String formatSeparators(String string){
         try {
-            /** Only relative paths are supported at the moment */
+            /** Currently only custom paths relative to the root are supported */
             if (string.startsWith("/") || string.startsWith("\\")) string = string.substring(1);
             return string.replace("/", File.separator).replace("\\", File.separator);
         } catch (Exception e){

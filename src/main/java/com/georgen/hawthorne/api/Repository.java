@@ -35,7 +35,7 @@ public class Repository {
         return repository.get(archetype, id);
     }
 
-    public static <I> boolean delete(Class javaClass, I... id) throws HawthorneException, IOException {
+    public static <I> boolean delete(Class javaClass, I... id) throws Exception {
         StorageArchetype archetype = getArchetype(javaClass);
         if (archetype == null) throw new HawthorneException(Message.DELETE_FAIL);
 
@@ -51,7 +51,7 @@ public class Repository {
         return repository.list(archetype);
     }
 
-    public static long count(Class javaClass) throws HawthorneException, IOException {
+    public static long count(Class javaClass) throws Exception {
         StorageArchetype archetype = getArchetype(javaClass);
         if (archetype == null) return 0;
 
