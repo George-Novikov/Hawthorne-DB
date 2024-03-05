@@ -1,5 +1,6 @@
 package com.georgen.hawthorne.model.storage;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.georgen.hawthorne.model.constants.EntityType;
 import com.georgen.hawthorne.model.constants.IdType;
@@ -16,6 +17,9 @@ public class StorageArchetype {
     private IdType idType;
     private String path;
     private Integer partitionCounter = 1;
+
+    @JsonCreator
+    public StorageArchetype() {}
 
     public StorageArchetype(Object object) throws HawthorneException, TypeException {
         Class javaClass = object.getClass();

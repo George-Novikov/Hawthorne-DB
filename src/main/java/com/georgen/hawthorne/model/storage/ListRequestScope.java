@@ -3,6 +3,7 @@ package com.georgen.hawthorne.model.storage;
 public class ListRequestScope {
     private int startPartition;
     private int startPartitionCount;
+    private int startPartitionOffset;
     private int numberOfMiddlePartitions;
     private int sizeOfMiddlePartitions;
     private int endPartition;
@@ -12,12 +13,14 @@ public class ListRequestScope {
 
     public ListRequestScope(int startPartition,
                             int startPartitionCount,
+                            int startPartitionOffset,
                             int numberOfMiddlePartitions,
                             int sizeOfMiddlePartitions,
                             int endPartitionNumber,
                             int endPartition) {
         this.startPartition = startPartition;
         this.startPartitionCount = startPartitionCount;
+        this.startPartitionOffset = startPartitionOffset;
         this.numberOfMiddlePartitions = numberOfMiddlePartitions;
         this.sizeOfMiddlePartitions = sizeOfMiddlePartitions;
         this.endPartition = endPartitionNumber;
@@ -38,6 +41,14 @@ public class ListRequestScope {
 
     public void setStartPartitionCount(int startPartitionCount) {
         this.startPartitionCount = startPartitionCount;
+    }
+
+    public int getStartPartitionOffset() {
+        return startPartitionOffset;
+    }
+
+    public void setStartPartitionOffset(int startPartitionOffset) {
+        this.startPartitionOffset = startPartitionOffset;
     }
 
     public int getNumberOfMiddlePartitions() {
@@ -72,11 +83,15 @@ public class ListRequestScope {
         this.endPartitionCount = endPartitionCount;
     }
 
+    public boolean hasStartPartition(){
+        return this.startPartition > 0;
+    }
+
     public boolean hasMiddlePartitions(){
         return this.numberOfMiddlePartitions > 0;
     }
 
     public boolean hasEndPartition(){
-        return endPartition != startPartition;
+        return this.endPartition > 0 && this.endPartition != this.startPartition;
     }
 }

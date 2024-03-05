@@ -3,7 +3,7 @@ package com.georgen.hawthorne.io.comparators;
 import java.io.File;
 import java.util.Comparator;
 
-public class FileIdNameComparator implements Comparator<File> {
+public class FileIdComparator implements Comparator<File> {
     @Override
     public int compare(File file1, File file2) {
         try {

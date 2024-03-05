@@ -17,6 +17,10 @@ public class Serializer {
         return (T) getInstance().readValue(json, javaClass);
     }
 
+    public static <T> T deserialize(String json, TypeReference type) throws JsonProcessingException {
+        return (T) getInstance().readValue(json, type);
+    }
+
     private static class SerializerHolder {
         private static final ObjectMapper INSTANCE = new ObjectMapper();
     }

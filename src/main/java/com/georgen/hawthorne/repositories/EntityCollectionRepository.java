@@ -95,7 +95,7 @@ public class EntityCollectionRepository implements GenericRepository, SelfTracki
     private List<File> listRequestedFiles(StorageArchetype archetype, int limit, int offset) throws Exception {
         ListRequestScope listRequestScope = PartitionFinder.getListRequestScope(archetype, limit, offset);
 
-        List<File> files = listStartPartitionFiles(archetype, listRequestScope, offset);
+        List<File> files = listStartPartitionFiles(archetype, listRequestScope);
         if (listRequestScope.hasMiddlePartitions()){
             files.addAll(listMiddlePartitionsFiles(archetype, listRequestScope));
         }
@@ -106,19 +106,23 @@ public class EntityCollectionRepository implements GenericRepository, SelfTracki
         return files;
     }
 
-    private List<File> listStartPartitionFiles(StorageArchetype archetype, ListRequestScope listRequestScope, int offset) throws Exception {
+    private List<File> listStartPartitionFiles(StorageArchetype archetype, ListRequestScope listRequestScope) throws Exception {
+        if (!listRequestScope.hasStartPartition()) return new ArrayList<>();
+
         String path = PathBuilder.concatenate(archetype.getPath(), listRequestScope.getStartPartition());
         try (FileOperation fileOperation = new FileOperation(path, false)){
             return fileOperation.listFilesByExtension(
                     FileExtension.ENTITY_FILE_EXTENSION,
                     listRequestScope.getStartPartitionCount(),
-                    offset
+                    listRequestScope.getStartPartitionOffset() //TODO: this offset is still wrong - recalculate
             );
         }
     }
 
     private List<File> listMiddlePartitionsFiles(StorageArchetype archetype, ListRequestScope listRequestScope) throws Exception {
         List<File> files = new ArrayList<>();
+
+        if (!listRequestScope.hasMiddlePartitions()) return files;
 
         int start = listRequestScope.getStartPartition() + 1;
         int end = listRequestScope.getStartPartition() + listRequestScope.getNumberOfMiddlePartitions();
@@ -138,6 +142,8 @@ public class EntityCollectionRepository implements GenericRepository, SelfTracki
     }
 
     private List<File> listEndPartitionFiles(StorageArchetype archetype, ListRequestScope listRequestScope) throws Exception{
+        if (!listRequestScope.hasEndPartition()) return new ArrayList<>();
+
         String path = PathBuilder.concatenate(archetype.getPath(), listRequestScope.getEndPartition());
         try (FileOperation fileOperation = new FileOperation(path, false)){
             return fileOperation.listFilesByExtension(

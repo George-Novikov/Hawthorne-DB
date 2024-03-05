@@ -81,14 +81,21 @@ public class PartitionFinder {
         int partitionsCount = archetype.getPartitionCounter();
 
         int startPartition = locateListStartPartition(partitioningThreshold, partitionsCount, offset);
-        int startPartitionCount = countStartPartitionObjects(partitioningThreshold, startPartition, limit, offset);
         int endPartition = locateListEndPartition(partitioningThreshold, partitionsCount, limit, offset);
-        int endPartitionCount = countEndPartitionObjects(partitioningThreshold, startPartitionCount, limit);
         int numberOfMiddlePartitions = countNumberOfMiddlePartitions(startPartition, endPartition);
+
+        int startPartitionCount = countStartPartitionObjects(partitioningThreshold, startPartition, limit, offset);
+        int startPartitionOffset = countStartPartitionOffset(startPartition, partitioningThreshold, offset);
+
+        int alreadyCounted = startPartitionCount + numberOfMiddlePartitions * partitioningThreshold;
+        int endPartitionCount = countEndPartitionObjects(partitioningThreshold, alreadyCounted, limit);
+
+
 
         return new ListRequestScope(
                 startPartition,
                 startPartitionCount,
+                startPartitionOffset,
                 numberOfMiddlePartitions,
                 partitioningThreshold,
                 endPartition,
@@ -98,7 +105,7 @@ public class PartitionFinder {
 
     public static int locateListStartPartition(int partitioningThreshold, int partitionsCount, int offset){
         if (offset <= partitioningThreshold) return 1;
-        int startPartitionNumber = 1;
+        int startPartitionNumber = 0;
         for (int i = 1; i <= partitionsCount; i++){
             if (offset <= i * partitioningThreshold){
                 startPartitionNumber = i;
@@ -110,12 +117,21 @@ public class PartitionFinder {
 
     public static int countStartPartitionObjects(int partitioningThreshold, int startPartitionNumber, int limit, int offset){
         if (partitioningThreshold > limit + offset) return limit;
-        return (partitioningThreshold * startPartitionNumber) - offset;
+        int count = (partitioningThreshold * startPartitionNumber) - offset;
+        return count > 0 ? count : 0;
+    }
+
+    public static int countStartPartitionOffset(int startPartitionNumber, int partitioningThreshold, int offset){
+        int skippedPartitionsCount = startPartitionNumber - 1;
+        for (int i = 1; i <= skippedPartitionsCount; i++){
+            offset = offset - (i * partitioningThreshold);
+        }
+        return offset;
     }
 
     public static int locateListEndPartition(int partitioningThreshold, int partitionsCount, int limit, int offset){
         if (limit + offset <= partitioningThreshold) return 1;
-        int endPartitionNumber = 1;
+        int endPartitionNumber = 0;
         for (int i = 1; i <= partitionsCount; i++){
             if (limit + offset <= i * partitioningThreshold){
                 endPartitionNumber = i;
@@ -125,12 +141,12 @@ public class PartitionFinder {
         return endPartitionNumber;
     }
 
-    public static int countEndPartitionObjects(int partitioningThreshold, int startPartitionCount, int limit){
-        int count = limit - startPartitionCount;
+    public static int countEndPartitionObjects(int partitioningThreshold, int alreadyCounted, int limit){
+        int count = limit - alreadyCounted;
         while (count > partitioningThreshold){
             count = count - partitioningThreshold;
         }
-        return count;
+        return count < 0 ? 0 : count;
     }
 
     public static int countNumberOfMiddlePartitions(int startPartition, int endPartition){

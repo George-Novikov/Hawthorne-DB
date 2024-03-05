@@ -35,7 +35,7 @@ public class Hawthorne {
                 LOGGER.info("Retrieved sample IdType: {}", idType);
             }
 
-            List<Sample> sampleList = Repository.list(Sample.class, 5, 3);
+            List<Sample> sampleList = Repository.list(Sample.class, 10, 8);
             for (Sample sampleElement : sampleList){
                 LOGGER.info("Sample list element: {}", Serializer.toJson(sampleElement));
             }

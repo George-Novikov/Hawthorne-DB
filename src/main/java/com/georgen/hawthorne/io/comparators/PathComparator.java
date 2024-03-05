@@ -7,12 +7,12 @@ import java.util.Comparator;
 public class PathComparator implements Comparator<Path> {
     @Override
     public int compare(Path path1, Path path2) {
-
-
-        return 0;
+        long fileId1 = extractFileId(path1);
+        long fileId2 = extractFileId(path2);
+        return Long.compare(fileId1, fileId2);
     }
 
-    private long extractFileId(Path path){
+    protected long extractFileId(Path path){
         String pathString = path.toString();
         int start = pathString.lastIndexOf(File.separator) + 1;
         int end = pathString.lastIndexOf('.');

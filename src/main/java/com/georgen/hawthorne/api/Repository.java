@@ -10,17 +10,19 @@ import com.georgen.hawthorne.repositories.GenericRepository;
 import com.georgen.hawthorne.repositories.RepositoryFactory;
 import com.georgen.hawthorne.settings.StorageSettings;
 
-import java.io.IOException;
 import java.util.List;
 
 public class Repository {
     private static final RepositoryFactory factory = new RepositoryFactory();
+    private static StorageSchema schema;
 
     public static <T> T save(T object) throws HawthorneException {
         try {
-            StorageUnit storageUnit = StorageUnit.of(object);
+            StorageArchetype archetype = getArchetype(object.getClass());
+            StorageUnit storageUnit = archetype != null ? StorageUnit.of(archetype, object) : StorageUnit.of(object);
             GenericRepository repository = factory.getRepository(storageUnit);
             repository.save(storageUnit);
+            updateSchemaArchetype(archetype);
             return object;
         } catch (Exception e){
             throw new HawthorneException(e);
@@ -32,7 +34,9 @@ public class Repository {
         if (archetype == null) return null;
 
         GenericRepository repository = factory.getRepository(archetype);
-        return repository.get(archetype, id);
+        T object = repository.get(archetype, id);
+
+        return object;
     }
 
     public static <I> boolean delete(Class javaClass, I... id) throws Exception {
@@ -61,7 +65,22 @@ public class Repository {
 
     private static StorageArchetype getArchetype(Class javaClass) throws HawthorneException {
         if (!EntityType.isTyped(javaClass)) throw new HawthorneException(Message.NOT_ANNOTATED);
-        StorageSchema schema = StorageSettings.getInstance().getStorageSchema();
+        initSchemaOrBypass();
         return schema.get(javaClass.getSimpleName());
+    }
+
+    private static void updateSchemaArchetype(StorageArchetype archetype) throws Exception {
+        initSchemaOrBypass();
+        schema.update(archetype);
+    }
+
+    private static void initSchemaOrBypass(){
+        if (schema == null){
+            synchronized (Repository.class){
+                if (schema == null){
+                    schema = StorageSettings.getInstance().getStorageSchema();
+                }
+            }
+        }
     }
 }

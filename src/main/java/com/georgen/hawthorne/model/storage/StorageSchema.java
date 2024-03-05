@@ -1,6 +1,8 @@
 package com.georgen.hawthorne.model.storage;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.georgen.hawthorne.io.FileManager;
 import com.georgen.hawthorne.tools.Serializer;
 
@@ -12,15 +14,29 @@ import java.util.concurrent.ConcurrentMap;
 public class StorageSchema {
     private File controlFile;
     private ConcurrentMap<String, StorageArchetype> schema;
+    public StorageSchema(){
+        this.schema = new ConcurrentHashMap<>();
+    };
     public StorageSchema(File controlFile){
         this.controlFile = controlFile;
         this.schema = new ConcurrentHashMap<>();
     }
 
+    @JsonIgnore
+    public File getControlFile() {
+        return controlFile;
+    }
+
+    public void setControlFile(File controlFile) {
+        this.controlFile = controlFile;
+    }
+
+    @JsonProperty("schema")
     public ConcurrentMap<String, StorageArchetype> getSchema() {
         return schema;
     }
 
+    @JsonProperty("schema")
     public void setSchema(ConcurrentMap<String, StorageArchetype> schema) {
         this.schema = schema;
     }
