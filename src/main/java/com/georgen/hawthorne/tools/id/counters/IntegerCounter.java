@@ -13,13 +13,10 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class IntegerCounter extends IdCounter<Integer> {
-    private StorageArchetype archetype;
     private File counterFile;
     private AtomicInteger atomicInteger;
 
     public IntegerCounter(StorageArchetype archetype) throws IOException, HawthorneException {
-        this.archetype = archetype;
-
         this.counterFile = FileFactory.getInstance().getFile(
                 PathBuilder.getIdCounterPath(archetype),
                 true
@@ -35,7 +32,6 @@ public class IntegerCounter extends IdCounter<Integer> {
             atomicInteger.set(Math.toIntExact(idCount));
 
             Integer newValue = atomicInteger.incrementAndGet();
-            updateArchetypePartitionInfo(newValue);
             saveCounterValue(newValue);
 
             return newValue;
@@ -49,15 +45,6 @@ public class IntegerCounter extends IdCounter<Integer> {
         String idCount = FileManager.read(counterFile);
         if (idCount == null || idCount.isEmpty()) idCount = DEFAULT_ID_COUNT_STRING_VALUE;
         return Long.valueOf(idCount);
-    }
-
-    private void updateArchetypePartitionInfo(Integer idCount) throws Exception {
-        int partitioningThreshold = StorageSettings.getInstance().getPartitioningThreshold();
-
-        int currentPartition = archetype.getPartitionCounter();
-        int targetPartition = idCount > currentPartition * partitioningThreshold ? currentPartition + 1 : currentPartition;
-
-        archetype.setPartitionCounter(targetPartition);
     }
 
     private void saveCounterValue(Integer newValue) throws Exception {

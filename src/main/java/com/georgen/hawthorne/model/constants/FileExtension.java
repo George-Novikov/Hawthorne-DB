@@ -1,7 +1,7 @@
 package com.georgen.hawthorne.model.constants;
 
 public enum FileExtension {
-    ENTITY_FILE_EXTENSION("json"),
+    ENTITY_EXTENSION("json"),
     BINARY_DATA_EXTENSION("bin");
 
     private String value;

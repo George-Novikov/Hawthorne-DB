@@ -30,6 +30,17 @@ public class FileOperation implements AutoCloseable {
         return this.file;
     }
 
+    public long countByExtension(FileExtension extension) throws HawthorneException, IOException {
+        if (!this.file.isDirectory()) throw new HawthorneException(Message.NOT_A_DIRECTORY);
+
+        try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(this.file.toPath())){
+            return StreamSupport
+                    .stream(directoryStream.spliterator(), false)
+                    .filter(path -> path.toString().endsWith(extension.getValue()))
+                    .count();
+        }
+    }
+
     public List<File> listFilesByExtension(FileExtension extension, int limit, int offset) throws HawthorneException, IOException {
         if (!this.file.isDirectory()) throw new HawthorneException(Message.NOT_A_DIRECTORY);
 
@@ -42,7 +53,7 @@ public class FileOperation implements AutoCloseable {
                     .stream(directoryStream.spliterator(), false)
                     .filter(path -> path.toString().endsWith(extension.getValue()))
                     .sorted(PATH_COMPARATOR)
-                    .filter(path -> offsetCounter.incrementAndGet() >= offset);
+                    .filter(path -> offsetCounter.incrementAndGet() > offset);
 
             List<File> files = paths
                     .filter(path -> limitCounter.incrementAndGet() <= limit)

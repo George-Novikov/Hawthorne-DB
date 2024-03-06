@@ -1,18 +1,13 @@
 package com.georgen.hawthorne.io;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.georgen.hawthorne.model.constants.SystemProperty;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.messages.Message;
 import com.georgen.hawthorne.settings.StorageSettings;
-import com.georgen.hawthorne.tools.PartitionFinder;
-import com.georgen.hawthorne.tools.Serializer;
 import com.georgen.hawthorne.tools.SystemHelper;
 import com.georgen.hawthorne.tools.id.counters.IntegerCounter;
 import com.georgen.hawthorne.tools.id.counters.LongCounter;
 import com.georgen.hawthorne.tools.id.counters.UuidCounter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FileFactory {
     private static final List<Class> PERMITTED_CALLERS = Arrays.asList(
-            StorageSettings.class, FileOperation.class, PartitionFinder.class,
+            StorageSettings.class, FileOperation.class,
             IntegerCounter.class, LongCounter.class, UuidCounter.class
     );
 

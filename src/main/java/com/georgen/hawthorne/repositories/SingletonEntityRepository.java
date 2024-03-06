@@ -30,7 +30,7 @@ public class SingletonEntityRepository implements GenericRepository, SelfTrackin
         StorageSchema storageSchema = StorageSettings.getInstance().getStorageSchema();
         storageSchema.update(archetype);
 
-        String path = PathBuilder.getEntityPath(archetype, storageUnit.getGeneratedId(), storageUnit.isNew());
+        String path = PathBuilder.getEntityPath(archetype, storageUnit.getGeneratedId());
 
         try (FileOperation fileOperation = new FileOperation(path, true)){
             File file = fileOperation.getFile();

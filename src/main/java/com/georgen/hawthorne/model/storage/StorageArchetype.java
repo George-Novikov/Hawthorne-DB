@@ -16,7 +16,6 @@ public class StorageArchetype {
     private EntityType entityType;
     private IdType idType;
     private String path;
-    private Integer partitionCounter = 1;
 
     @JsonCreator
     public StorageArchetype() {}
@@ -71,14 +70,6 @@ public class StorageArchetype {
         this.path = path;
     }
 
-    public Integer getPartitionCounter() {
-        return partitionCounter;
-    }
-
-    public void setPartitionCounter(Integer partitionCounter) {
-        this.partitionCounter = partitionCounter;
-    }
-
     @Override
     public int hashCode() {
         int hashCode = 5;
@@ -88,7 +79,6 @@ public class StorageArchetype {
         if (this.entityType != null) hashCode = 31 * hashCode + this.entityType.hashCode();
         if (this.idType != null) hashCode = 31 * hashCode + this.idType.hashCode();
         if (this.path != null) hashCode = 31 * hashCode + this.path.hashCode();
-        if (this.partitionCounter != null) hashCode = 31 * hashCode + this.partitionCounter.hashCode();
 
         return hashCode;
     }
@@ -116,9 +106,6 @@ public class StorageArchetype {
         boolean isPathEqual = (this.path == null && other.getPath() == null)
                 || (this.path != null && this.path.equals(other.getPath()));
 
-        boolean isPartitionsCounterEqual = (this.partitionCounter == null && other.getPartitionCounter() == null)
-                || (this.partitionCounter != null && this.partitionCounter.equals(other.getPartitionCounter()));
-
-        return isSimpleNameEqual && isFullNameEqual && isEntityTypeEqual && isIdTypeEqual && isPathEqual && isPartitionsCounterEqual;
+        return isSimpleNameEqual && isFullNameEqual && isEntityTypeEqual && isIdTypeEqual && isPathEqual;
     }
 }

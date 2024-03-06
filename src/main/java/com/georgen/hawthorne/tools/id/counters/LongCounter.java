@@ -13,12 +13,10 @@ import java.io.IOException;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class LongCounter extends IdCounter<Long> {
-    private StorageArchetype archetype;
     private File counterFile;
     private AtomicLong atomicLong;
 
     public LongCounter(StorageArchetype archetype) throws IOException, HawthorneException {
-        this.archetype = archetype;
 
         this.counterFile = FileFactory.getInstance().getFile(
                 PathBuilder.getIdCounterPath(archetype),
@@ -35,22 +33,12 @@ public class LongCounter extends IdCounter<Long> {
             atomicLong.set(idCount);
 
             Long newValue = atomicLong.incrementAndGet();
-            updateArchetypePartitionInfo(newValue);
             saveCounterValue(newValue);
 
             return newValue;
         } catch (Exception e){
             throw new HawthorneException(Message.ID_COUNTER_ERROR, e);
         }
-    }
-
-    private void updateArchetypePartitionInfo(long idCount) throws Exception {
-        int partitioningThreshold = StorageSettings.getInstance().getPartitioningThreshold();
-
-        int currentPartition = archetype.getPartitionCounter();
-        int targetPartition = idCount > currentPartition * partitioningThreshold ? currentPartition + 1 : currentPartition;
-
-        archetype.setPartitionCounter(targetPartition);
     }
 
     @Override

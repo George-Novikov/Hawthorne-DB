@@ -24,10 +24,6 @@ public class PathBuilder {
         return String.format("%s%s%s", parentPath, File.separator, childPath);
     }
 
-    public static String concatenate(String parentPath, int partitionNumber){
-        return concatenate(parentPath, String.valueOf(partitionNumber));
-    }
-
     public static String buildBasePath(Object source, StorageArchetype archetype){
         String entitiesBasePath = StorageSettings.getInstance().getEntitiesPath();
         String customSourcePath = extractPathFromAnnotation(source);
@@ -37,29 +33,26 @@ public class PathBuilder {
         );
     }
 
-    public static String getEntityPath(StorageArchetype archetype) throws Exception {
-        return getEntityPath(archetype, -1, false);
+    public static String getEntityPath(StorageArchetype archetype) {
+        return getEntityPath(archetype, null);
     }
 
-    public static String getEntityPath(StorageArchetype archetype, Object id, boolean isNewFile) throws Exception {
-        return getFinalFilePath(archetype, id, SystemProperty.ENTITY_FILE_EXTENSION.getValue(), isNewFile);
+    public static String getEntityPath(StorageArchetype archetype, Object id) {
+        return getFinalFilePath(archetype, id, SystemProperty.ENTITY_FILE_EXTENSION.getValue());
     }
 
-    public static String getBinaryDataPath(StorageArchetype archetype, Object id, boolean isNewFile) throws Exception {
-        return getFinalFilePath(archetype, id, SystemProperty.BINARY_DATA_EXTENSION.getValue(), isNewFile);
+    public static String getBinaryDataPath(StorageArchetype archetype, Object id) {
+        return getFinalFilePath(archetype, id, SystemProperty.BINARY_DATA_EXTENSION.getValue());
     }
 
-    public static String getFinalFilePath(StorageArchetype archetype, Object id, String fileExtension, boolean isNewFile) throws Exception {
+    public static String getFinalFilePath(StorageArchetype archetype, Object id, String fileExtension) {
         EntityType entityType = archetype.getEntityType();
-        boolean isSingleton = entityType.isSingleton();
 
         String basePath = archetype.getPath();
-        int partitionNumber = isNewFile ? archetype.getPartitionCounter() : PartitionFinder.locatePartition(archetype, id);
-        String partitionPath = String.valueOf(partitionNumber);
-        String entityName = isSingleton ? archetype.getSimpleName() : String.valueOf(id != null ? id : 0);
+        String entityName = entityType.isSingleton() ? archetype.getSimpleName() : String.valueOf(id != null ? id : 0);
 
         return concatenate(
-                isSingleton ? basePath : concatenate(basePath, partitionPath),
+                basePath,
                 String.format("%s.%s", entityName, fileExtension)
         );
     }
@@ -70,19 +63,6 @@ public class PathBuilder {
                 SystemProperty.ID_COUNTER_NAME.getValue());
     }
 
-    public static String getUuidIndexPath(StorageArchetype archetype){
-        return getUuidIndexPath(archetype, archetype.getPartitionCounter());
-    }
-
-    public static String getUuidIndexPath(StorageArchetype archetype, int partitionNumber){
-        return concatenate(
-                archetype.getPath(),
-                String.format(
-                        "%s-%s",
-                        SystemProperty.UUID_INDEX_NAME.getValue(),
-                        partitionNumber)
-        );
-    }
 
     public static String extractPathFromAnnotation(Object object) {
         Class javaClass = object.getClass();
