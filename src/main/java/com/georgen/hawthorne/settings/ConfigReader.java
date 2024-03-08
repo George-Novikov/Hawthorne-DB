@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.georgen.hawthorne.model.constants.ConfigProperty;
 import com.georgen.hawthorne.model.constants.SystemProperty;
-import com.georgen.hawthorne.tools.PathBuilder;
+import com.georgen.hawthorne.tools.paths.PathBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;

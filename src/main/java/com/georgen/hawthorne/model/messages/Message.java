@@ -1,12 +1,11 @@
 package com.georgen.hawthorne.model.messages;
 
 public enum Message implements Descriptive {
-    NOT_ANNOTATED("File cannot be saved because it is not annotated as a Hawthorne entity."),
+    NOT_ANNOTATED("File cannot be saved because it is not marked with the @SingletonEntity or @EntityCollection annotation."),
     NO_BINARY_DATA_ANNOTATION("The object data cannot be processed because the @BinaryData annotation is missing."),
     NOT_A_BYTE_ARRAY("The @BinaryData annotation is applicable only to fields or methods of type byte[]."),
     BINARY_DATA_IS_NULL("The field of method annotated with @BinaryData is null."),
     BINARY_DATA_EXTRACTION_ERROR("Binary data extraction error."),
-    NOT_AN_ENTITY("The object data cannot be processed because the @SingletonEntity or @EntityCollection annotations are missing."),
     STORAGE_UNIT_INCONSISTENCY("The operation cannot proceed because StorageUnit is cast to the wrong type."),
     ENTITY_RETRIEVAL_ERROR("Entity retrieval error."),
     NO_ID_ANNOTATION("The object cannot be processed because no fields or methods are marked with the @Id annotation."),

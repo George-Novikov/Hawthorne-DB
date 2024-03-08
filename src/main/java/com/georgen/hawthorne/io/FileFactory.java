@@ -17,14 +17,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * This class has a cache that ensures that all requested files with the same path
+ * will reference the same File object, thus synchronizing all input/output operations properly
+ * */
 public class FileFactory {
     private static final List<Class> PERMITTED_CALLERS = Arrays.asList(
             StorageSettings.class, FileOperation.class,
             IntegerCounter.class, LongCounter.class, UuidCounter.class
     );
 
-    // This map ensures that all requested files with the same path will reference to the same File object,
-    // thus, properly synchronizing all input/output operations
     private ConcurrentMap<String, File> fileCache;
 
     private FileFactory(){ this.fileCache = new ConcurrentHashMap<>(); }

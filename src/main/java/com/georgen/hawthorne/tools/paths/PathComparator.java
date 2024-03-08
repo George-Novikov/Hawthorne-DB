@@ -1,4 +1,4 @@
-package com.georgen.hawthorne.io.comparators;
+package com.georgen.hawthorne.tools.paths;
 
 import com.georgen.hawthorne.tools.extractors.PathIdExtractor;
 

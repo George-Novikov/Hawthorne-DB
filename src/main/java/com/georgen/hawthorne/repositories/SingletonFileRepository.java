@@ -1,15 +1,14 @@
 package com.georgen.hawthorne.repositories;
 
-import com.georgen.hawthorne.io.FileManager;
+import com.georgen.hawthorne.io.FileIOManager;
 import com.georgen.hawthorne.io.FileOperation;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.messages.Message;
 import com.georgen.hawthorne.model.storage.*;
 import com.georgen.hawthorne.tools.EntityConverter;
-import com.georgen.hawthorne.tools.PathBuilder;
+import com.georgen.hawthorne.tools.paths.PathBuilder;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,12 +28,12 @@ public class SingletonFileRepository implements GenericRepository {
 
         try (FileOperation fileOperation = new FileOperation(entityPath, true)){
             File file = fileOperation.getFile();
-            FileManager.write(file, fileUnit.getMetadata());
+            FileIOManager.write(file, fileUnit.getMetadata());
         }
 
         try (FileOperation fileOperation = new FileOperation(binaryDataPath, true)){
             File file = fileOperation.getFile();
-            FileManager.writeBytes(file, fileUnit.getContent());
+            FileIOManager.writeBytes(file, fileUnit.getContent());
         }
 
         return storageUnit.getSource();
@@ -59,7 +58,7 @@ public class SingletonFileRepository implements GenericRepository {
         try (FileOperation fileOperation = new FileOperation(binaryDataPath, false)){
             File file = fileOperation.getFile();
             if (!file.exists()) throw new HawthorneException(Message.NO_BINARY_DATA_FILE);
-            binaryData = FileManager.readBytes(file);
+            binaryData = FileIOManager.readBytes(file);
             if (binaryData == null) throw new HawthorneException(Message.BINARY_DATA_IS_CORRUPTED);
             object = EntityConverter.fillBinaryData(object, binaryData);
         }

@@ -28,16 +28,13 @@ public class IdGenerator {
         Class javaClass = source.getClass();
 
         for (Field field : javaClass.getDeclaredFields()){
-            if (field.isAnnotationPresent(Id.class)){
-                field.setAccessible(true);
-                return isValueNull(field, source) ? field.getAnnotation(Id.class).isGenerated() : false;
-            }
-        }
+            boolean hasNativeIdAnnotation = field.isAnnotationPresent(Id.class);
+            boolean hasJakartaIdAnnotation = field.isAnnotationPresent(jakarta.persistence.Id.class);
 
-        for (Method method : javaClass.getDeclaredMethods()){
-            if (method.isAnnotationPresent(Id.class)){
-                method.setAccessible(true);
-                return isValueNull(method, source) ? method.getAnnotation(Id.class).isGenerated() : false;
+            if (hasNativeIdAnnotation || hasJakartaIdAnnotation){
+                boolean isValueNull = isValueNull(field, source);
+                if (hasJakartaIdAnnotation) return isValueNull;
+                return isValueNull(field, source) ? field.getAnnotation(Id.class).isGenerated() : false;
             }
         }
 
@@ -45,7 +42,11 @@ public class IdGenerator {
     }
 
     private static boolean isValueNull(Field field, Object source) throws IllegalAccessException {
+        boolean isAccessible = field.isAccessible();
+        field.setAccessible(true);
         Object value = field.get(source);
+        field.setAccessible(isAccessible);
+
         String stringValue = value != null ? String.valueOf(value) : "0";
         return value == null || stringValue.equals("0") || stringValue.equals("0L");
     }
@@ -61,7 +62,10 @@ public class IdGenerator {
         Object generatedId = null;
 
         for (Field field : storageUnit.getSource().getClass().getDeclaredFields()){
-            if (!field.isAnnotationPresent(Id.class)) continue;
+            boolean hasNativeIdAnnotation = field.isAnnotationPresent(Id.class);
+            boolean hasJakartaIdAnnotation = field.isAnnotationPresent(jakarta.persistence.Id.class);
+
+            if (!hasNativeIdAnnotation && !hasJakartaIdAnnotation) continue;
             generatedId = fillIdField(storageUnit, field);
         }
 

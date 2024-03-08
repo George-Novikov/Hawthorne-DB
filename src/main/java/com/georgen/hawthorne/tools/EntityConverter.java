@@ -1,7 +1,7 @@
 package com.georgen.hawthorne.tools;
 
 import com.georgen.hawthorne.api.annotations.BinaryData;
-import com.georgen.hawthorne.io.FileManager;
+import com.georgen.hawthorne.io.FileIOManager;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.messages.Message;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
@@ -14,7 +14,7 @@ import java.util.Map;
 public class EntityConverter {
     public static <T> T convert(File file, StorageArchetype archetype) throws Exception {
         if (!file.exists()) return null;
-        String json = FileManager.read(file);
+        String json = FileIOManager.read(file);
         if (json == null || json.isEmpty()) throw new HawthorneException(Message.FILE_IS_CORRUPTED);
 
         Class javaClass = Class.forName(archetype.getFullName());
@@ -36,7 +36,7 @@ public class EntityConverter {
         File binaryDataFile = binaryDataFiles.get(id);
         if (binaryDataFile == null || !binaryDataFile.exists()) return null;
 
-        byte[] binaryData = FileManager.readBytes(binaryDataFile);
+        byte[] binaryData = FileIOManager.readBytes(binaryDataFile);
         if (binaryData == null) return null;
 
         return EntityConverter.fillBinaryData(object, binaryData);

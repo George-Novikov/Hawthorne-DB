@@ -3,7 +3,7 @@ package com.georgen.hawthorne.model.storage;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.georgen.hawthorne.io.FileManager;
+import com.georgen.hawthorne.io.FileIOManager;
 import com.georgen.hawthorne.tools.Serializer;
 
 import java.io.File;
@@ -57,7 +57,7 @@ public class StorageSchema {
     private void save() throws Exception {
         synchronized (this){
             String storageSchemaJson = Serializer.toJson(this);
-            FileManager.write(controlFile, storageSchemaJson);
+            FileIOManager.write(controlFile, storageSchemaJson);
         }
     }
 

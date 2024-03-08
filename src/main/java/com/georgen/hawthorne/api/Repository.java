@@ -12,6 +12,10 @@ import com.georgen.hawthorne.settings.StorageSettings;
 
 import java.util.List;
 
+/**
+ * Depending on the combination of class annotations, different repository implementations will be called.
+ * Custom GenericRepository implementations are not currently supported.
+ * */
 public class Repository {
     private static final RepositoryFactory factory = new RepositoryFactory();
     private static StorageSchema schema;
@@ -82,5 +86,9 @@ public class Repository {
                 }
             }
         }
+    }
+
+    private void validate(Object object){
+
     }
 }

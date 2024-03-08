@@ -1,6 +1,6 @@
 package com.georgen.hawthorne.io;
 
-import com.georgen.hawthorne.io.comparators.PathComparator;
+import com.georgen.hawthorne.tools.paths.PathComparator;
 import com.georgen.hawthorne.model.constants.FileExtension;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.messages.Message;
@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;

@@ -1,14 +1,12 @@
 package com.georgen.hawthorne.settings;
 
 import com.georgen.hawthorne.io.FileFactory;
-import com.georgen.hawthorne.io.FileManager;
+import com.georgen.hawthorne.io.FileIOManager;
 import com.georgen.hawthorne.model.exceptions.InitializationException;
 import com.georgen.hawthorne.model.messages.SystemMessage;
 import com.georgen.hawthorne.model.storage.StorageSchema;
-import com.georgen.hawthorne.model.storage.StorageSchemaDeserializer;
 import com.georgen.hawthorne.model.storage.StorageSchemaExtractor;
-import com.georgen.hawthorne.tools.Serializer;
-import com.georgen.hawthorne.tools.PathBuilder;
+import com.georgen.hawthorne.tools.paths.PathBuilder;
 import com.georgen.hawthorne.tools.Validator;
 
 import java.io.File;
@@ -25,7 +23,7 @@ public class StorageSettings {
         File controlFile = getControlFile();
 
         try {
-            String storageSchemaJson = FileManager.read(controlFile);
+            String storageSchemaJson = FileIOManager.read(controlFile);
             this.storageSchema = StorageSchemaExtractor.extract(storageSchemaJson);
             this.storageSchema.setControlFile(controlFile);
         } catch (Exception e){

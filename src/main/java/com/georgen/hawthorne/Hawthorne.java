@@ -4,7 +4,6 @@ import com.georgen.hawthorne.api.Repository;
 import com.georgen.hawthorne.model.constants.IdType;
 import com.georgen.hawthorne.model.sample.Sample;
 import com.georgen.hawthorne.tools.Serializer;
-import com.georgen.hawthorne.tools.PathBuilder;
 import com.georgen.hawthorne.tools.extractors.IdTypeExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,38 +16,13 @@ public class Hawthorne {
 
     static {
         try {
+            Sample sample = new Sample();
+            sample.setBytes("How are you?".getBytes());
 
-            List<Sample> samples = new ArrayList<>();
-            for (int i = 0; i < 10; i++){
-                samples.add(new Sample("This is a long message to test bytes serialization"));
-
-                Sample savedSample = Repository.save(samples.get(i));
-                LOGGER.info("Saved sample is not null: {}", savedSample != null);
-                LOGGER.info("Saved sample id: {}", savedSample.getId());
-            }
-
-            Sample retrievedSample = Repository.get(Sample.class, 4);
-            LOGGER.info("Retrieved sample is not null: {}", retrievedSample != null);
-            if (retrievedSample != null){
-                LOGGER.info("Sample field: {}", retrievedSample.getField());
-                byte[] bytes = retrievedSample.getBytes();
-                if (bytes != null){
-                    LOGGER.info("Sample binary data length: {}", bytes.length);
-                }
-                IdType idType = IdTypeExtractor.extract(retrievedSample);
-                LOGGER.info("Retrieved sample IdType: {}", idType);
-            }
-
-            List<Sample> sampleList = Repository.list(Sample.class, 10, 8);
-            for (Sample sampleElement : sampleList){
-                LOGGER.info("Sample list element: {}", Serializer.toJson(sampleElement));
-            }
-
-            boolean isDeleted = Repository.delete(Sample.class, 3);
-            LOGGER.info("Is sample deleted: {}", isDeleted);
-
-            long sampleCount = Repository.count(Sample.class);
-            LOGGER.info("Sample count: {}", sampleCount);
+            Sample savedSample = Repository.save(sample);
+            Sample retrievedSample = Repository.get(Sample.class, 1);
+            List<Sample> samples = Repository.list(Sample.class, 0, 0);
+            //boolean isDeleted = Repository.delete(Sample.class, 1);
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);

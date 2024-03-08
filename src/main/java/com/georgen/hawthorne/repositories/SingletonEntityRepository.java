@@ -2,22 +2,21 @@ package com.georgen.hawthorne.repositories;
 
 import com.georgen.hawthorne.io.FileOperation;
 import com.georgen.hawthorne.settings.StorageSettings;
-import com.georgen.hawthorne.io.FileManager;
+import com.georgen.hawthorne.io.FileIOManager;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.messages.Message;
 import com.georgen.hawthorne.model.storage.EntityUnit;
 import com.georgen.hawthorne.model.storage.StorageSchema;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
 import com.georgen.hawthorne.model.storage.StorageUnit;
-import com.georgen.hawthorne.tools.PathBuilder;
+import com.georgen.hawthorne.tools.paths.PathBuilder;
 import com.georgen.hawthorne.tools.EntityConverter;
-import com.georgen.hawthorne.tools.logging.SelfTracking;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SingletonEntityRepository implements GenericRepository, SelfTracking {
+public class SingletonEntityRepository implements GenericRepository {
 
     protected SingletonEntityRepository(){}
 
@@ -34,7 +33,7 @@ public class SingletonEntityRepository implements GenericRepository, SelfTrackin
 
         try (FileOperation fileOperation = new FileOperation(path, true)){
             File file = fileOperation.getFile();
-            FileManager.write(file, entityUnit.getContent());
+            FileIOManager.write(file, entityUnit.getContent());
         }
 
         return storageUnit.getSource();

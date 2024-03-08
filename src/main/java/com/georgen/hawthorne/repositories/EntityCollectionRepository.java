@@ -1,6 +1,6 @@
 package com.georgen.hawthorne.repositories;
 
-import com.georgen.hawthorne.io.FileManager;
+import com.georgen.hawthorne.io.FileIOManager;
 import com.georgen.hawthorne.io.FileOperation;
 import com.georgen.hawthorne.model.constants.FileExtension;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
@@ -8,14 +8,13 @@ import com.georgen.hawthorne.model.messages.Message;
 import com.georgen.hawthorne.model.storage.*;
 import com.georgen.hawthorne.tools.EntityConverter;
 import com.georgen.hawthorne.settings.StorageSettings;
-import com.georgen.hawthorne.tools.PathBuilder;
-import com.georgen.hawthorne.tools.logging.SelfTracking;
+import com.georgen.hawthorne.tools.paths.PathBuilder;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityCollectionRepository implements GenericRepository, SelfTracking {
+public class EntityCollectionRepository implements GenericRepository{
 
     protected EntityCollectionRepository(){}
 
@@ -32,7 +31,7 @@ public class EntityCollectionRepository implements GenericRepository, SelfTracki
 
         try (FileOperation fileOperation = new FileOperation(path, true)){
             File file = fileOperation.getFile();
-            FileManager.write(file, entityUnit.getContent());
+            FileIOManager.write(file, entityUnit.getContent());
         }
 
         return storageUnit.getSource();

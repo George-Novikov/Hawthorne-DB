@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 
-public class FileManager {
+public class FileIOManager {
     public static void write(File file, String content) throws Exception {
         synchronized (file){
             try (CloseableWriter writer = new CloseableWriter(file, false)){
@@ -23,8 +23,8 @@ public class FileManager {
 
     public static String read(File file) throws Exception {
         synchronized (file){
-            try (CloseableReader scanner = new CloseableReader(file)){
-                return scanner.read();
+            try (CloseableReader reader = new CloseableReader(file)){
+                return reader.read();
             }
         }
     }

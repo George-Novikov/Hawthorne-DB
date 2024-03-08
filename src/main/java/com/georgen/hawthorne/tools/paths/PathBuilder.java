@@ -1,4 +1,4 @@
-package com.georgen.hawthorne.tools;
+package com.georgen.hawthorne.tools.paths;
 
 import com.georgen.hawthorne.api.annotations.EntityCollection;
 import com.georgen.hawthorne.api.annotations.SingletonEntity;

@@ -1,12 +1,11 @@
 package com.georgen.hawthorne.tools.id.counters;
 
 import com.georgen.hawthorne.io.FileFactory;
-import com.georgen.hawthorne.io.FileManager;
+import com.georgen.hawthorne.io.FileIOManager;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.messages.Message;
 import com.georgen.hawthorne.model.storage.StorageArchetype;
-import com.georgen.hawthorne.settings.StorageSettings;
-import com.georgen.hawthorne.tools.PathBuilder;
+import com.georgen.hawthorne.tools.paths.PathBuilder;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,12 +45,12 @@ public class UuidCounter extends IdCounter<String> {
 
     @Override
     public long getGenerationsCount() throws Exception {
-        String idCount = FileManager.read(counterFile);
+        String idCount = FileIOManager.read(counterFile);
         if (idCount == null || idCount.isEmpty()) idCount = "0";
         return Long.valueOf(idCount);
     }
 
     private void saveCounterValue(Long incrementedCount) throws Exception {
-        FileManager.write(counterFile, String.valueOf(incrementedCount));
+        FileIOManager.write(counterFile, String.valueOf(incrementedCount));
     }
 }

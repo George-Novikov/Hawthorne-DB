@@ -25,7 +25,7 @@ public class IdTypeExtractor {
 
     private static IdType getFromFields(Class javaClass) throws TypeException {
         for (Field field : javaClass.getDeclaredFields()){
-            if (field.isAnnotationPresent(Id.class)){
+            if (field.isAnnotationPresent(Id.class) || field.isAnnotationPresent(jakarta.persistence.Id.class)){
                 IdType idType = IdType.of(field.getType());
                 if (IdType.NONE.equals(idType)) throw new TypeException(TypeMessage.WRONG_ID_TYPE);
                 return idType;
@@ -36,7 +36,7 @@ public class IdTypeExtractor {
 
     private static IdType getFromMethods(Class javaClass) throws TypeException {
         for (Method method : javaClass.getDeclaredMethods()){
-            if (method.isAnnotationPresent(Id.class)){
+            if (method.isAnnotationPresent(Id.class) || method.isAnnotationPresent(jakarta.persistence.Id.class)){
                 IdType idType = IdType.of(method.getReturnType());
                 if (IdType.NONE.equals(idType)) throw new TypeException(TypeMessage.WRONG_ID_TYPE);
                 return idType;
