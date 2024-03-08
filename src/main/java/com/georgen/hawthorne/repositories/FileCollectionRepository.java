@@ -49,7 +49,7 @@ public class FileCollectionRepository implements GenericRepository {
 
         try (FileOperation fileOperation = new FileOperation(entityPath, false)){
             File file = fileOperation.getFile();
-            if (!file.exists()) throw new HawthorneException(Message.NO_ENTITY_FILE);
+            if (!file.exists()) return null;
             object = EntityConverter.convert(file, archetype);
         }
 
@@ -105,14 +105,14 @@ public class FileCollectionRepository implements GenericRepository {
     }
 
     private Map<String, File> mapRequestedEntityFiles(StorageArchetype archetype, int limit, int offset) throws Exception {
-        String entityPath = PathBuilder.getEntityPath(archetype);
+        String entityPath = archetype.getPath();
         try (FileOperation fileOperation = new FileOperation(entityPath, false)){
             return fileOperation.mapFilesByExtension(FileExtension.ENTITY_EXTENSION, limit, offset);
         }
     }
 
     private Map<String, File> mapRequestedBinaryDataFiles(StorageArchetype archetype, int limit, int offset) throws Exception {
-        String binaryDataPath = PathBuilder.getBinaryDataPath(archetype);
+        String binaryDataPath = archetype.getPath();
         try (FileOperation fileOperation = new FileOperation(binaryDataPath, false)){
            return fileOperation.mapFilesByExtension(FileExtension.BINARY_DATA_EXTENSION, limit, offset);
         }

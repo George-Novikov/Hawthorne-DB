@@ -71,7 +71,7 @@ public class EntityConverter {
     }
 
     private static boolean isByteArray(Field field){
-        return field.getDeclaringClass().isAssignableFrom(byte[].class);
+        return field.getType().equals(byte[].class);
     }
 
     private static boolean isByteArray(Method method) throws HawthorneException {

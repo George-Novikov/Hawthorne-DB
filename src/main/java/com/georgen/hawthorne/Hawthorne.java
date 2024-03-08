@@ -27,10 +27,14 @@ public class Hawthorne {
                 LOGGER.info("Saved sample id: {}", savedSample.getId());
             }
 
-            Sample retrievedSample = Repository.get(Sample.class, 3);
+            Sample retrievedSample = Repository.get(Sample.class, 4);
             LOGGER.info("Retrieved sample is not null: {}", retrievedSample != null);
             if (retrievedSample != null){
                 LOGGER.info("Sample field: {}", retrievedSample.getField());
+                byte[] bytes = retrievedSample.getBytes();
+                if (bytes != null){
+                    LOGGER.info("Sample binary data length: {}", bytes.length);
+                }
                 IdType idType = IdTypeExtractor.extract(retrievedSample);
                 LOGGER.info("Retrieved sample IdType: {}", idType);
             }

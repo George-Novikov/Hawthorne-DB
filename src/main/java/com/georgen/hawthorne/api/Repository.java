@@ -22,7 +22,7 @@ public class Repository {
             StorageUnit storageUnit = archetype != null ? StorageUnit.of(archetype, object) : StorageUnit.of(object);
             GenericRepository repository = factory.getRepository(storageUnit);
             repository.save(storageUnit);
-            updateSchemaArchetype(archetype);
+            updateSchemaArchetype(storageUnit.getArchetype());
             return object;
         } catch (Exception e){
             throw new HawthorneException(e);

@@ -64,7 +64,7 @@ public class BinaryDataExtractor {
 
     private static void validateData(Object data) throws HawthorneException {
         if (data == null) throw new HawthorneException(Message.BINARY_DATA_IS_NULL);
-        boolean isByteArray = data instanceof byte[];
-        if (isByteArray) throw new HawthorneException(Message.NOT_A_BYTE_ARRAY);
+        boolean isByteArray = data.getClass().isAssignableFrom(byte[].class);
+        if (!isByteArray) throw new HawthorneException(Message.NOT_A_BYTE_ARRAY);
     }
 }

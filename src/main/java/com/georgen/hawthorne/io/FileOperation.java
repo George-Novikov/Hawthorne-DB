@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -72,7 +73,9 @@ public class FileOperation implements AutoCloseable {
                     .collect(
                             Collectors.toMap(
                                     path -> PathIdExtractor.extractStringId(path),
-                                    path -> path.toFile()
+                                    path -> path.toFile(),
+                                    (k, v) -> k,
+                                    TreeMap::new
                             )
                     );
 

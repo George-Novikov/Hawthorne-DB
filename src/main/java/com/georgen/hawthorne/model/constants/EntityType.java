@@ -16,20 +16,12 @@ public enum EntityType {
         Class javaClass = object.getClass();
 
         if (javaClass.isAnnotationPresent(SingletonEntity.class)){
-            return SINGLETON_ENTITY;
+            return hasBinaryData(object) ? SINGLETON_FILE : SINGLETON_ENTITY;
         }
 
         if (javaClass.isAnnotationPresent(EntityCollection.class)){
-            return ENTITY_COLLECTION;
+            return hasBinaryData(object) ? FILE_COLLECTION : ENTITY_COLLECTION;
         }
-
-//        if (javaClass.isAnnotationPresent(SingletonEntity.class)){
-//            return hasBinaryData(object) ? SINGLETON_FILE : SINGLETON_ENTITY;
-//        }
-//
-//        if (javaClass.isAnnotationPresent(EntityCollection.class)){
-//            return hasBinaryData(object) ? FILE_COLLECTION : ENTITY_COLLECTION;
-//        }
 
         throw new HawthorneException(Message.NOT_ANNOTATED);
     }
