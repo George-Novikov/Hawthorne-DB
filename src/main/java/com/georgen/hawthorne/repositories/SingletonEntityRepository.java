@@ -76,6 +76,6 @@ public class SingletonEntityRepository implements GenericRepository, SelfTrackin
 
     private void validateType(StorageUnit storageUnit) throws HawthorneException {
         boolean isEntityType = storageUnit instanceof EntityUnit;
-        if (!isEntityType) throw new HawthorneException(Message.NOT_AN_ENTITY);
+        if (!isEntityType) throw new HawthorneException(Message.STORAGE_UNIT_INCONSISTENCY);
     }
 }

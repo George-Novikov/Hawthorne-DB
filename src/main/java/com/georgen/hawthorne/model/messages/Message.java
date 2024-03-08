@@ -7,6 +7,7 @@ public enum Message implements Descriptive {
     BINARY_DATA_IS_NULL("The field of method annotated with @BinaryData is null."),
     BINARY_DATA_EXTRACTION_ERROR("Binary data extraction error."),
     NOT_AN_ENTITY("The object data cannot be processed because the @SingletonEntity or @EntityCollection annotations are missing."),
+    STORAGE_UNIT_INCONSISTENCY("The operation cannot proceed because StorageUnit is cast to the wrong type."),
     ENTITY_RETRIEVAL_ERROR("Entity retrieval error."),
     NO_ID_ANNOTATION("The object cannot be processed because no fields or methods are marked with the @Id annotation."),
     FILE_IS_CORRUPTED("The file cannot be read because its structure is corrupted."),

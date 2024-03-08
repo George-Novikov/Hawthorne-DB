@@ -9,6 +9,7 @@ import com.georgen.hawthorne.model.storage.StorageArchetype;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Map;
 
 public class EntityConverter {
     public static <T> T convert(File file, StorageArchetype archetype) throws Exception {
@@ -23,9 +24,22 @@ public class EntityConverter {
         return object;
     }
 
-    public static byte[] convertBytes(File file) throws Exception {
-        if (!file.exists()) return null;
-        return FileManager.readBytes(file);
+    public static <T> T convert(StorageArchetype archetype, Map.Entry<String, File> entry, Map<String, File> binaryDataFiles) throws Exception {
+        String id = entry.getKey();
+
+        File entityFile = entry.getValue();
+        if (entityFile == null || !entityFile.exists()) return null;
+
+        T object = convert(entityFile, archetype);
+        if (object == null) return null;
+
+        File binaryDataFile = binaryDataFiles.get(id);
+        if (binaryDataFile == null || !binaryDataFile.exists()) return null;
+
+        byte[] binaryData = FileManager.readBytes(binaryDataFile);
+        if (binaryData == null) return null;
+
+        return EntityConverter.fillBinaryData(object, binaryData);
     }
 
     public static <T> T fillBinaryData(T object, byte[] binaryData) throws Exception {

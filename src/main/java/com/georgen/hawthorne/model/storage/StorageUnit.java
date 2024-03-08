@@ -75,12 +75,6 @@ public abstract class StorageUnit<C, S> {
 
     public static StorageUnit of(Object object) throws Exception {
         StorageArchetype archetype = new StorageArchetype(object);
-        EntityType entityType = archetype.getEntityType();
-
-        if (entityType.isFile()){
-            return new FileUnit(archetype, object);
-        }
-
-        return new EntityUnit(archetype, object);
+        return of(archetype, object);
     }
 }
