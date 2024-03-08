@@ -73,15 +73,6 @@ public class StorageSettings {
         return this.storageSchema;
     }
 
-    public int getPartitioningThreshold(){
-        try {
-            String stringThresholdValue = this.configReader.getProperty(PARTITIONING_THRESHOLD);
-            return stringThresholdValue != null ? Integer.valueOf(stringThresholdValue) : Integer.valueOf(PARTITIONING_THRESHOLD.getDefaultValue());
-        } catch (Exception e) {
-
-            return Integer.valueOf(PARTITIONING_THRESHOLD.getDefaultValue());
-        }
-    }
 
     private String getPathRelativeToRoot(String path){
         return PathBuilder.concatenate(getRootPath(), path);

@@ -61,11 +61,12 @@ public class SingletonEntityRepository implements GenericRepository, SelfTrackin
 
     @Override
     public <T> List<T> list(StorageArchetype archetype, int limit, int offset) throws Exception {
+        List<T> list = new ArrayList<>();
         T object = get(archetype);
-        return new ArrayList<T>() {{ add(object); }};
+        if (object != null) list.add(object);
+        return list;
     }
 
-    //TODO: maybe it would be better to return the number of versions
     public long count(StorageArchetype archetype) throws Exception {
         String path = PathBuilder.getEntityPath(archetype);
         try (FileOperation fileOperation = new FileOperation(path, false)){

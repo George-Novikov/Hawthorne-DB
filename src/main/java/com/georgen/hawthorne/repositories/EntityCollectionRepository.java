@@ -16,18 +16,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityCollectionRepository implements GenericRepository, SelfTracking {
+
     protected EntityCollectionRepository(){}
+
     @Override
     public <C, S> S save(StorageUnit<C, S> storageUnit) throws Exception {
         validateType(storageUnit);
-
         EntityUnit entityUnit = (EntityUnit) storageUnit;
-        StorageArchetype archetype = entityUnit.getArchetype();
 
+        StorageArchetype archetype = entityUnit.getArchetype();
         StorageSchema storageSchema = StorageSettings.getInstance().getStorageSchema();
         storageSchema.update(archetype);
 
         String path = PathBuilder.getEntityPath(archetype, storageUnit.getGeneratedId());
+
         try (FileOperation fileOperation = new FileOperation(path, true)){
             File file = fileOperation.getFile();
             FileManager.write(file, entityUnit.getContent());

@@ -3,7 +3,7 @@ package com.georgen.hawthorne.model.messages;
 public enum Message implements Descriptive {
     NOT_ANNOTATED("File cannot be saved because it is not annotated as a Hawthorne entity."),
     NO_BINARY_DATA_ANNOTATION("The object data cannot be processed because the @BinaryData annotation is missing."),
-    NOT_A_BYTE_ARRAY("The @BinaryData annotation is applicable only to fields of type byte[]."),
+    NOT_A_BYTE_ARRAY("The @BinaryData annotation is applicable only to fields or methods of type byte[]."),
     BINARY_DATA_IS_NULL("The field of method annotated with @BinaryData is null."),
     BINARY_DATA_EXTRACTION_ERROR("Binary data extraction error."),
     NOT_AN_ENTITY("The object data cannot be processed because the @SingletonEntity or @EntityCollection annotations are missing."),
@@ -15,7 +15,12 @@ public enum Message implements Descriptive {
     ID_COUNTER_ERROR("The ID counter is corrupted and cannot be read."),
     ID_IS_NULL("The request is missing the id parameter."),
     PERMISSION_DENIED("The operation is not permitted."),
-    NOT_A_DIRECTORY("The requested path is not a directory.")
+    NOT_A_DIRECTORY("The requested path is not a directory."),
+    NO_ENTITY_FILE("The entity file for this identifier was not found."),
+    NO_BINARY_DATA_FILE("The requested object could not be retrieved because the binary data file is missing."),
+    BINARY_DATA_IS_CORRUPTED("The requested object could not be retrieved because it's binary data file is corrupted."),
+    NO_METHOD_PARAMETERS("A method annotated as @BinaryData must have at least one parameter."),
+    TOO_MANY_METHOD_PARAMETERS("A method annotated as @BinaryData must have only one parameter.")
     ;
 
     private String description;

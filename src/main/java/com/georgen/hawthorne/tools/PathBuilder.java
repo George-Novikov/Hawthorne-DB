@@ -41,6 +41,10 @@ public class PathBuilder {
         return getFinalFilePath(archetype, id, SystemProperty.ENTITY_FILE_EXTENSION.getValue());
     }
 
+    public static String getBinaryDataPath(StorageArchetype archetype) {
+        return getBinaryDataPath(archetype, null);
+    }
+
     public static String getBinaryDataPath(StorageArchetype archetype, Object id) {
         return getFinalFilePath(archetype, id, SystemProperty.BINARY_DATA_EXTENSION.getValue());
     }
@@ -49,7 +53,7 @@ public class PathBuilder {
         EntityType entityType = archetype.getEntityType();
 
         String basePath = archetype.getPath();
-        String entityName = entityType.isSingleton() ? archetype.getSimpleName() : String.valueOf(id != null ? id : 0);
+        String entityName = entityType.isSingleton() ? archetype.getSimpleName() : String.valueOf(id != null ? id : archetype.getSimpleName());
 
         return concatenate(
                 basePath,
