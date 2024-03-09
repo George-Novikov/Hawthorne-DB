@@ -7,8 +7,14 @@ import com.georgen.hawthorne.io.FileIOManager;
 import com.georgen.hawthorne.tools.Serializer;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Stream;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StorageSchema {
@@ -61,7 +67,7 @@ public class StorageSchema {
         }
     }
 
-    private StorageArchetype register(StorageArchetype archetype) throws Exception {
+    public StorageArchetype register(StorageArchetype archetype) throws Exception {
         StorageArchetype addedArchetype = this.schema.put(
                 archetype.getSimpleName(),
                 archetype
@@ -70,10 +76,28 @@ public class StorageSchema {
         return addedArchetype;
     }
 
+    public StorageArchetype unregister(Class javaClass) throws Exception {
+        StorageArchetype existingArchetype = this.schema.get(javaClass.getSimpleName());
+        if (existingArchetype == null) return null;
+        return unregister(existingArchetype);
+    }
+
     private StorageArchetype unregister(StorageArchetype archetype) throws Exception {
         StorageArchetype removedArchetype = this.schema.remove(archetype.getSimpleName());
+        cleanUpResidualFiles(removedArchetype);
         save();
         return removedArchetype;
+    }
+
+    private void cleanUpResidualFiles(StorageArchetype archetype) throws IOException {
+        String path = archetype.getPath();
+
+        try (Stream<Path> pathStream = Files.walk(Paths.get(path))){
+            pathStream
+                    .sorted(Comparator.reverseOrder())
+                    .map(Path::toFile)
+                    .forEach(File::delete);
+        }
     }
 
     private boolean isNew(StorageArchetype archetype){

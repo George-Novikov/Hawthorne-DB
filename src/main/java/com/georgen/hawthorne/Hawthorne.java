@@ -2,6 +2,8 @@ package com.georgen.hawthorne;
 
 import com.georgen.hawthorne.api.Repository;
 import com.georgen.hawthorne.model.sample.Sample;
+import com.georgen.hawthorne.model.storage.StorageSchema;
+import com.georgen.hawthorne.settings.StorageSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,9 +18,15 @@ public class Hawthorne {
             sample.setBytes("How are you?".getBytes());
 
             Sample savedSample = Repository.save(sample);
-            Sample retrievedSample = Repository.get(Sample.class, "86a0fad8-12a4-4839-a4dd-403824421b71");
-            List<Sample> samples = Repository.list(Sample.class, 1, 5);
-            boolean isDeleted = Repository.delete(Sample.class, "86a0fad8-12a4-4839-a4dd-403824421b71");
+            Sample retrievedSample = Repository.get(Sample.class);
+            List<Sample> samples = Repository.list(Sample.class, 0, 0);
+            for (Sample element : samples){
+                LOGGER.info(new String(element.getBytes()));
+            }
+            boolean isDeleted = Repository.delete(Sample.class);
+
+            StorageSchema schema = StorageSettings.getInstance().getStorageSchema();
+            schema.unregister(Sample.class);
 
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
