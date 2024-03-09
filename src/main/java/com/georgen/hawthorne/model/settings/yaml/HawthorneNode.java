@@ -1,4 +1,4 @@
-package com.georgen.hawthorne.settings.yaml;
+package com.georgen.hawthorne.model.settings.yaml;
 
 public class HawthorneNode {
     private NamingNode naming;

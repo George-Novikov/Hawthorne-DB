@@ -1,8 +1,10 @@
-package com.georgen.hawthorne.settings.yaml;
+package com.georgen.hawthorne.model.settings.yaml;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.georgen.hawthorne.model.constants.ConfigProperty;
+import com.georgen.hawthorne.model.settings.HawthorneProperties;
 
-public class YamlProperties {
+public class YamlProperties extends HawthorneProperties {
     private HawthorneNode hawthorne;
 
     public HawthorneNode getHawthorne() {
@@ -13,6 +15,7 @@ public class YamlProperties {
         this.hawthorne = hawthorne;
     }
 
+    @Override
     public String getProperty(ConfigProperty property){
         if (hawthorne == null || hawthorne.isEmpty()) return null;
         NamingNode naming = hawthorne.getNaming();
@@ -29,6 +32,8 @@ public class YamlProperties {
         }
     }
 
+    @Override
+    @JsonIgnore
     public boolean isEmpty(){
         return hawthorne == null || hawthorne.isEmpty();
     }

@@ -1,4 +1,4 @@
-package com.georgen.hawthorne.settings.yaml;
+package com.georgen.hawthorne.model.settings.yaml;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -5,20 +5,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.georgen.hawthorne.model.constants.ConfigProperty;
 import com.georgen.hawthorne.model.constants.SystemProperty;
-import com.georgen.hawthorne.model.exceptions.InitializationException;
-import com.georgen.hawthorne.settings.yaml.YamlProperties;
+import com.georgen.hawthorne.model.settings.HawthorneProperties;
+import com.georgen.hawthorne.model.settings.regular.RegularProperties;
+import com.georgen.hawthorne.model.settings.yaml.YamlProperties;
 import com.georgen.hawthorne.tools.paths.PathBuilder;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
+import java.io.*;
 
 public class ConfigReader {
-    private Properties properties;
-    private YamlProperties yamlProperties;
+    private HawthorneProperties properties;
+    private boolean isDefaultValue;
 
-    public String getControlFilePath() throws IOException {
+    public String getControlFilePath() {
         String rootFolderName = getProperty(ConfigProperty.ROOT_PATH);
         String controlFileName = getProperty(ConfigProperty.CONTROL_FILE_NAME);
 
@@ -28,43 +26,73 @@ public class ConfigReader {
         return PathBuilder.concatenate(rootFolderName, controlFileName);
     }
 
-    public String getProperty(ConfigProperty property) throws IOException {
-        Properties properties = initProperties();
-        if (properties != null){
-            return properties.getProperty(property.getName());
-        }
+    public String getProperty(ConfigProperty property) {
+        if (isDefaultValue) return property.getDefaultValue();
 
-        YamlProperties yamlProperties = initYamlProperties();
-        if (yamlProperties != null){
-            return yamlProperties.getProperty(property);
+        boolean isInit = initProperties();
+        this.isDefaultValue = !isInit;
+        if (isDefaultValue) return property.getDefaultValue();
+
+        if (isInit()){
+            return this.properties.getProperty(property);
         }
 
         return null;
     }
 
-    private Properties initProperties() throws IOException {
-        if (this.properties == null || properties.isEmpty()){
-            properties = new Properties();
-            ClassLoader classLoader = this.getClass().getClassLoader();
-            InputStream resourceStream = classLoader.getResourceAsStream(SystemProperty.APPLICATION_PROPERTIES_NAME.getValue());
-            if (resourceStream == null) return null;
-            properties.load(resourceStream);
-        }
-        return this.properties;
+    private boolean isInit(){
+        return this.properties != null && !this.properties.isEmpty();
     }
 
-    private YamlProperties initYamlProperties() throws IOException {
-        if (this.yamlProperties == null || this.yamlProperties.isEmpty()){
+    private boolean initProperties(){
+        if (!isInit()){
+            this.properties = tryLoadFromRootPath();
+            if (this.properties == null) this.properties = tryLoadFromClasspath();
+            if (this.properties == null) this.properties = tryLoadFromYaml();
+        }
+
+        return isInit();
+    }
+
+    private HawthorneProperties tryLoadFromClasspath() {
+        ClassLoader classLoader = this.getClass().getClassLoader();
+        try (InputStream resourceStream = classLoader.getResourceAsStream(SystemProperty.APPLICATION_PROPERTIES_NAME.getValue())){
+            if (resourceStream == null) return null;
+            RegularProperties regularProperties = new RegularProperties();
+            regularProperties.load(resourceStream);
+            return regularProperties;
+        } catch (Exception e){
+            return null;
+        }
+    }
+
+    private HawthorneProperties tryLoadFromRootPath() {
+        try (InputStream stream = new FileInputStream(SystemProperty.HAWTHORNE_PROPERTIES_NAME.getValue())){
+            RegularProperties regularProperties = new RegularProperties();
+            regularProperties.load(stream);
+            return regularProperties;
+        } catch (Exception e){
+            return null;
+        }
+    }
+
+    private HawthorneProperties tryLoadFromYaml() {
+        try {
             YAMLFactory yamlFactory = new YAMLFactory();
             ObjectMapper mapper = new ObjectMapper(yamlFactory);
             mapper.findAndRegisterModules();
 
-            File yamlFile = new File(SystemProperty.APPLICATION_YAML_NAME.getValue());
+            File yamlFile = new File(SystemProperty.HAWTHORNE_YAML_NAME.getValue());
+            if (!yamlFile.exists()) yamlFile = new File(SystemProperty.HAWTHORNE_YML_NAME.getValue());
+            if (!yamlFile.exists()) yamlFile = new File(SystemProperty.APPLICATION_YAML_NAME.getValue());
             if (!yamlFile.exists()) yamlFile = new File(SystemProperty.APPLICATION_YML_NAME.getValue());
             if (!yamlFile.exists()) return null;
 
-            this.yamlProperties = mapper.readValue(yamlFile, YamlProperties.class);
+            YamlProperties yamlProperties = mapper.readValue(yamlFile, YamlProperties.class);
+
+            return yamlProperties;
+        } catch (Exception e){
+            return null;
         }
-        return this.yamlProperties;
     }
 }

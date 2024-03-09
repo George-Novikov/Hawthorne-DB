@@ -1,5 +1,0 @@
-hawthorne:
-  naming:
-    control-file: storage-schema.json
-    root-directory: hawthorne
-    entities-directory: entities

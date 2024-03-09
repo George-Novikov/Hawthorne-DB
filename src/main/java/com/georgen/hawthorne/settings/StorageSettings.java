@@ -59,7 +59,7 @@ public class StorageSettings {
         }
     }
 
-    public File getControlFile() {
+    private File getControlFile() {
         try {
             return FileFactory.getInstance().getFile(configReader.getControlFilePath(), true);
         } catch (Exception e){

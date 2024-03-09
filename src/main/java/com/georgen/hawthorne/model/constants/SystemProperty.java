@@ -10,7 +10,6 @@ public enum SystemProperty {
     HAWTHORNE_YML_NAME("hawthorne.yml"),
 
     ID_COUNTER_NAME("id-counter"),
-    UUID_INDEX_NAME("uuid-index"),
 
     ENTITY_FILE_EXTENSION("json"),
     BINARY_DATA_EXTENSION("bin");
