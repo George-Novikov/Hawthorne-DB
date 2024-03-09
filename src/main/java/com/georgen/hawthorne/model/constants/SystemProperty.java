@@ -2,8 +2,8 @@ package com.georgen.hawthorne.model.constants;
 
 public enum SystemProperty {
     APPLICATION_PROPERTIES_NAME("application.properties"),
-    APPLICATION_YAML_NAME("application.yaml"),
-    APPLICATION_YML_NAME("application.yml"),
+    APPLICATION_YAML_NAME("src/main/resources/application.yaml"),
+    APPLICATION_YML_NAME("src/main/resources/application.yml"),
 
     HAWTHORNE_PROPERTIES_NAME("hawthorne.properties"),
     HAWTHORNE_YAML_NAME("hawthorne.yaml"),

@@ -6,10 +6,16 @@ import com.georgen.hawthorne.api.annotations.Id;
 import com.georgen.hawthorne.api.annotations.SingletonEntity;
 import jakarta.persistence.Entity;
 
-@SingletonEntity(path = "samples/example")
+@EntityCollection(path = "samples/example")
 public class Sample {
+    @Id
+    private String uuid;
     @BinaryData
     private byte[] bytes;
+
+    public String getUuid() { return uuid; }
+
+    public void setUuid(String uuid) { this.uuid = uuid; }
 
     public byte[] getBytes() { return bytes; }
 
