@@ -27,7 +27,7 @@ public enum EntityType {
         throw new HawthorneException(Message.NOT_ANNOTATED);
     }
 
-    public static boolean isTyped(Class javaClass){
+    public static boolean isAnnotated(Class javaClass){
         return javaClass.isAnnotationPresent(SingletonEntity.class)
                 || javaClass.isAnnotationPresent(EntityCollection.class)
                 || javaClass.isAnnotationPresent(Entity.class);

@@ -10,6 +10,7 @@ import com.georgen.hawthorne.repositories.GenericRepository;
 import com.georgen.hawthorne.repositories.RepositoryFactory;
 import com.georgen.hawthorne.settings.StorageSettings;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,7 +46,7 @@ public class Repository {
 
     public static <I> boolean delete(Class javaClass, I... id) throws Exception {
         StorageArchetype archetype = getArchetype(javaClass);
-        if (archetype == null) throw new HawthorneException(Message.DELETE_FAIL);
+        if (archetype == null) return false;
 
         GenericRepository repository = factory.getRepository(archetype);
         return repository.delete(archetype, id);
@@ -53,7 +54,7 @@ public class Repository {
 
     public static <T> List<T> list(Class javaClass, int limit, int offset) throws Exception {
         StorageArchetype archetype = getArchetype(javaClass);
-        if (archetype == null) return null;
+        if (archetype == null) return new ArrayList<>();
 
         GenericRepository repository = factory.getRepository(archetype);
         return repository.list(archetype, limit, offset);
@@ -68,7 +69,7 @@ public class Repository {
     }
 
     private static StorageArchetype getArchetype(Class javaClass) throws HawthorneException {
-        if (!EntityType.isTyped(javaClass)) throw new HawthorneException(Message.NOT_ANNOTATED);
+        validate(javaClass);
         initSchemaOrBypass();
         return schema.get(javaClass.getSimpleName());
     }
@@ -88,7 +89,7 @@ public class Repository {
         }
     }
 
-    private void validate(Object object){
-
+    private static void validate(Class javaClass) throws HawthorneException {
+        if (!EntityType.isAnnotated(javaClass)) throw new HawthorneException(Message.NOT_ANNOTATED);
     }
 }

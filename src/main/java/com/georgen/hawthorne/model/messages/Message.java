@@ -20,7 +20,8 @@ public enum Message implements Descriptive {
     NO_BINARY_DATA_FILE("The requested object could not be retrieved because the binary data file is missing."),
     BINARY_DATA_IS_CORRUPTED("The requested object could not be retrieved because it's binary data file is corrupted."),
     NO_METHOD_PARAMETERS("A method annotated as @BinaryData must have at least one parameter."),
-    TOO_MANY_METHOD_PARAMETERS("A method annotated as @BinaryData must have only one parameter.")
+    TOO_MANY_METHOD_PARAMETERS("A method annotated as @BinaryData must have only one parameter."),
+    ARCHETYPE_IS_NOT_REGISTERED("The requested entity has not yet been registered in the Hawthorne repository.")
     ;
 
     private String description;
