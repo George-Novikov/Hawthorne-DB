@@ -5,15 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a21c502-bf7b-46bf-9d89-07dc9a468797" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/EntityCollectionRepositoryTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/FileCollectionRepositoryTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/SingletonFileRepositoryTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/model/NonEntitySample.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/Repository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/api/Repository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/constants/EntityType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/constants/EntityType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/messages/Message.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/messages/Message.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/model/EntityCollectionSample.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/model/EntityCollectionSample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/Hawthorne.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/sample/Sample.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/sample/Sample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/EntityCollectionRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/EntityCollectionRepositoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/FileCollectionRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/FileCollectionRepositoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/SingletonEntityRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/SingletonEntityRepositoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/SingletonFileRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/SingletonFileRepositoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/model/FileCollectionSample.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/model/FileCollectionSample.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/model/SingletonFileSample.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/model/SingletonFileSample.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -110,16 +111,7 @@
       <recent name="storage" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.Tests in 'Hawthorne.test'">
-    <configuration name="Hawthorne" type="Application" factoryName="Application">
-      <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="MAIN_CLASS_NAME" value="com.georgen.hawthorne.Hawthorne" />
-      <module name="Hawthorne.main" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="Gradle.FileCollectionRepositoryTest">
     <configuration name="EntityCollectionRepositoryTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -143,28 +135,7 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
-    <configuration name="Hawthorne [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="build" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="RepositoryTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="FileCollectionRepositoryTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -177,7 +148,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;com.georgen.hawthorne.api.RepositoryTest&quot;" />
+            <option value="&quot;com.georgen.hawthorne.api.FileCollectionRepositoryTest&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -210,6 +181,29 @@
       <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
+    <configuration name="SingletonFileRepositoryTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.georgen.hawthorne.api.SingletonFileRepositoryTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="Tests in 'Hawthorne.test'" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -232,20 +226,19 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.Hawthorne" />
+      <item itemvalue="Gradle.FileCollectionRepositoryTest" />
+      <item itemvalue="Gradle.SingletonFileRepositoryTest" />
       <item itemvalue="Gradle.EntityCollectionRepositoryTest" />
       <item itemvalue="Gradle.Tests in 'Hawthorne.test'" />
-      <item itemvalue="Gradle.RepositoryTest" />
       <item itemvalue="Gradle.SingletonEntityRepositoryTest" />
-      <item itemvalue="Gradle.Hawthorne [build]" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.FileCollectionRepositoryTest" />
+        <item itemvalue="Gradle.SingletonFileRepositoryTest" />
         <item itemvalue="Gradle.Tests in 'Hawthorne.test'" />
         <item itemvalue="Gradle.EntityCollectionRepositoryTest" />
         <item itemvalue="Gradle.SingletonEntityRepositoryTest" />
-        <item itemvalue="Gradle.Hawthorne [build]" />
-        <item itemvalue="Gradle.RepositoryTest" />
       </list>
     </recent_temporary>
   </component>
@@ -307,7 +300,10 @@
       <workItem from="1710077784586" duration="1842000" />
       <workItem from="1710130487063" duration="44000" />
       <workItem from="1710156861057" duration="726000" />
-      <workItem from="1710174040738" duration="2824000" />
+      <workItem from="1710174040738" duration="3868000" />
+      <workItem from="1710217778471" duration="20000" />
+      <workItem from="1710259814440" duration="2396000" />
+      <workItem from="1710262732851" duration="870000" />
     </task>
     <servers />
   </component>

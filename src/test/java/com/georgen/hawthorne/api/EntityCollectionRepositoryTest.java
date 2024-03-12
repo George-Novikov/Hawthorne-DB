@@ -1,7 +1,6 @@
 package com.georgen.hawthorne.api;
 
 import com.georgen.hawthorne.api.model.EntityCollectionSample;
-import com.georgen.hawthorne.api.model.SingletonEntitySample;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.storage.StorageSchema;
 import com.georgen.hawthorne.settings.StorageSettings;

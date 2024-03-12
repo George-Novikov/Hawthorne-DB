@@ -2,6 +2,7 @@ package com.georgen.hawthorne.api;
 
 import com.georgen.hawthorne.api.annotations.SingletonEntity;
 import com.georgen.hawthorne.api.model.SingletonEntitySample;
+import com.georgen.hawthorne.api.model.SingletonFileSample;
 import com.georgen.hawthorne.model.sample.Sample;
 import com.georgen.hawthorne.model.storage.StorageSchema;
 import com.georgen.hawthorne.settings.StorageSettings;
@@ -32,6 +33,9 @@ public class SingletonEntityRepositoryTest {
 
             boolean isDeleted = Repository.delete(SingletonEntitySample.class);
             assertEquals(true, isDeleted);
+
+            long count = Repository.count(SingletonEntitySample.class);
+            assertEquals(0, count);
 
             StorageSchema schema = StorageSettings.getInstance().getStorageSchema();
             schema.unregister(SingletonEntitySample.class);

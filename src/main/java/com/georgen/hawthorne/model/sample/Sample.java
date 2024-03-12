@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 @SingletonEntity
 public class Sample {
     private String uuid;
+    @BinaryData
     private byte[] bytes;
 
     public String getUuid() { return uuid; }
