@@ -12,11 +12,11 @@ import com.georgen.hawthorne.model.constants.EntityType;
 import java.io.File;
 
 /**
- * @SingletonEntity path: hawthorneRoot/entities/customPath/classSimpleName/classSimpleName.json
- * @BinaryData (singleton) path: hawthorneRoot/entities/customPath/classSimpleName/classSimpleName.bin
+ * SingletonEntity path: hawthorneRoot/entities/customPath/classSimpleName/classSimpleName.json
+ * BinaryData (singleton) path: hawthorneRoot/entities/customPath/classSimpleName/classSimpleName.bin
  *
- * @EntityCollention path: hawthorneRoot/entities/customPath/classSimpleName/partitionNumber/id.json
- * @BinaryData (collection) path: hawthorneRoot/entities/customPath/classSimpleName/partitionNumber/id.bin
+ * EntityCollection path: hawthorneRoot/entities/customPath/classSimpleName/partitionNumber/id.json
+ * BinaryData (collection) path: hawthorneRoot/entities/customPath/classSimpleName/partitionNumber/id.bin
  */
 public class PathBuilder {
 
