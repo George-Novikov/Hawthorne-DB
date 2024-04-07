@@ -1,18 +1,12 @@
 package com.georgen.hawthorne.model.storage;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.georgen.hawthorne.model.constants.EntityType;
-import com.georgen.hawthorne.model.exceptions.HawthorneException;
-import com.georgen.hawthorne.model.exceptions.TypeException;
-
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 public abstract class StorageUnit<C, S> {
     private StorageArchetype archetype;
     private String metadata;
     private S source;
-    private Object generatedId;
+    private Object sourceId;
     private boolean isNew;
 
     public StorageArchetype getArchetype() {
@@ -39,12 +33,12 @@ public abstract class StorageUnit<C, S> {
         this.source = source;
     }
 
-    public Object getGeneratedId() {
-        return generatedId;
+    public Object getSourceId() {
+        return sourceId;
     }
 
-    public void setGeneratedId(Object generatedId) {
-        this.generatedId = generatedId;
+    public void setSourceId(Object sourceId) {
+        this.sourceId = sourceId;
     }
 
     public boolean isNew() {

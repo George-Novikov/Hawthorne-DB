@@ -2,6 +2,7 @@ package com.georgen.hawthorne.model.storage;
 
 import com.georgen.hawthorne.tools.Serializer;
 import com.georgen.hawthorne.tools.id.IdGenerator;
+import com.georgen.hawthorne.tools.id.extractors.IdValueExtractor;
 
 public class EntityUnit<S> extends StorageUnit<String, S> {
     private String content;
@@ -18,8 +19,11 @@ public class EntityUnit<S> extends StorageUnit<String, S> {
 
         if (IdGenerator.isGenerationRequired(this)){
             Object generatedId = IdGenerator.generateForUnit(this);
-            this.setGeneratedId(generatedId);
+            this.setSourceId(generatedId);
             this.setNew(true);
+        } else {
+            Object existingId = IdValueExtractor.extract(source);
+            this.setSourceId(existingId);
         }
 
         String jsonContent = Serializer.toJson(source);

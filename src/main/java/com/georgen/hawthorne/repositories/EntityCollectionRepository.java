@@ -27,7 +27,7 @@ public class EntityCollectionRepository implements GenericRepository{
         StorageSchema storageSchema = StorageSettings.getInstance().getStorageSchema();
         storageSchema.update(archetype);
 
-        String path = PathBuilder.getEntityPath(archetype, storageUnit.getGeneratedId());
+        String path = PathBuilder.getEntityPath(archetype, storageUnit.getSourceId());
 
         try (FileOperation fileOperation = new FileOperation(path, true)){
             File file = fileOperation.getFile();

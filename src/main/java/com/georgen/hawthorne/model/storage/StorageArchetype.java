@@ -7,7 +7,7 @@ import com.georgen.hawthorne.model.constants.IdType;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.exceptions.TypeException;
 import com.georgen.hawthorne.tools.paths.PathBuilder;
-import com.georgen.hawthorne.tools.extractors.IdTypeExtractor;
+import com.georgen.hawthorne.tools.id.extractors.IdTypeExtractor;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StorageArchetype {

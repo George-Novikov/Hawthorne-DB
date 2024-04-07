@@ -11,6 +11,7 @@ import com.georgen.hawthorne.tools.id.counters.IdCounter;
 import com.georgen.hawthorne.tools.id.counters.IntegerCounter;
 import com.georgen.hawthorne.tools.id.counters.LongCounter;
 import com.georgen.hawthorne.tools.id.counters.UuidCounter;
+import com.georgen.hawthorne.tools.id.extractors.IdTypeExtractor;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -30,10 +31,12 @@ public class IdGenerator {
         for (Field field : javaClass.getDeclaredFields()){
             boolean hasNativeIdAnnotation = field.isAnnotationPresent(Id.class);
             boolean hasJakartaIdAnnotation = field.isAnnotationPresent(jakarta.persistence.Id.class);
+            boolean hasJavaxIdAnnotation = field.isAnnotationPresent(javax.persistence.Id.class);
 
-            if (hasNativeIdAnnotation || hasJakartaIdAnnotation){
+            if (hasNativeIdAnnotation || hasJakartaIdAnnotation || hasJavaxIdAnnotation){
                 boolean isValueNull = isValueNull(field, source);
                 if (hasJakartaIdAnnotation) return isValueNull;
+                if (hasJavaxIdAnnotation) return isValueNull;
                 return isValueNull(field, source) ? field.getAnnotation(Id.class).isGenerated() : false;
             }
         }
@@ -64,8 +67,9 @@ public class IdGenerator {
         for (Field field : storageUnit.getSource().getClass().getDeclaredFields()){
             boolean hasNativeIdAnnotation = field.isAnnotationPresent(Id.class);
             boolean hasJakartaIdAnnotation = field.isAnnotationPresent(jakarta.persistence.Id.class);
+            boolean hasJavaxIdAnnotation = field.isAnnotationPresent(javax.persistence.Id.class);
 
-            if (!hasNativeIdAnnotation && !hasJakartaIdAnnotation) continue;
+            if (!hasNativeIdAnnotation && !hasJakartaIdAnnotation && !hasJavaxIdAnnotation) continue;
             generatedId = fillIdField(storageUnit, field);
         }
 

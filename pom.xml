@@ -11,7 +11,7 @@
 
   <groupId>com.george-n</groupId>
   <artifactId>hawthorne</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
 
   <properties>
     <developerId>georgen</developerId>
@@ -84,6 +84,12 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
+      <groupId>javax.persistence</groupId>
+      <artifactId>javax.persistence-api</artifactId>
+      <version>2.2</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>net.ju-n.maven.plugins</groupId>
       <artifactId>checksum-maven-plugin</artifactId>
       <version>1.4</version>
@@ -122,6 +128,16 @@
               <Implementation-Version>${project.version}</Implementation-Version>
             </manifestEntries>
           </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.7.1</version>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
         </configuration>
       </plugin>
       <plugin>

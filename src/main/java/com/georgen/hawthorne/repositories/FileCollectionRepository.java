@@ -23,8 +23,8 @@ public class FileCollectionRepository implements GenericRepository {
 
         StorageArchetype archetype = fileUnit.getArchetype();
 
-        String entityPath = PathBuilder.getEntityPath(archetype, storageUnit.getGeneratedId());
-        String binaryDataPath = PathBuilder.getBinaryDataPath(archetype, storageUnit.getGeneratedId());
+        String entityPath = PathBuilder.getEntityPath(archetype, storageUnit.getSourceId());
+        String binaryDataPath = PathBuilder.getBinaryDataPath(archetype, storageUnit.getSourceId());
 
         try (FileOperation fileOperation = new FileOperation(entityPath, true)){
             File file = fileOperation.getFile();

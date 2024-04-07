@@ -3,6 +3,7 @@ package com.georgen.hawthorne.model.storage;
 import com.georgen.hawthorne.tools.Serializer;
 import com.georgen.hawthorne.tools.id.IdGenerator;
 import com.georgen.hawthorne.tools.extractors.BinaryDataExtractor;
+import com.georgen.hawthorne.tools.id.extractors.IdValueExtractor;
 
 public class FileUnit<S> extends StorageUnit<byte[], S>{
     private byte[] content;
@@ -20,8 +21,11 @@ public class FileUnit<S> extends StorageUnit<byte[], S>{
 
         if (IdGenerator.isGenerationRequired(this)){
             Object generatedId = IdGenerator.generateForUnit(this);
-            this.setGeneratedId(generatedId);
+            this.setSourceId(generatedId);
             this.setNew(true);
+        } else {
+            Object existingId = IdValueExtractor.extract(source);
+            this.setSourceId(existingId);
         }
 
         this.setMetadata(Serializer.toJson(source));

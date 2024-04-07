@@ -5,7 +5,6 @@ import com.georgen.hawthorne.api.annotations.SingletonEntity;
 import com.georgen.hawthorne.model.exceptions.HawthorneException;
 import com.georgen.hawthorne.model.messages.Message;
 import com.georgen.hawthorne.tools.extractors.BinaryDataExtractor;
-import jakarta.persistence.Entity;
 
 public enum EntityType {
     SINGLETON_ENTITY,
@@ -20,7 +19,10 @@ public enum EntityType {
             return hasBinaryData(object) ? SINGLETON_FILE : SINGLETON_ENTITY;
         }
 
-        if (javaClass.isAnnotationPresent(EntityCollection.class) || javaClass.isAnnotationPresent(Entity.class)){
+        boolean hasPersistenceEntityAnnotation = javaClass.isAnnotationPresent(jakarta.persistence.Entity.class)
+                || javaClass.isAnnotationPresent(javax.persistence.Entity.class);
+
+        if (javaClass.isAnnotationPresent(EntityCollection.class) || hasPersistenceEntityAnnotation){
             return hasBinaryData(object) ? FILE_COLLECTION : ENTITY_COLLECTION;
         }
 
@@ -30,7 +32,8 @@ public enum EntityType {
     public static boolean isAnnotated(Class javaClass){
         return javaClass.isAnnotationPresent(SingletonEntity.class)
                 || javaClass.isAnnotationPresent(EntityCollection.class)
-                || javaClass.isAnnotationPresent(Entity.class);
+                || javaClass.isAnnotationPresent(jakarta.persistence.Entity.class)
+                || javaClass.isAnnotationPresent(javax.persistence.Entity.class);
     }
 
     public boolean isEntity(){
