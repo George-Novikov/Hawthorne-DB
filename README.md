@@ -7,6 +7,24 @@ This library is designed to simplify the data storage process:
 - All storage operations are available through a single Repository class and its static methods  
 - The storage process is easy and fast.
 
+## Installation  
+
+To use the dependency in your projects, install it like this:
+
+Gradle:
+```
+implementation 'com.george-n:hawthorne:1.0.1'
+```
+
+Maven:
+```
+<dependency>
+    <groupId>'com.george-n</groupId>
+    <artifactId>hawthorne</artifactId>
+    <version>1.0.1</version>
+</dependency>
+```
+
 ## Usage:
 ### 1. Singleton Entity  
 

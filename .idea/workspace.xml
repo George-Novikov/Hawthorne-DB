@@ -5,24 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a21c502-bf7b-46bf-9d89-07dc9a468797" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/tools/id/IdAnnotationDetector.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/tools/id/extractors/IdValueExtractor.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/constants/EntityType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/constants/EntityType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/storage/EntityUnit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/storage/EntityUnit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/storage/FileUnit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/storage/FileUnit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/storage/StorageArchetype.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/storage/StorageArchetype.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/storage/StorageUnit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/model/storage/StorageUnit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/repositories/EntityCollectionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/repositories/EntityCollectionRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/repositories/FileCollectionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/repositories/FileCollectionRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/repositories/SingletonEntityRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/repositories/SingletonEntityRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/tools/FileListProcessor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/tools/extractors/IdTypeExtractor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/tools/id/extractors/IdTypeExtractor.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/tools/id/IdGenerator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/georgen/hawthorne/tools/id/IdGenerator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/EntityCollectionRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/EntityCollectionRepositoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/FileCollectionRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/georgen/hawthorne/api/FileCollectionRepositoryTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
