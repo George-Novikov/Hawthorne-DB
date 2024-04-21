@@ -3,7 +3,6 @@ package com.georgen.hawthorne.api;
 import com.georgen.hawthorne.api.annotations.SingletonEntity;
 import com.georgen.hawthorne.api.model.SingletonEntitySample;
 import com.georgen.hawthorne.api.model.SingletonFileSample;
-import com.georgen.hawthorne.model.sample.Sample;
 import com.georgen.hawthorne.model.storage.StorageSchema;
 import com.georgen.hawthorne.settings.StorageSettings;
 import org.junit.jupiter.api.Assertions;

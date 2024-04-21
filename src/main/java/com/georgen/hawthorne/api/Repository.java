@@ -60,6 +60,18 @@ public class Repository {
         return repository.list(archetype, limit, offset);
     }
 
+    public static <T> List<T> list(Class javaClass, int limit) throws Exception {
+        return list(javaClass, limit, 0);
+    }
+
+    public static <T> List<T> list(Class javaClass, long limit, long offset) throws Exception {
+        return list(javaClass, Math.toIntExact(limit), Math.toIntExact(offset));
+    }
+
+    public static <T> List<T> list(Class javaClass, long limit) throws Exception {
+        return list(javaClass, Math.toIntExact(limit), 0);
+    }
+
     public static long count(Class javaClass) throws Exception {
         StorageArchetype archetype = getArchetype(javaClass);
         if (archetype == null) return 0;

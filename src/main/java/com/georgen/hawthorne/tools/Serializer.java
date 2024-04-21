@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,9 +24,20 @@ public class Serializer {
 
     private static class SerializerHolder {
         private static final ObjectMapper INSTANCE = new ObjectMapper();
+        private static boolean isInit;
+
+        private static void init(){
+            SerializerHolder.INSTANCE.findAndRegisterModules();
+            isInit = true;
+        }
+
+        private static boolean isInit(){
+            return isInit;
+        }
     }
 
     public static ObjectMapper getInstance(){
+        if (!SerializerHolder.isInit()) SerializerHolder.init();
         return SerializerHolder.INSTANCE;
     }
 }

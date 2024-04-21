@@ -11,7 +11,7 @@
 
   <groupId>com.george-n</groupId>
   <artifactId>hawthorne</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2</version>
 
   <properties>
     <developerId>georgen</developerId>
@@ -47,6 +47,12 @@
   </scm>
 
   <dependencies>
+    <dependency>
+      <groupId>com.george-n</groupId>
+      <artifactId>hawthorne-annotation-processor</artifactId>
+      <version>1.0.0</version>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
@@ -173,6 +179,15 @@
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
+          <debug>true</debug>
+          <optimize>true</optimize>
+          <compilerArguments>
+            <AaddGeneratedAnnotation>true</AaddGeneratedAnnotation>
+            <Adebug>true</Adebug>
+          </compilerArguments>
+          <annotationProcessors>
+            <annotationProcessor>com.georgen.hawthorneprocessor.HawthorneAnnotationProcessor</annotationProcessor>
+          </annotationProcessors>
         </configuration>
       </plugin>
       <plugin>

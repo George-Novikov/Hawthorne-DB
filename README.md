@@ -19,7 +19,7 @@ implementation 'com.george-n:hawthorne:1.0.1'
 Maven:
 ```
 <dependency>
-    <groupId>'com.george-n</groupId>
+    <groupId>com.george-n</groupId>
     <artifactId>hawthorne</artifactId>
     <version>1.0.1</version>
 </dependency>
