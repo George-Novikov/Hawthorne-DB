@@ -13,7 +13,7 @@ To use the dependency in your projects, install it like this:
 
 Gradle:
 ```
-implementation 'com.george-n:hawthorne:1.0.1'
+implementation 'com.george-n:hawthorne:1.0.2'
 ```
 
 Maven:
@@ -21,7 +21,7 @@ Maven:
 <dependency>
     <groupId>com.george-n</groupId>
     <artifactId>hawthorne</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 
@@ -104,7 +104,7 @@ sample.setField("Sample ");
 
 Sample savedSample = Repository.save(sample);
 Sample retrievedSample = Repository.get(Sample.class, 1);
-List<Sample> samples = Repository.list(Sample.class, 0, 0);
+List<Sample> samples = Repository.list(Sample.class, 5, 0);
 boolean isDeleted = Repository.delete(Sample.class, 1);
 ```
 
@@ -164,4 +164,4 @@ Your database structure will be available at the path:
 
 - Each stored entity must have a default no-args constructor (otherwise a HawthorneException will be thrown).  
 - I strongly recommend that you do not edit the files directly — neither storage schema nor the entity files. This will likely result in data corruption.
-- Currently (March 2024), Hawthorne does not support changes to your schema. This feature will be added in future releases.  
+- Currently (April 2024), Hawthorne does not support changes to your schema. This feature will be added in future releases.  
